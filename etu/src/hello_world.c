@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "decoupage_mcu.h"
+#include "q_zz.h"
 
 int main(void)
 {
@@ -17,6 +18,7 @@ int main(void)
     // for (size_t i = 0; i < 64; i++) {
     //   printf("%hx\n", blc.y[i]);
     // }
-    printf("%x\n", blc.y[0]);
+    // printf("%x\n", blc.y[0]);
+    zigzag_composante()
     return EXIT_SUCCESS;
 }
