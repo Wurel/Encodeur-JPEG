@@ -37,16 +37,6 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   }
 }
 
-
-// int *tableau_decoupe(int*tab_rgb)
-// {
-//   if (tab_rgb[0]*tab_rgb[1]*tab_rgb[2] == 64)
-//   {
-//     return(tab_rgb);
-//   }
-// }
-
-
 //prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
 struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
 {
@@ -156,14 +146,3 @@ void dct(uint8_t *composante)
     composante[k] = 4*c_i*c_j*somme;
   }
 }
-
-
-
-
-// }
-
-//
-// int main(int argc, char const *argv[]) {
-  // transformation_rgb_ycbcr(&decoupage_mcu("/user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm",1,1)[0][0]);
-//   return 0;
-// }
