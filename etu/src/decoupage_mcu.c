@@ -9,7 +9,7 @@
 struct mcu{
   uint8_t h;
   uint8_t v;
-  uint8_t *rgb[64*3];
+  uint32_t rgb[64];
   int8_t y[64];
   int8_t cb[64];
   int8_t cr[64];
@@ -60,7 +60,7 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
 
 
 //prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
-struct mcu decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
+struct mcu **decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
 {
   if(h1 == 1 && v1 == 1)
   {
@@ -71,47 +71,56 @@ struct mcu decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
     {
       if (tab_rgb[1] % 8 == 0 && tab_rgb[2] % 8 ==0) // on fait juste le cas multiple de 8
       {
-        struct mcu tableau_de_mcu[tab_rgb[2]/8][tab_rgb[1]/8];
+        struct mcu **tableau_de_mcu;
+        tableau_de_mcu = malloc(tab_rgb[2]/8*sizeof(*tableau_de_mcu));
+        if (tableau_de_mcu == NULL){
+          printf("erreur d'allocation\n");
+          exit(0);
+        }
+        for (size_t i = 0; i < tab_rgb[2]/8; i++) {
+          tableau_de_mcu[i] = malloc(tab_rgb[1]/8 * sizeof(**tableau_de_mcu));
+          if (tableau_de_mcu[i] == NULL){
+            printf("erreur d'allocation\n");
+            exit(0);
+          }
+        }
         for (int32_t k = 0; k < tab_rgb[2]*tab_rgb[1]; k++)
         {
-          int32_t i = (k/tab_rgb[2])/8-1;
-          int32_t j = (k/tab_rgb[2])/8-1;
+          int32_t i = (k/tab_rgb[2]-1)/8;
+          int32_t j = (k/tab_rgb[2]-1)/8;
           int32_t i_prime = k/tab_rgb[2] - 8*i;
           int32_t j_prime = k%tab_rgb[2] -j*8;
-          uint8_t *sous_tableau = malloc(sizeof(uint8_t)*3);
-          sous_tableau[0] = tab_rgb[k + 3];
-          sous_tableau[1] = tab_rgb[k + 3];
-          sous_tableau[2] = tab_rgb[k + 3];
-          // printf("%hhx\n", sous_tableau[1] );
-          tableau_de_mcu[i][j].rgb[i_prime*8+j_prime] = sous_tableau;
-          printf("%i ", k);
-          printf("%x \n", tableau_de_mcu[i][j].rgb[i_prime*8+j_prime][0]);
-          printf("second %x \n", tableau_de_mcu[i][j].rgb[i_prime*8+j_prime][1]);
-          printf("troisieme %x \n", tableau_de_mcu[i][j].rgb[i_prime*8+j_prime][2]);
-
+          if (tableau_de_mcu == NULL){
+            printf("erreur d'allocation\n");
+            exit(0);
+          }
+          int32_t nombre;
+          nombre = tab_rgb[k + 3] + tab_rgb[k + 3]*16*16 + tab_rgb[k + 3]*16*16*16*16;
+          printf("salut\n");
+          tableau_de_mcu[i][j].rgb[i_prime*8+j_prime] = nombre;
         }
+        return tableau_de_mcu;
       }
-
     }
   }
 }
 
 
 // transforme UNE mcu en RGB en une MCU en YCbCr
-struct mcu transformation_rgb_ycbcr(struct mcu *mc)
-{
-
-  for (size_t i = 0; i < 64; i++) {
-    uint8_t rouge = mc.rgb[i_prime*8+j_prime][0];
-    uint8_t vert = mc.rgb[i_prime*8+j_prime][1];
-    uint8_t bleu = mc.rgb[i_prime*8+j_prime][2];
-    mc->y = 0.299*rouge + 0.587*vert + 0.114*bleu;
-    mc->cb = -0.1687*rouge + 0.3313*vert + 0.5*bleu +128;
-    mc->cr = 0.299*rouge + 0.587*vert - 0.0813*bleu +128;
-
-  }
-
-}
+// struct mcu transformation_rgb_ycbcr(struct mcu *mc)
+// {
+//
+//   for (size_t i = 0; i < 64; i++) {
+//     uint8_t rouge = mc.rgb[i_prime*8+j_prime][0];
+//     uint8_t vert = mc.rgb[i_prime*8+j_prime][1];
+//     uint8_t bleu = mc.rgb[i_prime*8+j_prime][2];
+//     mc->y = 0.299*rouge + 0.587*vert + 0.114*bleu;
+//     mc->cb = -0.1687*rouge + 0.3313*vert + 0.5*bleu +128;
+//     mc->cr = 0.299*rouge + 0.587*vert - 0.0813*bleu +128;
+//
+//   }
+//
+// }
 
 
 
@@ -131,6 +140,6 @@ struct mcu transformation_rgb_ycbcr(struct mcu *mc)
 // }
 
 int main(int argc, char const *argv[]) {
-  decoupage_mcu("/user/7/taconnem/Encodeur-JPEG/etu/images/invader.pgm",1,1);
+  decoupage_mcu("/user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm",1,1);
   return 0;
 }
