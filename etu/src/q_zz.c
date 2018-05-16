@@ -1,4 +1,4 @@
-//#include "q_zz.h"
+#include "q_zz.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -78,6 +78,15 @@ int8_t* zigzag_composante(int8_t *composante)
     return zigzag;
 }
 
+void quantification_composante(int8_t *composante)
+{
+  for (uint8_t i = 0; i < 64; i++)
+  {
+    composante[i] = composante[i]/compressed_Y_table[i];
+  }
+}
+
+
 int main(int argc, char const *argv[])
 {
     //TEST DU ZIGZAG
@@ -101,4 +110,3 @@ int main(int argc, char const *argv[])
     }
     //FIN DU TEST DU ZIG ZAG
     return 0;
-}

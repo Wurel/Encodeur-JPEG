@@ -27,6 +27,6 @@ extern uint8_t *recuperation_rgb(const char *ppm_filename);
 
 extern struct mcu transformation_rgb_ycbcr(struct mcu *mc);
 
-extern struct mcu dct(struct mcu *mc);
+extern void dct(uint8_t *composante);
 
 #endif /* decoupage_mcu */
