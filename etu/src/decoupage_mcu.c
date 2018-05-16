@@ -119,62 +119,56 @@ struct mcu transformation_rgb_ycbcr(struct mcu *mc)
   }
 }
 
-// struct mcu dct(struct mcu *mc)
-// {
-//   //parcours de chaque bloc dans la mcu
-//   //notre cas d'une mcu 1*1
-//   if (mc->h==1 && mc->v ==1)
-//   {
-//     //parcours des 3 blocs
-//     for (size_t i = 0; i < 3; i++)
-//     {
-//       //pour chaque bloc:
-//
-//       //changement d'intervalle: [0, 255] vers [-128, 127]
-//       for (size_t k = 0; k < 64; k++)
-//       {
-//         //ici mc->y est un bloc comme ....ici on a que 3 blocs
-//         //et transforme en flottants
-//         mc->y[k] = mc->y[k]-128.;
-//         mc->cb[k] = mc->cb[k]-128.;
-//         mc->cr[k] = mc->cr[k]-128.;
-//
-//       }
-//       //transformee en cosinus discrete
-//       //copy du bloc
-//       uint8_t copy_bloc[64];
-//       memcpy(copy_bloc, mc->y[k], sizeof mc->y[k]);
-//       for (size_t k = 0; k < 64; k++)
-//       {
-//         //calcul de C(i) et C(j)
-//         if (k/8 == 0)
-//         {
-//           uint8_t c_i = 1/sqrt(2) if (k/8)==0;
-//         }else
-//         {
-//           uint8_t c_i =1;
-//         }
-//         if (k%8 == 0)
-//         {
-//           uint8_t c_j = 1/sqrt(2) if (k/8)==0;
-//         }else
-//         {
-//           uint8_t c_j =1;
-//         }
-//         //calcul de la transformee
-//         float somme = 0;
-//         for (size_t p = 0; p < 64; p++)
-//         {
-//
-//           somme += copy_bloc[k]cos((2*(p/8)+1*));
-//         }
-//
-//
-//       }
-//
-//     }
-//   }
+//a modifier quand on aurra la s
+struct mcu dct(struct mcu *mc)
+{
+  //parcours de chaque bloc dans la mcu
+  //notre cas d'une mcu 1*1
+  if (mc->h==1 && mc->v ==1)
+  {
+    //changement d'intervalle: [0, 255] vers [-128, 127]
+    for (size_t k = 0; k < 64; k++)
+    {
+      //ici mc->y est un bloc comme ....ici on a que 3 blocs
+      //et transforme en flottants
+      mc->y[k] = mc->y[k]-128.;
+      mc->cb[k] = mc->cb[k]-128.;
+      mc->cr[k] = mc->cr[k]-128.;
 
+    //transformee en cosinus discrete
+    //copy du bloc
+    uint8_t copy_bloc[64];
+    memcpy(copy_bloc, mc->y, sizeof mc->y);
+    for (size_t k = 0; k < 64; k++)
+    {
+      //calcul de C(i) et C(j)
+      if (k/8 == 0)
+      {
+        uint8_t c_i = 1/sqrt(2);
+      }else
+      {
+        uint8_t c_i =1;
+      }
+      if (k%8 == 0)
+      {
+        uint8_t c_j = 1/sqrt(2);
+      }else
+      {
+        uint8_t c_j =1;
+      }
+      //calcul de la transformee
+      float somme = 0;
+      for (size_t p = 0; p < 64; p++)
+      {
+        uint8_t x = p/8;
+        uint8_t y = p%8;
+        somme += copy_bloc[p]*cos((2*x+1)*(k/8)*M_PI/16)*cos((2*y+1)*(k%8)*M_PI/16)
+      }
+      mc->y[k] = 4*c_i*c_j*somme
+    }
+    }
+  }
+}
 
 
 // }
