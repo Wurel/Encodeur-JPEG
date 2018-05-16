@@ -1,9 +1,39 @@
-#include "decoupage_mcu.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
+
+int **tableau()
+{
+  int **ptr;
+  ptr = malloc(2 * sizeof(*ptr));       //On alloue 'taille1' pointeurs.
+  for(int i=0 ; i < 2 ; i++){
+
+       ptr[i] = malloc(5 * sizeof(**ptr) );       //On alloue des tableaux de 'taille2' variables.
+
+
+  }
+  ptr[1][3] = 5;
+  printf("%i\n", ptr[1][3]);
+  return ptr;
+}
+
+int main(int argc, char const *argv[]) {
+  tableau();
+  return 0;
+}
+
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+// #include "decoupage_mcu.h"
 
 
 
 struct mcu{
-  //en vrai c'est un bloc
   uint8_t h;
   uint8_t v;
   uint32_t rgb[64];
@@ -93,98 +123,11 @@ struct mcu **decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
           }
           int32_t nombre;
           nombre = tab_rgb[k + 3] + tab_rgb[k + 3]*16*16 + tab_rgb[k + 3]*16*16*16*16;
+          printf("salut\n");
           tableau_de_mcu[i][j].rgb[i_prime*8+j_prime] = nombre;
-          tableau_de_mcu[i][j].h = 1;
-          tableau_de_mcu[i][j].v = 1;
-
         }
         return tableau_de_mcu;
       }
     }
   }
 }
-
-// transforme UNE mcu (son pointeur est mis en parametre) en RGB en une mcu en YCbCr
-struct mcu transformation_rgb_ycbcr(struct mcu *mc)
-{
-  //parcours de chaque bloc dans la mcu
-  for (size_t i = 0; i < mc->h; i++)
-  {
-    for (size_t j = 0; j < mc->v; j++)
-    {
-      //pour chaque tableau de composante de mcu ici juste un bloc pour la mcu
-      for (size_t k = 0; k < 64; k++)
-      {
-        //mc est un triple bloc dans notre cas
-        uint8_t rouge = mc->rgb[k]/(16*16*16*16);
-        uint8_t vert = (mc->rgb[k]-rouge*(16*16*16*16))/(16*16);
-        uint8_t bleu = mc->rgb[k]-rouge*(16*16*16*16)-vert*(16*16);
-        printf("%x %x %x\n", rouge, vert, bleu);
-        printf("%zu\n", k);
-        mc->y[k] = 0.299*rouge + 0.587*vert + 0.114*bleu;
-        mc->cb[k] = -0.1687*rouge - 0.3313*vert + 0.5*bleu +128;
-        mc->cr[k] = 0.5*rouge + 0.4187*vert - 0.0813*bleu +128;
-      }
-    }
-  }
-}
-
-//a modifier quand on aurra la s
-struct mcu dct(struct mcu *mc)
-{
-  //parcours de chaque bloc dans la mcu
-  //notre cas d'une mcu 1*1
-  if (mc->h==1 && mc->v ==1)
-  {
-    //changement d'intervalle: [0, 255] vers [-128, 127]
-    for (size_t k = 0; k < 64; k++)
-    {
-      //ici mc->y est un bloc comme ....ici on a que 3 blocs
-      //et transforme en flottants
-      mc->y[k] = mc->y[k]-128.;
-      mc->cb[k] = mc->cb[k]-128.;
-      mc->cr[k] = mc->cr[k]-128.;
-
-    //transformee en cosinus discrete
-    //copy du bloc
-    uint8_t copy_bloc[64];
-    memcpy(copy_bloc, mc->y, sizeof mc->y);
-    for (size_t k = 0; k < 64; k++)
-    {
-      //calcul de C(i) et C(j)
-      if (k/8 == 0)
-      {
-        uint8_t c_i = 1/sqrt(2);
-      }else
-      {
-        uint8_t c_i =1;
-      }
-      if (k%8 == 0)
-      {
-        uint8_t c_j = 1/sqrt(2);
-      }else
-      {
-        uint8_t c_j =1;
-      }
-      //calcul de la transformee
-      float somme = 0;
-      for (size_t p = 0; p < 64; p++)
-      {
-        uint8_t x = p/8;
-        uint8_t y = p%8;
-        somme += copy_bloc[p]*cos((2*x+1)*(k/8)*M_PI/16)*cos((2*y+1)*(k%8)*M_PI/16)
-      }
-      mc->y[k] = 4*c_i*c_j*somme
-    }
-    }
-  }
-}
-
-
-// }
-
-//
-// int main(int argc, char const *argv[]) {
-//   transformation_rgb_ycbcr(&decoupage_mcu("/user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm",1,1)[0][0]);
-//   return 0;
-// }
