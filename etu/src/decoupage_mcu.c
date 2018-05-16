@@ -2,11 +2,13 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <math.h>
 // #include "decoupage_mcu.h"
 
 
 
 struct mcu{
+  //en vrai c'est un bloc
   uint8_t h;
   uint8_t v;
   uint32_t rgb[64];
@@ -105,39 +107,89 @@ struct mcu **decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
   }
 }
 
+// transforme UNE mcu (son pointeur est mis en parametre) en RGB en une mcu en YCbCr
+struct mcu transformation_rgb_ycbcr(struct mcu *mc)
+{
+  //parcours de chaque bloc dans la mcu
+  for (size_t i = 0; i < mc->h; i++)
+  {
+    for (size_t j = 0; j < mc->v; j++)
+    {
+      //pour chaque triple bloc de mcu ici juste un bloc pour la mcu
+      for (size_t k = 0; k < 64; k++)
+      {
+        //mc est un triple bloc dans notre cas
+        uint8_t rouge = mc->rgb[k][0];
+        uint8_t vert = mc->rgb[k][1];
+        uint8_t bleu = mc->rgb[k][2];
+        mc->y[k] = 0.299*rouge + 0.587*vert + 0.114*bleu;
+        mc->cb[k] = -0.1687*rouge - 0.3313*vert + 0.5*bleu +128;
+        mc->cr[k] = 0.5*rouge + 0.4187*vert - 0.0813*bleu +128;
+      }
+    }
+  }
+}
 
-// transforme UNE mcu en RGB en une MCU en YCbCr
-// struct mcu transformation_rgb_ycbcr(struct mcu *mc)
-// {
-//
-//   for (size_t i = 0; i < 64; i++) {
-//     uint8_t rouge = mc.rgb[i_prime*8+j_prime][0];
-//     uint8_t vert = mc.rgb[i_prime*8+j_prime][1];
-//     uint8_t bleu = mc.rgb[i_prime*8+j_prime][2];
-//     mc->y = 0.299*rouge + 0.587*vert + 0.114*bleu;
-//     mc->cb = -0.1687*rouge + 0.3313*vert + 0.5*bleu +128;
-//     mc->cr = 0.299*rouge + 0.587*vert - 0.0813*bleu +128;
-//
-//   }
-//
-// }
+struct mcu dct(struct mcu *mc)
+{
+  //parcours de chaque bloc dans la mcu
+  //notre cas d'une mcu 1*1
+  if (mc->h==1 && mc->v ==1)
+  {
+    //parcours des 3 blocs
+    for (size_t i = 0; i < 3; i++)
+    {
+      //pour chaque bloc:
+
+      //changement d'intervalle: [0, 255] vers [-128, 127]
+      for (size_t k = 0; k < 64; k++)
+      {
+        //ici mc->y est un bloc comme ....ici on a que 3 blocs
+        //et transforme en flottants
+        mc->y[k] = mc->y[k]-128.;
+        mc->cb[k] = mc->cb[k]-128.;
+        mc->cr[k] = mc->cr[k]-128.;
+
+      }
+      //transformee en cosinus discrete
+      //copy du bloc
+      uint8_t copy_bloc[64];
+      memcpy(copy_bloc, mc->y[k], sizeof mc->y[k]);
+      for (size_t k = 0; k < 64; k++)
+      {
+        //calcul de C(i) et C(j)
+        if (k/8 == 0)
+        {
+          uint8_t c_i = 1/sqrt(2) if (k/8)==0;
+        }else
+        {
+          uint8_t c_i =1;
+        }
+        if (k%8 == 0)
+        {
+          uint8_t c_j = 1/sqrt(2) if (k/8)==0;
+        }else
+        {
+          uint8_t c_j =1;
+        }
+        //calcul de la transformee
+        float somme = 0;
+        for (size_t p = 0; p < 64; p++)
+        {
+
+          somme += copy_bloc[k]cos((2*(p/8)+1*))
+        }
+
+
+      }
+
+    }
+  }
 
 
 
-// struct mcu *create_mcu(const char *ppm_filename)
-// {
-//
-// }
+}
 
-
-
-// struct mcu *renvoie_mcu_8_8(*tableau_decoupe)
-// {
-//   if(tableau_decoupe[0] == 1)
-//   {
-//     struct mcu *
-//   }
-// }
 
 int main(int argc, char const *argv[]) {
   decoupage_mcu("/user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm",1,1);
