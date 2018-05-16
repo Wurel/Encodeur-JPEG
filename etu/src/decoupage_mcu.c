@@ -62,21 +62,27 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
             exit(0);
           }
         }
+        for (size_t i = 0; i < tab_rgb[2]/8; i++) {
+          for (size_t j = 0; j < tab_rgb[1]/8; j++) {
+            tableau_de_mcu[i][j].tableau_de_bloc = malloc(h1*v1*sizeof(struct bloc));
+            struct bloc bloc0;
+            tableau_de_mcu[i][j].tableau_de_bloc[0] = bloc0;
+            tableau_de_mcu[i][j].h = h1;
+            tableau_de_mcu[i][j].v = v1;
+            for (int k = 0; k < h1*v1; k++) {
+              tableau_de_mcu[i][j].tableau_de_bloc[k].rgb = malloc(64*sizeof(uint8_t));
+            }
+          }
+        }
         for (int32_t k = 0; k < tab_rgb[2]*tab_rgb[1]; k++)
         {
           int32_t i = (k/tab_rgb[2]-1)/8;
           int32_t j = (k/tab_rgb[2]-1)/8;
           int32_t i_prime = k/tab_rgb[2] - 8*i;
           int32_t j_prime = k%tab_rgb[2] -j*8;
-          if (tableau_de_mcu == NULL){
-            printf("erreur d'allocation\n");
-            exit(0);
-          }
           int32_t nombre;
           nombre = tab_rgb[k + 3] + tab_rgb[k + 3]*16*16 + tab_rgb[k + 3]*16*16*16*16;
-          tableau_de_mcu[i][j].rgb[i_prime*8+j_prime] = nombre;
-          tableau_de_mcu[i][j].h = 1;
-          tableau_de_mcu[i][j].v = 1;
+          tableau_de_mcu[i][j].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
         }
         return tableau_de_mcu;
       }
@@ -85,39 +91,23 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
 }
 
 // transforme UNE mcu (son pointeur est mis en parametre) en RGB en une mcu en YCbCr
-void transformation_rgb_ycbcr(struct mcu *mc)
+void transformation_bloc_rgb_ycbcr(struct bloc *blo)
 {
-  //parcours de chaque bloc dans la mcu
-  for (size_t i = 0; i < mc->h; i++)
+  //pour chaque tableau de composante de mcu ici juste un bloc pour la mcu
+  for (size_t k = 0; k < 64; k++)
   {
-    for (size_t j = 0; j < mc->v; j++)
-    {
-      //pour chaque tableau de composante de mcu ici juste un bloc pour la mcu
-      for (size_t k = 0; k < 64; k++)
-      {
-        //mc est un triple bloc dans notre cas
-        uint8_t rouge = mc->rgb[k]/(16*16*16*16);
-        uint8_t vert = (mc->rgb[k]-rouge*(16*16*16*16))/(16*16);
-        uint8_t bleu = mc->rgb[k]-rouge*(16*16*16*16)-vert*(16*16);
-        mc->y[k] = 0.299*rouge + 0.587*vert + 0.114*bleu;
-        mc->cb[k] = -0.1687*rouge - 0.3313*vert + 0.5*bleu +128;
-        mc->cr[k] = 0.5*rouge + 0.4187*vert - 0.0813*bleu +128;
-      }
-    }
+    uint8_t rouge = blo->rgb[k]/(16*16*16*16);
+    uint8_t vert = (blo->rgb[k]-rouge*(16*16*16*16))/(16*16);
+    uint8_t bleu = blo->rgb[k]-rouge*(16*16*16*16)-vert*(16*16);
+    blo->y[k] = 0.299*rouge + 0.587*vert + 0.114*bleu;
+    blo->cb[k] = -0.1687*rouge - 0.3313*vert + 0.5*bleu +128;
+    blo->cr[k] = 0.5*rouge + 0.4187*vert - 0.0813*bleu +128;
   }
 }
-
 //a modifier quand on aurra la s
 void dct(uint8_t *composante, int16_t *nouvelle_composante)
 {
   //changement d'intervalle: [0, 255] vers [-128, 127]
-  for (size_t k = 0; k < 64; k++)
-  {
-    // int16_t nombre;
-    // nombre = (int16_t)composante[k];
-    // nouvelle_composante[k] = (float)composante[k]-128;
-    // printf("%f\n", (float)composante[k]);
-  }
   //transformee en cosinus discrete
   //copy de la composante
   for (size_t k = 0; k < 64; k++)
@@ -139,8 +129,8 @@ void dct(uint8_t *composante, int16_t *nouvelle_composante)
     {
       uint8_t x = p/8;
       uint8_t y = p%8;
-      uint8_t i = k/8;
-      uint8_t j = k%8;
+      uint8_t i = k%8;
+      uint8_t j = k/8;
       // printf("%d, %d\n", y, j);
       // printf("%f\n", (2*y+1)*j*M_PI*0.0625);
       somme += ((float)composante[x+8*y]-128)*cos((2*x+1)*i*M_PI*0.0625)*cos((2*y+1)*j*M_PI*0.0625);

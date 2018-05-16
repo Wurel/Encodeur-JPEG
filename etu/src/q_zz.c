@@ -5,12 +5,12 @@
 #include <string.h>
 #include <math.h>
 
-int8_t* zigzag_composante(int8_t *composante)
+int16_t* zigzag_composante(int16_t *composante)
 {
-    int8_t* zigzag = malloc(64 * sizeof(int8_t));
-    int8_t i = 0;
-    int8_t j = 0;
-    int8_t deuxieme_partie = 0;
+    int16_t* zigzag = malloc(64 * sizeof(int16_t));
+    int16_t i = 0;
+    int16_t j = 0;
+    int16_t deuxieme_partie = 0;
     while(j < 64)
     {
         if (i==7)
@@ -18,7 +18,7 @@ int8_t* zigzag_composante(int8_t *composante)
             deuxieme_partie = 1;
         }
         zigzag[j] = composante[i];
-        int8_t diagonale = (i % 7);
+        int16_t diagonale = (i % 7);
         if (deuxieme_partie == 1)
         {
             diagonale += 7;
@@ -78,9 +78,9 @@ int8_t* zigzag_composante(int8_t *composante)
     return zigzag;
 }
 
-void quantification_composante(int8_t *composante)
+void quantification_composante(int16_t *composante)
 {
-  for (uint8_t i = 0; i < 64; i++)
+  for (uint16_t i = 0; i < 64; i++)
   {
     composante[i] = composante[i]/compressed_Y_table[i];
   }
@@ -90,10 +90,10 @@ void quantification_composante(int8_t *composante)
 // int main(int argc, char const *argv[])
 // {
 //     //TEST DU ZIGZAG
-//     int8_t* test_zigzag = malloc(64*sizeof(int8_t));
-//     for(int8_t i = 0; i < 8; i++)
+//     int16_t* test_zigzag = malloc(64*sizeof(int16_t));
+//     for(int16_t i = 0; i < 8; i++)
 //     {
-//         for(int8_t j = 0; j < 8; j++)
+//         for(int16_t j = 0; j < 8; j++)
 //         {
 //             test_zigzag[8*i+j]=i;
 //         }
@@ -103,7 +103,7 @@ void quantification_composante(int8_t *composante)
 //         printf("%d\n", test_zigzag[i]);
 //     }
 //     printf("Le tableau en zig-zag : \n");
-//     int8_t* apres_zigzag = zigzag_composante(test_zigzag);
+//     int16_t* apres_zigzag = zigzag_composante(test_zigzag);
 //     for (size_t i = 0; i < 64; i++)
 //     {
 //         printf("%d\n", apres_zigzag[i]);
