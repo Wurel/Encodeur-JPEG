@@ -4,13 +4,15 @@
 #include <string.h>
 // #include "decoupage_mcu.h"
 
+
+
 struct mcu{
-  int8_t h;
-  int8_t v;
-  int8_t rgb[64];
-  int8_t y;
-  int8_t cb;
-  int8_t cr;
+  uint8_t h;
+  uint8_t v;
+  uint8_t *rgb[64*3];
+  int8_t y[64];
+  int8_t cb[64];
+  int8_t cr[64];
 };
 
 uint8_t *recuperation_rgb(const char *ppm_filename)
@@ -56,6 +58,8 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
 //   }
 // }
 
+
+//prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
 struct mcu decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
 {
   if(h1 == 1 && v1 == 1)
@@ -74,13 +78,42 @@ struct mcu decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
           int32_t j = (k/tab_rgb[2])/8-1;
           int32_t i_prime = k/tab_rgb[2] - 8*i;
           int32_t j_prime = k%tab_rgb[2] -j*8;
-          tableau_de_mcu[i][j].rgb[i_prime*8+j_prime] = tab_rgb[k + 3];
-          printf("%hhx %i\n", tableau_de_mcu[i][j].rgb[i_prime*8+j_prime], k);
+          uint8_t *sous_tableau = malloc(sizeof(uint8_t)*3);
+          sous_tableau[0] = tab_rgb[k + 3];
+          sous_tableau[1] = tab_rgb[k + 3];
+          sous_tableau[2] = tab_rgb[k + 3];
+          // printf("%hhx\n", sous_tableau[1] );
+          tableau_de_mcu[i][j].rgb[i_prime*8+j_prime] = sous_tableau;
+          printf("%i ", k);
+          printf("%x \n", tableau_de_mcu[i][j].rgb[i_prime*8+j_prime][0]);
+          printf("second %x \n", tableau_de_mcu[i][j].rgb[i_prime*8+j_prime][1]);
+          printf("troisieme %x \n", tableau_de_mcu[i][j].rgb[i_prime*8+j_prime][2]);
+
         }
       }
+
     }
   }
 }
+
+
+// transforme UNE mcu en RGB en une MCU en YCbCr
+struct mcu transformation_rgb_ycbcr(struct mcu *mc)
+{
+
+  for (size_t i = 0; i < 64; i++) {
+    uint8_t rouge = mc.rgb[i_prime*8+j_prime][0];
+    uint8_t vert = mc.rgb[i_prime*8+j_prime][1];
+    uint8_t bleu = mc.rgb[i_prime*8+j_prime][2];
+    mc->y = 0.299*rouge + 0.587*vert + 0.114*bleu;
+    mc->cb = -0.1687*rouge + 0.3313*vert + 0.5*bleu +128;
+    mc->cr = 0.299*rouge + 0.587*vert - 0.0813*bleu +128;
+
+  }
+
+}
+
+
 
 // struct mcu *create_mcu(const char *ppm_filename)
 // {
@@ -98,6 +131,6 @@ struct mcu decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
 // }
 
 int main(int argc, char const *argv[]) {
-  decoupage_mcu("/user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/gris.pgm",1,1);
+  decoupage_mcu("/user/7/taconnem/Encodeur-JPEG/etu/images/invader.pgm",1,1);
   return 0;
 }
