@@ -87,26 +87,27 @@ void quantification_composante(int8_t *composante)
 }
 
 
-int main(int argc, char const *argv[])
-{
-    //TEST DU ZIGZAG
-    int8_t* test_zigzag = malloc(64*sizeof(int8_t));
-    for(int8_t i = 0; i < 8; i++)
-    {
-        for(int8_t j = 0; j < 8; j++)
-        {
-            test_zigzag[8*i+j]=i;
-        }
-    }
-    for (size_t i = 0; i < 64; i++)
-    {
-        printf("%d\n", test_zigzag[i]);
-    }
-    printf("Le tableau en zig-zag : \n");
-    int8_t* apres_zigzag = zigzag_composante(test_zigzag);
-    for (size_t i = 0; i < 64; i++)
-    {
-        printf("%d\n", apres_zigzag[i]);
-    }
-    //FIN DU TEST DU ZIG ZAG
-    return 0;
+// int main(int argc, char const *argv[])
+// {
+//     //TEST DU ZIGZAG
+//     int8_t* test_zigzag = malloc(64*sizeof(int8_t));
+//     for(int8_t i = 0; i < 8; i++)
+//     {
+//         for(int8_t j = 0; j < 8; j++)
+//         {
+//             test_zigzag[8*i+j]=i;
+//         }
+//     }
+//     for (size_t i = 0; i < 64; i++)
+//     {
+//         printf("%d\n", test_zigzag[i]);
+//     }
+//     printf("Le tableau en zig-zag : \n");
+//     int8_t* apres_zigzag = zigzag_composante(test_zigzag);
+//     for (size_t i = 0; i < 64; i++)
+//     {
+//         printf("%d\n", apres_zigzag[i]);
+//     }
+//     //FIN DU TEST DU ZIG ZAG
+//     return 0;
+// }
