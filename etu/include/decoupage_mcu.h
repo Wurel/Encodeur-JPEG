@@ -13,9 +13,15 @@ struct mcu{
   uint8_t h;
   uint8_t v;
   uint32_t rgb[64];
-  int8_t y[64];
-  int8_t cb[64];
-  int8_t cr[64];
+  uint8_t y[64];
+  uint8_t cb[64];
+  uint8_t cr[64];
+};
+
+struct bloc_apres_dct{
+    int16_t y[64];
+    int16_t cb[64];
+    int16_t cr[64];
 };
 
 extern struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1);
@@ -25,8 +31,8 @@ extern struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
  * hauteur */
 extern uint8_t *recuperation_rgb(const char *ppm_filename);
 
-extern struct mcu transformation_rgb_ycbcr(struct mcu *mc);
+extern void transformation_rgb_ycbcr(struct mcu *mc);
 
-extern void dct(uint8_t *composante);
+extern void dct(uint8_t *composante, int16_t *nouvelle_composante);
 
 #endif /* decoupage_mcu */
