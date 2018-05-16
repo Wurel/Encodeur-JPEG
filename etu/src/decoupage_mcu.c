@@ -2,15 +2,7 @@
 
 
 
-struct mcu{
-  //en vrai c'est un bloc
-  uint8_t h;
-  uint8_t v;
-  uint32_t rgb[64];
-  int8_t y[64];
-  int8_t cb[64];
-  int8_t cr[64];
-};
+
 
 uint8_t *recuperation_rgb(const char *ppm_filename)
 {
@@ -22,7 +14,6 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   hauteur = malloc(sizeof(char));
   FILE *ppm;
   ppm = fopen(ppm_filename, "r");
-  uint8_t courant;
   if (ppm==NULL)
   {
     printf("Ouverture du fichier impossible\n");
@@ -57,7 +48,7 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
 
 
 //prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
-struct mcu **decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
+struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
 {
   if(h1 == 1 && v1 == 1)
   {
@@ -96,7 +87,6 @@ struct mcu **decoupage_mcu(const char *ppm_filename, int8_t h1, int8_t v1)
           tableau_de_mcu[i][j].rgb[i_prime*8+j_prime] = nombre;
           tableau_de_mcu[i][j].h = 1;
           tableau_de_mcu[i][j].v = 1;
-
         }
         return tableau_de_mcu;
       }
@@ -191,6 +181,6 @@ struct mcu transformation_rgb_ycbcr(struct mcu *mc)
 
 //
 // int main(int argc, char const *argv[]) {
-//   transformation_rgb_ycbcr(&decoupage_mcu("/user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm",1,1)[0][0]);
+  // transformation_rgb_ycbcr(&decoupage_mcu("/user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm",1,1)[0][0]);
 //   return 0;
 // }
