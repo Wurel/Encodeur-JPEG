@@ -8,9 +8,9 @@
 int8_t* zigzag_composante(int8_t *composante)
 {
     int8_t* zigzag = malloc(64 * sizeof(int8_t));
-    int i = 0;
-    int j = 0;
-    int deuxieme_partie = 0;
+    int8_t i = 0;
+    int8_t j = 0;
+    int8_t deuxieme_partie = 0;
     while(j < 64)
     {
         if (i==7)
@@ -18,7 +18,7 @@ int8_t* zigzag_composante(int8_t *composante)
             deuxieme_partie = 1;
         }
         zigzag[j] = composante[i];
-        int diagonale = (i % 7);
+        int8_t diagonale = (i % 7);
         if (deuxieme_partie == 1)
         {
             diagonale += 7;
