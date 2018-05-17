@@ -1,5 +1,5 @@
 #include "decoupage_mcu.h"
-
+#include "structures.h"
 
 
 
@@ -65,12 +65,21 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
         for (size_t i = 0; i < tab_rgb[2]/8; i++) {
           for (size_t j = 0; j < tab_rgb[1]/8; j++) {
             tableau_de_mcu[i][j].tableau_de_bloc = malloc(h1*v1*sizeof(struct bloc));
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct = malloc(h1*v1*sizeof(struct bloc_apres_dct));
             struct bloc bloc0;
             tableau_de_mcu[i][j].tableau_de_bloc[0] = bloc0;
+            struct bloc_apres_dct bloc1;
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0] = bloc1;
             tableau_de_mcu[i][j].h = h1;
             tableau_de_mcu[i][j].v = v1;
             for (int k = 0; k < h1*v1; k++) {
-              tableau_de_mcu[i][j].tableau_de_bloc[k].rgb = malloc(64*sizeof(uint8_t));
+              tableau_de_mcu[i][j].tableau_de_bloc[k].rgb = malloc(64*sizeof(uint32_t));
+              tableau_de_mcu[i][j].tableau_de_bloc[k].y = malloc(64*sizeof(uint8_t));
+              tableau_de_mcu[i][j].tableau_de_bloc[k].cb = malloc(64*sizeof(uint8_t));
+              tableau_de_mcu[i][j].tableau_de_bloc[k].cr = malloc(64*sizeof(uint8_t));
+              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y = malloc(64*sizeof(uint16_t));
+              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr = malloc(64*sizeof(uint16_t));
+              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb = malloc(64*sizeof(uint16_t));
             }
           }
         }
@@ -87,57 +96,5 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
         return tableau_de_mcu;
       }
     }
-  }
-}
-
-// transforme UNE mcu (son pointeur est mis en parametre) en RGB en une mcu en YCbCr
-void transformation_bloc_rgb_ycbcr(struct bloc *blo)
-{
-  //pour chaque tableau de composante de mcu ici juste un bloc pour la mcu
-  for (size_t k = 0; k < 64; k++)
-  {
-    uint8_t rouge = blo->rgb[k]/(16*16*16*16);
-    uint8_t vert = (blo->rgb[k]-rouge*(16*16*16*16))/(16*16);
-    uint8_t bleu = blo->rgb[k]-rouge*(16*16*16*16)-vert*(16*16);
-    blo->y[k] = 0.299*rouge + 0.587*vert + 0.114*bleu;
-    blo->cb[k] = -0.1687*rouge - 0.3313*vert + 0.5*bleu +128;
-    blo->cr[k] = 0.5*rouge + 0.4187*vert - 0.0813*bleu +128;
-  }
-}
-//a modifier quand on aurra la s
-void dct(uint8_t *composante, int16_t *nouvelle_composante)
-{
-  //changement d'intervalle: [0, 255] vers [-128, 127]
-  //transformee en cosinus discrete
-  //copy de la composante
-  for (size_t k = 0; k < 64; k++)
-  {
-    //calcul de C(i) et C(j)
-    float c_i = 1;
-    float c_j =1;
-    if (k/8 == 0)
-    {
-      c_i = 1/sqrt(2);
-    }
-    if (k%8 == 0)
-    {
-      c_j = 1/sqrt(2);
-    }
-    //calcul de la transformee
-    float somme = 0;
-    for (size_t p = 0; p < 64; p++)
-    {
-      uint8_t x = p/8;
-      uint8_t y = p%8;
-      uint8_t i = k%8;
-      uint8_t j = k/8;
-      // printf("%d, %d\n", y, j);
-      // printf("%f\n", (2*y+1)*j*M_PI*0.0625);
-      somme += ((float)composante[x+8*y]-128)*cos((2*x+1)*i*M_PI*0.0625)*cos((2*y+1)*j*M_PI*0.0625);
-    }
-    // printf("%f\n", 1/sqrt(2));
-    // printf("%f\n", 0.25*c_i*c_j*somme);
-    nouvelle_composante[k] = 0.25*c_i*c_j*somme;
-    // printf("%hx, %zu\n", nouvelle_composante[k], k);
   }
 }
