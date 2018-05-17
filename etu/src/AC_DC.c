@@ -29,10 +29,17 @@ int16_t retourne_bits(int16_t nombre, int8_t magnitude)
 }
 
 
+
 void ecriture(struct bitstream *stream, uint16_t nombre)
 {
   int8_t magnitude = retourne_magnitude(nombre);
   int16_t bits = retourne_bits(nombre, magnitude);
   bitstream_write_nbits(stream, magnitude, 4, 0);
   bitstream_write_nbits(stream, bits, magnitude + 1, 0);
+}
+
+
+uint16_t tempo_dc(uint16_t *composante)
+{
+  return composante[0];
 }
