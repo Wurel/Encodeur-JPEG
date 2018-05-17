@@ -14,7 +14,7 @@ int main(void)
     transformation_bloc_rgb_ycbcr(&tab[0][0].tableau_de_bloc[0]);
     for (size_t i = 0; i < 8; i++) {
       for (size_t j = 0; j < 8; j++) {
-        printf("%hhx\t", tab[0][0].tableau_de_bloc[0].rgb[j+8*i]);
+        printf("%x\t", tab[0][0].tableau_de_bloc[0].rgb[j+8*i]);
       }
       printf("\n");
     }
