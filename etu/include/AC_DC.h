@@ -11,5 +11,7 @@ int16_t retourne_bits(int16_t nombre, int8_t magnitude);
 
 void ecriture(struct bitstream *stream, uint16_t nombre);
 
+void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante);
+
 
 #endif /* AC_DC */

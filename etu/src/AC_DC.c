@@ -39,18 +39,21 @@ void ecriture(struct bitstream *stream, uint16_t nombre)
   bitstream_write_nbits(stream, bits, magnitude + 1, 0);
 }
 
-void ecriture_symbole_AC(struct bitsream *stream, uint32_t symbole_decode, uint8_t *nbits)
+
+void ecriture_symbole_AC(struct bitstream *stream, uint32_t symbole_decode, uint8_t *nbits)
 {
-    bitstream_write_nbits(stream, symbole_decode, nbits, 0);
+    bitstream_write_nbits(stream, symbole_decode, *nbits, 0);
 }
 
-//ecrit dans un fichier les codage AC d'une composante
-int16_t* AC_composante_puis_huffman(int16_t *composante)
-{
 
-  struct huff_table *mon_arbre = malloc(struct huff_table);
-  mon_arbre = huffman_table_build(*htables_nb_symb_per_lengths[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS][16],
-                      *htables_symbols[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS],
+
+//ecrit dans un fichier les codage AC d'une composante
+void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante)
+{
+  // struct huff_table *mon_arbre = malloc(sizeof(struct huff_table));
+  struct huff_table *mon_arbre = malloc(600);
+  mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS][16],
+                      htables_symbols[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS],
                       htables_nb_symbols[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS]);
 
   int8_t compteur_zeros = 0;
@@ -61,7 +64,7 @@ int16_t* AC_composante_puis_huffman(int16_t *composante)
     nb_zeros_finaux++;
     k--;
   }
-  for (size_t i = 1; i < 64 - nb_zeros_finaux; i++)
+  for (int i = 1; i < 64 - nb_zeros_finaux; i++)
   {
     if (composante[i]==0)
     {
@@ -87,11 +90,6 @@ int16_t* AC_composante_puis_huffman(int16_t *composante)
   {
     uint8_t *nbits = malloc(sizeof(uint8_t));
     uint32_t symbole_decode = huffman_table_get_path(mon_arbre, 0, nbits);
-    ecriture_symbole_AC(stream, symbole_decode, nbits)
+    ecriture_symbole_AC(stream, symbole_decode, nbits);
   }
-
-uint16_t tempo_dc(uint16_t *composante)
-{
-  return composante[0];
-
 }
