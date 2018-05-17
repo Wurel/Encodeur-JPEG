@@ -65,8 +65,11 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
         for (size_t i = 0; i < tab_rgb[2]/8; i++) {
           for (size_t j = 0; j < tab_rgb[1]/8; j++) {
             tableau_de_mcu[i][j].tableau_de_bloc = malloc(h1*v1*sizeof(struct bloc));
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct = malloc(h1*v1*sizeof(struct bloc_apres_dct));
             struct bloc bloc0;
             tableau_de_mcu[i][j].tableau_de_bloc[0] = bloc0;
+            struct bloc_apres_dct bloc1;
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0] = bloc1;
             tableau_de_mcu[i][j].h = h1;
             tableau_de_mcu[i][j].v = v1;
             for (int k = 0; k < h1*v1; k++) {
@@ -74,7 +77,9 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
               tableau_de_mcu[i][j].tableau_de_bloc[k].y = malloc(64*sizeof(uint8_t));
               tableau_de_mcu[i][j].tableau_de_bloc[k].cb = malloc(64*sizeof(uint8_t));
               tableau_de_mcu[i][j].tableau_de_bloc[k].cr = malloc(64*sizeof(uint8_t));
-
+              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y = malloc(64*sizeof(uint16_t));
+              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr = malloc(64*sizeof(uint16_t));
+              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb = malloc(64*sizeof(uint16_t));
             }
           }
         }
@@ -88,7 +93,6 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
           nombre = tab_rgb[k + 3] + tab_rgb[k + 3]*16*16 + tab_rgb[k + 3]*16*16*16*16;
           tableau_de_mcu[i][j].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
         }
-        printf("salut\n");
         return tableau_de_mcu;
       }
     }

@@ -1,6 +1,9 @@
 #ifndef structures
 #define structures
 
+#include <stdint.h>
+
+
 struct bloc{
   uint32_t *rgb;
   uint8_t *y;
@@ -12,6 +15,7 @@ struct mcu{
   uint8_t h;
   uint8_t v;
   struct bloc *tableau_de_bloc;
+  struct bloc_apres_dct *tableau_de_bloc_apres_dct;
 };
 struct bloc_apres_dct{
     int16_t *y;
