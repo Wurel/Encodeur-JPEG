@@ -30,6 +30,7 @@ int16_t retourne_bits(int16_t nombre, int8_t magnitude)
 }
 
 
+
 void ecriture(struct bitstream *stream, uint16_t nombre)
 {
   int8_t magnitude = retourne_magnitude(nombre);
@@ -88,4 +89,9 @@ int16_t* AC_composante_puis_huffman(int16_t *composante)
     uint32_t symbole_decode = huffman_table_get_path(mon_arbre, 0, nbits);
     ecriture_symbole_AC(stream, symbole_decode, nbits)
   }
+
+uint16_t tempo_dc(uint16_t *composante)
+{
+  return composante[0];
+
 }

@@ -37,6 +37,36 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   }
 }
 
+uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
+{
+  if (h1 == 1 && v1 == 1)
+  {
+    printf("salut\n");
+    char *type;
+    type = malloc(2*sizeof(char));
+    char *largeur;
+    largeur = malloc(sizeof(char));
+    char *hauteur;
+    hauteur = malloc(sizeof(char));
+    FILE *ppm;
+    ppm = fopen(ppm_filename, "r");
+    if (ppm==NULL)
+    {
+      printf("Ouverture du fichier impossible\n");
+      exit(0);
+    }
+    uint32_t *tab = malloc(2*sizeof(uint32_t));
+    fscanf(ppm, "%s", type);
+    fscanf(ppm, "%s", largeur);
+    fscanf(ppm, "%s", hauteur);
+    printf("%s\n", largeur);
+    tab[0] = atoi(largeur)/8;
+    tab[1] = atoi(hauteur)/8;
+    fclose(ppm);
+    return tab;
+  }
+}
+
 //prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
 struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
 {

@@ -22,6 +22,8 @@
 
 extern struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1);
 
+uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1);
+
 /* permet de recuperer les échantillons RGB à partir du fichier
  * d’entrée PPM premiere case type du tableau deuxieme case largeur troisieme case
  * hauteur */
