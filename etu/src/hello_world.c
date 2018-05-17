@@ -6,11 +6,12 @@
 #include "q_zz.h"
 #include "AC_DC.h"
 
+
 int main(void)
 {
     printf("Au boulot!\n");
     struct mcu **tab;
-    tab = decoupage_mc("/home/marion/Encodeur-JPEG/etu/images/invader.pgm",1,1);
+    tab = decoupage_mc("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm",1,1);
     transformation_bloc_rgb_ycbcr(&tab[0][0].tableau_de_bloc[0]);
     struct bloc_apres_dct blc;
     blc.y = malloc(sizeof(uint16_t)*64);
@@ -26,6 +27,7 @@ int main(void)
     //   printf("\n");
     // }
     // printf("%x\n", blc.y[0]);
-    retourne_magnitude_bits(-4);
+    struct bitstream *bit = bitstream_create("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/test");
+    ecriture(bit, 4);
     return EXIT_SUCCESS;
 }
