@@ -22,24 +22,24 @@
 int main(int argc, char const *argv[])
 {
     printf("Au boulot!\n");
-    struct mcu **tab;
+    struct mcu **tableau_de_mcu;
     uint32_t *tab_taille = taille_tableau(argv[1],1,1);
     // Découpage
-    tab = decoupage_mc(argv[1],1,1);
+    tableau_de_mcu = decoupage_mc(argv[1],1,1);
 // RGB -> YCbCr, DCT
     for (size_t i = 0; i < tab_taille[0]; i++) {
       for (size_t j = 0; j < tab_taille[1]; j++) {
         //rgb 2 ycbcr
-        transformation_bloc_rgb_ycbcr(&tab[i][j].tableau_de_bloc[0]);
+        transformation_bloc_rgb_ycbcr(&tableau_de_mcu[i][j].tableau_de_bloc[0]);
         // DCT
-        tab[i][j].tableau_de_bloc_apres_dct = malloc(sizeof(struct bloc_apres_dct));
-        tab[i][j].tableau_de_bloc_apres_dct[0].y = malloc(sizeof(uint16_t)*64);
-        dct_bloc(tab[i][j].tableau_de_bloc[0].y, tab[i][j].tableau_de_bloc_apres_dct[0].y);
+        tableau_de_mcu[i][j].tableau_de_bloc_apres_dct = malloc(sizeof(struct bloc_apres_dct));
+        tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y = malloc(sizeof(uint16_t)*64);
+        dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[0].y, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
         //Zigzag
-        tab[i][j].tableau_de_bloc_apres_dct[0].y =
-                                zigzag_composante(tab[i][j].tableau_de_bloc_apres_dct[0].y);
+        tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y =
+                                zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
         //Quantification
-        quantification_composante(tab[i][j].tableau_de_bloc_apres_dct[0].y);
+        quantification_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
       }
     }
 
@@ -59,8 +59,8 @@ int main(int argc, char const *argv[])
     jpeg_write_header(jpeg);
     struct bitstream *bits; //= bitstream_create("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/test.jpeg");
     bits = jpeg_desc_get_bitstream(jpeg);
-    ecriture_symbole_DC(bits, tabl[0]);
-    AC_composante_puis_huffman(bits, tabl);
+    ecriture_symbole_DC(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
+    AC_composante_puis_huffman(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y);
     jpeg_write_footer(jpeg);
     return EXIT_SUCCESS;
 }
