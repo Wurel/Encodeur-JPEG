@@ -33,10 +33,20 @@ int16_t retourne_bits(int16_t nombre, int8_t magnitude)
 
 void ecriture_symbole_DC(struct bitstream *stream, uint16_t nombre)
 {
+  struct huff_table *mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][0],
+                      htables_symbols[0][0],
+                      htables_nb_symbols[0][0]);
   int8_t magnitude = retourne_magnitude(nombre);
+  uint8_t *nbits = malloc(sizeof(uint8_t));
+  uint32_t symbole_decode = huffman_table_get_path(mon_arbre, magnitude, nbits);
+  bitstream_write_nbits(stream, symbole_decode, nbits, 0);
+  free(nbits);
+
   int16_t bits = retourne_bits(nombre, magnitude);
-  bitstream_write_nbits(stream, magnitude, 4, 0);
-  bitstream_write_nbits(stream, bits, magnitude + 1, 0);
+  uint8_t *nbits = malloc(sizeof(uint8_t));
+  uint32_t symbole_decode = huffman_table_get_path(mon_arbre, bits, nbits);
+  bitstream_write_nbits(stream, symbole_decode, nbits, 0);
+  free(nbits);
 }
 
 
