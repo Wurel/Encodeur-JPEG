@@ -95,10 +95,8 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante)
       uint8_t magnitude = retourne_magnitude(composante[i]);
       int8_t bit = retourne_bits(composante[i], magnitude);
       //On veut concaténer
-      printf("%d\n", compteur_zeros);
       uint8_t *nbits = malloc(sizeof(uint8_t));
       uint32_t symbole_decode = huffman_table_get_path(mon_arbre, compteur_zeros*16+magnitude, nbits);
-      printf("le symbole est %x\n", symbole_decode);
       ecriture_symbole_AC(stream, symbole_decode, nbits);
       ecriture_symbole_AC(stream, bit, &magnitude);
       compteur_zeros = 0;

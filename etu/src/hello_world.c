@@ -11,9 +11,10 @@
 #include "bitstream.h"
 #include "huffman.h"
 
-int main(void)
+int main(int argc, char const *argv[])
 {
     printf("Au boulot!\n");
+    printf("%d\n", argc);
     struct mcu **tab;
     uint32_t *tab_taille = taille_tableau("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm",1,1);
     tab = decoupage_mc("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm",1,1);
