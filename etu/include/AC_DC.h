@@ -7,10 +7,10 @@
 
 
 //Retourne la magnitude d'un nombre entré en paramètre
-int8_t retourne_magnitude(int16_t nombre);
+uint8_t retourne_magnitude(int16_t nombre);
 
 //Retourne la place d'un nombre entré en paramètre dans sa classe de magnitude
-int16_t retourne_bits(int16_t nombre, int8_t magnitude);
+int16_t retourne_bits(int16_t nombre, uint8_t magnitude);
 
 
 void ecriture_symbole_DC(struct bitstream *stream, uint16_t nombre);

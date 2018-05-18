@@ -1,0 +1,37 @@
+[SOI]	marker found
+[APP0]	length 16 bytes
+	JFIF application
+	other parameters ignored (9 bytes).
+[COM]	length 16 bytes
+	Comment found: "<3 le projet C"
+[DQT]	length 67 bytes
+		quantization table index 0
+		quantization precision 8 bits
+		quantization table read (64 bytes)
+[SOF0]	length 11 bytes
+	sample precision 8
+	image height 8
+	image width 8
+	nb of component  1
+	component Y
+		id 1
+		sampling factors (hxv) 1x1
+		quantization table index 0
+[DHT]	length 31 bytes
+		Huffman table type DC
+		Huffman table index 0
+		total nb of Huffman codes 12
+[DHT]	length 181 bytes
+		Huffman table type AC
+		Huffman table index 0
+		total nb of Huffman codes 162
+[SOS]	length 8 bytes
+	nb of components in scan 1
+	scan component index 0
+		associated to component of id 1 (frame index 0)
+		associated to DC Huffman table of index 0
+		associated to AC Huffman table of index 0
+	other parameters ignored (3 bytes)
+
+*** STOPPED SCAN, bitstream at the beginning of Scan raw compressed data ***
+... (image decompression) ...

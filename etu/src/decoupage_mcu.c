@@ -12,6 +12,8 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   largeur = malloc(sizeof(char));
   char *hauteur;
   hauteur = malloc(sizeof(char));
+  char *poubelle;
+  poubelle = malloc(5*sizeof(char));
   FILE *ppm;
   ppm = fopen(ppm_filename, "r");
   if (ppm==NULL)
@@ -23,7 +25,7 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   fscanf(ppm, "%s", type);
   fscanf(ppm, "%s", largeur);
   fscanf(ppm, "%s", hauteur);
-  // fread(stderr, 1, 5, ppm);
+  fread(poubelle, 1, 5, ppm);
   // fprintf(stderr, "erreur\n");
   if (!strcmp(type, "P5"))
   {
