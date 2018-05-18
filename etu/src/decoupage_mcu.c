@@ -13,7 +13,7 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   char *hauteur;
   hauteur = malloc(sizeof(char));
   char *poubelle;
-  poubelle = malloc(5*sizeof(char));
+  poubelle = malloc(50*sizeof(char));
   FILE *ppm;
   ppm = fopen(ppm_filename, "r");
   if (ppm==NULL)
@@ -44,7 +44,6 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
 {
   if (h1 == 1 && v1 == 1)
   {
-    printf("salut\n");
     char *type;
     type = malloc(2*sizeof(char));
     char *largeur;
@@ -62,7 +61,6 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
     fscanf(ppm, "%s", type);
     fscanf(ppm, "%s", largeur);
     fscanf(ppm, "%s", hauteur);
-    printf("%s\n", largeur);
     tab[0] = atoi(largeur)/8;
     tab[1] = atoi(hauteur)/8;
     fclose(ppm);
@@ -75,8 +73,13 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
 {
   if(h1 == 1 && v1 == 1)
   {
-    printf("ici %d\n", recuperation_rgb(ppm_filename)[1]);
+    printf("%d\n", recuperation_rgb(ppm_filename)[1]);
+    printf("salut\n");
     uint8_t *tab_rgb = malloc((recuperation_rgb(ppm_filename)[1]*recuperation_rgb(ppm_filename)[2]+3)*sizeof(uint8_t));
+    if (tab_rgb == NULL){
+      printf("erreur d'allocation\n");
+      exit(0);
+    }
     tab_rgb = recuperation_rgb(ppm_filename);
     if (tab_rgb[0] == 1)
     //cas négro

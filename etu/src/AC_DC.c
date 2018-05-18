@@ -40,14 +40,9 @@ void ecriture_symbole_DC(struct bitstream *stream, uint16_t nombre)
   uint8_t magnitude = retourne_magnitude(nombre);
   uint8_t *nbits = malloc(sizeof(uint8_t));
   symbole_decode = huffman_table_get_path(mon_arbre, magnitude, nbits);
-  printf("hexa %x\n", symbole_decode);
   bitstream_write_nbits(stream, symbole_decode, *nbits, 0);
   free(nbits);
   int16_t bits = retourne_bits(nombre, magnitude);
-  printf("nombre %x\n", bits);
-  // uint8_t *nbits2 = malloc(sizeof(uint8_t));
-  // printf("ici ici %x\n", bits);
-  // symbole_decode = huffman_table_get_path(mon_arbre, bits, nbits2);
   bitstream_write_nbits(stream, bits, magnitude, 0);
 }
 
@@ -91,8 +86,7 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante)
 
   while (composante[k] == 0 && k>=1)
   {
-    printf("%d\n", composante[k]);
-    nb_zeros_finaux++;
+      nb_zeros_finaux++;
     k--;
   }
   for (int i = 1; i < 64 - nb_zeros_finaux; i++)
