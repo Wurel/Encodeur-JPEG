@@ -31,7 +31,7 @@ int16_t retourne_bits(int16_t nombre, int8_t magnitude)
 
 
 
-void ecriture(struct bitstream *stream, uint16_t nombre)
+void ecriture_symbole_DC(struct bitstream *stream, uint16_t nombre)
 {
   int8_t magnitude = retourne_magnitude(nombre);
   int16_t bits = retourne_bits(nombre, magnitude);
@@ -46,8 +46,7 @@ void ecriture_symbole_AC(struct bitstream *stream, uint32_t symbole_decode, uint
 }
 
 
-
-//ecrit dans un fichier les codage AC d'une composante
+//ecrit dans un fichier les codage AC d'une composante, après avoir codé les symboles avec huffman
 void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante)
 {
   // struct huff_table *mon_arbre = malloc(sizeof(struct huff_table));
