@@ -1,10 +1,16 @@
 #include "dct.h"
 
+
+/*
+Transformation en cosinus discrete (DCT):
+prend en parametre la composante a transformer ainsi qu'une composante vide
+(qui deviendra la composante transformee)
+*/
 void dct_bloc(uint8_t *composante, int16_t *nouvelle_composante)
 {
   //changement d'intervalle: [0, 255] vers [-128, 127]
   //transformee en cosinus discrete
-  //copy de la composante
+  //copie de la composante
   for (size_t k = 0; k < 64; k++)
   {
     //calcul de C(i) et C(j)
@@ -18,21 +24,17 @@ void dct_bloc(uint8_t *composante, int16_t *nouvelle_composante)
     {
       c_j = 1/sqrt(2);
     }
-    //calcul de la transformee
+    //calcul de la transformee avec changement d'intervalle
     float somme = 0;
     for (size_t p = 0; p < 64; p++)
     {
+      //i et j indices de l'ancienne composante, x et y de la nouvelle
       uint8_t x = p/8;
       uint8_t y = p%8;
       uint8_t i = k%8;
       uint8_t j = k/8;
-      // printf("%d, %d\n", y, j);
-      // printf("%f\n", (2*y+1)*j*M_PI*0.0625);
       somme += ((float)composante[x+8*y]-128)*cos((2*x+1)*i*M_PI*0.0625)*cos((2*y+1)*j*M_PI*0.0625);
     }
-    // printf("%f\n", 1/sqrt(2));
-    // printf("%f\n", 0.25*c_i*c_j*somme);
     nouvelle_composante[k] = 0.25*c_i*c_j*somme;
-    // printf("%hx, %zu\n", nouvelle_composante[k], k);
   }
 }
