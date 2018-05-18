@@ -50,14 +50,13 @@ void ecriture_symbole_AC(struct bitstream *stream, uint32_t symbole_decode, uint
 void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante)
 {
   // struct huff_table *mon_arbre = malloc(sizeof(struct huff_table));
-  struct huff_table *mon_arbre = malloc(600);
+  struct huff_table *mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[1][0],
+                      htables_symbols[1][0],
+                      htables_nb_symbols[1][0]);
+;
   // mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS][16],
   //                     htables_symbols[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS],
   //                     htables_nb_symbols[NB_SAMPLE_TYPES][NB_COLOR_COMPONENTS]);
-  mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[1][0],
-                      htables_symbols[1][0],
-                      htables_nb_symbols[1][0]);
-
   int8_t compteur_zeros = 0;
   int8_t nb_zeros_finaux = 0;
   int8_t k = 63;
