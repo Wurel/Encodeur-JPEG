@@ -12,12 +12,6 @@
 #include "huffman.h"
 #include <unistd.h>
 
-// for (size_t i = 0; i < 8; i++) {
-//   for (size_t j = 0; j < 8; j++) {
-//     printf("%x\t", tabl[j+8*i]);
-//   }
-//   printf("\n");
-// }
 
 int main(int argc, char const *argv[])
 {
@@ -42,6 +36,12 @@ int main(int argc, char const *argv[])
         quantification_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
       }
     }
+    for (size_t i = 0; i < 8; i++) {
+      for (size_t j = 0; j < 8; j++) {
+        printf("%x\t", tableau_de_mcu[1][1].tableau_de_bloc_apres_dct[0].y[j+i*8]);
+      }
+      printf("\n");
+    }
 
     struct jpeg_desc *jpeg = jpeg_desc_create();
     jpeg_desc_set_ppm_filename(jpeg, argv[1]);
@@ -59,8 +59,10 @@ int main(int argc, char const *argv[])
     jpeg_write_header(jpeg);
     struct bitstream *bits; //= bitstream_create("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/test.jpeg");
     bits = jpeg_desc_get_bitstream(jpeg);
-    ecriture_symbole_DC(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
-    AC_composante_puis_huffman(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y);
+    // ecriture_symbole_DC(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
+    printf("%d\n", tab_taille[1]);
+    ecriture_AC_DC_complete(bits, tableau_de_mcu, tab_taille[0], tab_taille[1]);
+    // AC_composante_puis_huffman(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y);
     jpeg_write_footer(jpeg);
     return EXIT_SUCCESS;
 }

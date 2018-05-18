@@ -1,4 +1,4 @@
-#include "AC_DC.h"
+  #include "AC_DC.h"
 #include <math.h>
 #include "bitstream.h"
 #include <stdlib.h>
@@ -13,7 +13,7 @@ uint8_t retourne_magnitude(int16_t nombre)
       return m;
     }
   }
-  exit(0);
+  return 0;
 }
 
 int16_t retourne_bits(int16_t nombre, uint8_t magnitude)
@@ -49,19 +49,19 @@ void ecriture_symbole_DC(struct bitstream *stream, uint16_t nombre)
 
 //se fait appeler par la fonction AC DC et donne le symbole DC pour un indice de tableau de bloc donné
 //Attention c'est dans le cas N&B
-void ecriture_DC(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , uint16_t *predicateur)
+void ecriture_DC(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , uint16_t predicateur)
 {
   //cas du premier bloc
-  if (predicateur == 0)
-  {
-    predicateur = tab[i][j].tableau_de_bloc_apres_dct[0].y[0];
-    ecriture_symbole_DC(stream, predicateur)
-  }
-  else
-  {
-    uint16_t nombre_dc = tableau_de_bloc_apres_dct[indice_bloc_apres_dct].y[0] - predicateur;
-    ecriture_symbole_DC(stream, nombre_dc);
-  }
+  // if (predicateur == 0)
+  // {
+  //   predicateur = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].y[0];
+  //   ecriture_symbole_DC(stream, *predicateur);
+  // }
+  // else
+  // {
+  uint16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].y[0] - predicateur;
+  ecriture_symbole_DC(stream, nombre_dc);
+  // }
 }
 
 
@@ -129,12 +129,12 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante)
 void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab,
    uint32_t h, uint32_t v)
 {
-  uint16_t *predicateur =malloc(sizeof(uint16_t));
-  predicateur = 0;
+  uint16_t predicateur = 0;
   for (size_t i = 0; i < h; i++)
   {
     for (size_t j = 0; j < v; j++) {
       ecriture_DC(stream, tab, i, j, predicateur);
+      predicateur = tab[i][j].tableau_de_bloc_apres_dct[0].y[0];
       AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].y);
     }
   }
