@@ -23,10 +23,11 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   fscanf(ppm, "%s", type);
   fscanf(ppm, "%s", largeur);
   fscanf(ppm, "%s", hauteur);
-  fread(stderr, 1, 5, ppm);
+  // fread(stderr, 1, 5, ppm);
+  // fprintf(stderr, "erreur\n");
   if (!strcmp(type, "P5"))
   {
-    uint8_t *tableau = malloc(atoi(hauteur)*atoi(largeur) + 3);
+    uint8_t *tableau = malloc(sizeof(uint8_t)*(atoi(hauteur)*atoi(largeur) + 3));
     // 1 car 1 pixel = 1 byte
     tableau[0] = 1;
     tableau[1] = atoi(largeur);
@@ -72,8 +73,9 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
 {
   if(h1 == 1 && v1 == 1)
   {
-    uint8_t *tab_rgb = recuperation_rgb(ppm_filename);
-
+    printf("ici %d\n", recuperation_rgb(ppm_filename)[1]);
+    uint8_t *tab_rgb = malloc((recuperation_rgb(ppm_filename)[1]*recuperation_rgb(ppm_filename)[2]+3)*sizeof(uint8_t));
+    tab_rgb = recuperation_rgb(ppm_filename);
     if (tab_rgb[0] == 1)
     //cas négro
     {
@@ -95,7 +97,15 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
         for (size_t i = 0; i < tab_rgb[2]/8; i++) {
           for (size_t j = 0; j < tab_rgb[1]/8; j++) {
             tableau_de_mcu[i][j].tableau_de_bloc = malloc(h1*v1*sizeof(struct bloc));
+            if (tableau_de_mcu[i][j].tableau_de_bloc == NULL){
+              printf("erreur d'allocation\n");
+              exit(0);
+            }
             tableau_de_mcu[i][j].tableau_de_bloc_apres_dct = malloc(h1*v1*sizeof(struct bloc_apres_dct));
+            if (tableau_de_mcu[i][j].tableau_de_bloc_apres_dct == NULL){
+              printf("erreur d'allocation\n");
+              exit(0);
+            }
             struct bloc bloc0;
             tableau_de_mcu[i][j].tableau_de_bloc[0] = bloc0;
             struct bloc_apres_dct bloc1;
