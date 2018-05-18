@@ -8,12 +8,13 @@
 int16_t* zigzag_composante(int16_t *composante)
 {
     int16_t* zigzag = malloc(64 * sizeof(int16_t));
-    int16_t i = 0;
-    int16_t j = 0;
+    int16_t i = 0; //Parcours la composante originale
+    int16_t j = 0; //Ecrit dans le nouveau tableau zigzag
     int16_t deuxieme_partie = 0;
     while(j < 64)
     {
-        if (i==7)
+        //L'algorithme agit de deux maniéres différentes, que l'on soit dans la partie haute gauche, ou dans la partie basse droite.
+        if (i==7) //Lorsque i=7, on etre dans la partie basse droite
         {
             deuxieme_partie = 1;
         }
