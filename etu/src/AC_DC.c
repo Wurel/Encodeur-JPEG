@@ -31,7 +31,7 @@ int16_t retourne_bits(int16_t nombre, uint8_t magnitude)
 
 
 
-void ecriture_symbole_DC(struct bitstream *stream, uint16_t nombre)
+void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre)
 {
   uint32_t symbole_decode;
   struct huff_table *mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][0],
@@ -59,7 +59,7 @@ void ecriture_DC(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, u
   // }
   // else
   // {
-  uint16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].y[0] - predicateur;
+  int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].y[0] - predicateur;
   ecriture_symbole_DC(stream, nombre_dc);
   // }
 }
@@ -130,9 +130,9 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab,
    uint32_t h, uint32_t v)
 {
   uint16_t predicateur = 0;
-  for (size_t i = 0; i < h; i++)
+  for (uint32_t i = 0; i < h; i++)
   {
-    for (size_t j = 0; j < v; j++) {
+    for (uint32_t j = 0; j < v; j++) {
       ecriture_DC(stream, tab, i, j, predicateur);
       predicateur = tab[i][j].tableau_de_bloc_apres_dct[0].y[0];
       AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].y);

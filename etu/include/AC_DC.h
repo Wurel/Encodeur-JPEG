@@ -13,7 +13,7 @@ uint8_t retourne_magnitude(int16_t nombre);
 int16_t retourne_bits(int16_t nombre, uint8_t magnitude);
 
 
-void ecriture_symbole_DC(struct bitstream *stream, uint16_t nombre);
+void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre);
 
 void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante);
 
