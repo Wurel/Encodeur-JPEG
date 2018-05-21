@@ -13,8 +13,15 @@ uint8_t type(const char *ppm_filename){
   }
   fscanf(ppm, "%s", type);
   fclose(ppm);
-  if (!strcmp(type, "P5")) return 1;
-  return 3;
+  printf("dif %d\n", strcmp(type, "P5"));
+  if (!strcmp(type, "P5"))
+  {
+    return 1;
+  }
+  else{
+    return 3;
+  }
+
 
 
 }

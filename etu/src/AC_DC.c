@@ -147,10 +147,16 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_
     for (uint32_t i = 0; i < h; i++)
     {
       for (uint32_t j = 0; j < v; j++) {
-        ecriture_DC(stream, tab, i, j, predicateur);
+        ecriture_DC(stream, tab, i, j, predicateur_cb);
         predicateur_cb = tab[i][j].tableau_de_bloc_apres_dct[0].cb[0];
-        predicateur_cr = tab[i][j].tableau_de_bloc_apres_dct[0].cr[0];
         AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].cb);
+      }
+    }
+    for (uint32_t i = 0; i < h; i++)
+    {
+      for (uint32_t j = 0; j < v; j++) {
+        ecriture_DC(stream, tab, i, j, predicateur_cr);
+        predicateur_cr = tab[i][j].tableau_de_bloc_apres_dct[0].cr[0];
         AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].cr);
       }
     }
