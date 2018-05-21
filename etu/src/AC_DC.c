@@ -126,9 +126,10 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante)
 
 
 
-void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab,
-   uint32_t h, uint32_t v)
+void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_t h, uint32_t v, uint8_t type )
 {
+  //pour Y (cas de base)
+  //(pour N&B il ne fait que cette première partie)
   uint16_t predicateur = 0;
   for (uint32_t i = 0; i < h; i++)
   {
@@ -136,6 +137,22 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab,
       ecriture_DC(stream, tab, i, j, predicateur);
       predicateur = tab[i][j].tableau_de_bloc_apres_dct[0].y[0];
       AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].y);
+    }
+  }
+  if (type == 3)
+  {
+  //cas couleur sans down sampler
+    uint16_t predicateur_cr = 0;
+    uint16_t predicateur_cb = 0;
+    for (uint32_t i = 0; i < h; i++)
+    {
+      for (uint32_t j = 0; j < v; j++) {
+        ecriture_DC(stream, tab, i, j, predicateur);
+        predicateur_cb = tab[i][j].tableau_de_bloc_apres_dct[0].cb[0];
+        predicateur_cr = tab[i][j].tableau_de_bloc_apres_dct[0].cr[0];
+        AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].cb);
+        AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].cr);
+      }
     }
   }
 }
