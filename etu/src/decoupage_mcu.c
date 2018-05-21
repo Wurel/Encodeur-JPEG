@@ -1,13 +1,29 @@
 #include "decoupage_mcu.h"
 #include "structures.h"
 
+uint8_t type(const char *ppm_filename){
+  char *type;
+  type = malloc(2*sizeof(char));
+  FILE *ppm;
+  ppm = fopen(ppm_filename, "r");
+  if (ppm==NULL)
+  {
+    printf("Ouverture du fichier impossible\n");
+    exit(0);
+  }
+  fscanf(ppm, "%s", type);
+  fclose(ppm);
+  if (!strcmp(type, "P5")) return 1;
+  return 3;
 
+
+}
 
 
 uint8_t *recuperation_rgb(const char *ppm_filename)
 {
-  uint32_t largeur1 = taille_tableau(ppm_filename, 1, 1)[0]*8;
-  uint32_t hauteur1 = taille_tableau(ppm_filename, 1, 1)[1]*8;
+  uint32_t largeur1 = taille_tableau_x8(ppm_filename, 1, 1)[0];
+  uint32_t hauteur1 = taille_tableau_x8(ppm_filename, 1, 1)[1];
   char *type;
   type = malloc(2*sizeof(char));
   char *largeur;
@@ -31,10 +47,11 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   // fprintf(stderr, "erreur\n");
   if (!strcmp(type, "P5"))
   {
+    printf("negro\n");
     uint8_t *tableau = malloc(sizeof(uint8_t)*(atoi(hauteur)*atoi(largeur) + 3));
     // 1 car 1 pixel = 1 byte
     tableau[0] = 1;
-  
+
 
     //ATTENTION BIDOUILLE
 
@@ -45,6 +62,25 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
     fclose(ppm);
     return tableau;
   }
+  if (!strcmp(type, "P6"))
+  {
+    printf("image en couleur\n");
+    uint8_t *tableau = malloc(sizeof(uint8_t)*3*(atoi(hauteur)*atoi(largeur) + 3));
+    // 1 car 1 pixel = 1 byte
+    tableau[0] = 0;
+
+
+    //ATTENTION BIDOUILLE
+
+
+    tableau[1] = 0;
+    tableau[2] = 0;
+    fread(tableau + 3, 1, 3*atoi(largeur)*atoi(hauteur), ppm);
+    fclose(ppm);
+    return tableau;
+  }
+  printf("mauvais type d'image\n");
+  exit(1);
 }
 
 uint32_t ajustement_taille(int32_t taille)
@@ -63,7 +99,6 @@ uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
   uint32_t largeur = taille_tableau_x8(ppm_filename, h1, v1)[0];
   uint32_t hauteur_objectif = ajustement_taille(hauteur);
   uint32_t largeur_objectif = ajustement_taille(largeur);
-  printf("%d, %d, %d, %d\n", largeur ,hauteur, largeur_objectif, hauteur_objectif);
   uint8_t * rgb_bonne_taille = malloc((hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
   uint8_t *tableau_rgb = malloc(sizeof(uint8_t)*(hauteur * largeur + 3));
   tableau_rgb = recuperation_rgb(ppm_filename);
@@ -163,9 +198,6 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
     }
     tab_rgb = rgb_rembourre(ppm_filename, 1, 1);
     // tab_rgb = recuperation_rgb(ppm_filename);
-    if (tab_rgb[0] == 1)
-    //cas négro
-    {
       if (largeur_objectif % 8 == 0 && hauteur_objectif % 8 ==0) // on fait juste le cas multiple de 8
       {
         struct mcu **tableau_de_mcu;
@@ -210,6 +242,9 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
             }
           }
         }
+        if (tab_rgb[0] == 1)
+        //cas négro
+        {
         int32_t indice_ligne = 0;
         for (uint32_t k = 0; k < hauteur_objectif*largeur_objectif; k++)
         {
@@ -233,8 +268,36 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
           tableau_de_mcu[i/8][j/8].tableau_de_bloc[0].rgb[k%8+indice_ligne*8] = nombre;
           // tableau_de_mcu[k/largeur_objectif/8][k%largeur_objectif/8].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
         }
-        return tableau_de_mcu;
+      }
+        if (tab_rgb[0] == 0)
+        //cas négro
+        {
+          printf("coul\n");
+        int32_t indice_ligne = 0;
+        for (uint32_t k = 0; k < hauteur_objectif*largeur_objectif; k++)
+        {
+          if (k % largeur_objectif == 0 && (k != 0)) {
+            indice_ligne ++;
+          }
+          if (indice_ligne == 8) {
+            indice_ligne = 0;
+          }
+          uint32_t i = k/largeur_objectif;
+          uint32_t j = k%largeur_objectif;
+          // uint32_t j = k%hauteur_objectif;
+          // printf("%d\n", k);
+          // int32_t i_prime = k/hauteur - 8*i;
+          // int32_t j_prime = k%hauteur -j*8;
+          int32_t i_prime = i-8*(k/largeur_objectif/8);
+          // int32_t j_prime = j-8*(k%largeur_objectif/8);
+          int32_t j_prime = j*8 + k%8;
+          int32_t nombre;
+          nombre = tab_rgb[3*k + 3] + tab_rgb[3*k + 1 + 3]*16*16 + tab_rgb[3*k + 2 + 3]*16*16*16*16;
+          tableau_de_mcu[i/8][j/8].tableau_de_bloc[0].rgb[k%8+indice_ligne*8] = nombre;
+          // tableau_de_mcu[k/largeur_objectif/8][k%largeur_objectif/8].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
+        }
+      }
+      return tableau_de_mcu;
       }
     }
   }
-}

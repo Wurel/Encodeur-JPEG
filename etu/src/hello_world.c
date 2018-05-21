@@ -16,18 +16,18 @@
 int main(int argc, char const *argv[])
 {
     printf("Au boulot!\n");
+    printf("%d\n", type(argv[1]));
     struct mcu **tableau_de_mcu;
     uint32_t *tab_taille = taille_tableau(argv[1],1,1);
-
     uint32_t largeur = taille_tableau_x8(argv[1], 1, 1)[0];
     uint32_t hauteur = taille_tableau_x8(argv[1], 1, 1)[1];
     uint8_t *tab_rgb_rembourre = malloc((ajustement_taille(largeur)*ajustement_taille(hauteur)+3)*sizeof(uint8_t));
     tab_rgb_rembourre = rgb_rembourre(argv[1], 1, 1);
     // Découpage
     // printf("%d\n", largeur);
-    // printf("%d\n", ajustement_taille(largeur));
-    // for (size_t i = 0; i < ajustement_taille(hauteur); i++) {
-    //   for (size_t j = 0; j < ajustement_taille(largeur); j++) {
+    // // printf("%d\n", ajustement_taille(largeur));
+    // for (size_t i = 0; i < 376; i++) {
+    //   for (size_t j = 0; j < 367; j++) {
     //     printf("[%d, %d] %x\t", i, j,tab_rgb_rembourre[i*ajustement_taille(largeur)+j+3]);
     //   }
     //   printf("\n");
@@ -52,15 +52,15 @@ int main(int argc, char const *argv[])
     }
 
 
-    // for (size_t i = 0; i < 8; i++) {
-    //   for (size_t j = 0; j < 8; j++) {
-    //     printf("%x\t", tableau_de_mcu[i][j].tableau_de_bloc[0].y[j+i*8+3]);
-    //   }
-    //   printf("\n");
-    // }
-
-
+    // // for (size_t i = 0; i < 8; i++) {
+    // //   for (size_t j = 0; j < 8; j++) {
+    // //     printf("%x\t", tableau_de_mcu[i][j].tableau_de_bloc[0].y[j+i*8+3]);
+    // //   }
+    // //   printf("\n");
+    // // }
     //
+    //
+    // //
     struct jpeg_desc *jpeg = jpeg_desc_create();
     jpeg_desc_set_ppm_filename(jpeg, argv[1]);
     jpeg_desc_set_jpeg_filename(jpeg, strcat(argv[1], "jpeg"));
@@ -79,7 +79,6 @@ int main(int argc, char const *argv[])
     bits = jpeg_desc_get_bitstream(jpeg);
     // ecriture_symbole_DC(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
     ecriture_AC_DC_complete(bits, tableau_de_mcu, tab_taille[1], tab_taille[0]);
-    // AC_composante_puis_huffman(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y);
     jpeg_write_footer(jpeg);
-    return EXIT_SUCCESS;
+//     return EXIT_SUCCESS;
 }

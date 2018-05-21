@@ -4,7 +4,6 @@
 void transformation_bloc_rgb_ycbcr(struct bloc *blo)
 {
   //pour chaque tableau de composante de mcu ici juste un bloc pour la mcu
-  printf("ici\n");
   for (size_t i = 0; i < 8; i++) {
     for (size_t j = 0; j < 8; j++) {
       uint8_t rouge = blo->rgb[j+8*i] >> 16;
