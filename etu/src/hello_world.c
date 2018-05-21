@@ -33,7 +33,6 @@ int main(int argc, char const *argv[])
     //   printf("\n");
     //   printf("\n");
     // }
-
     tableau_de_mcu = decoupage_mc(argv[1],1,1);
 // RGB -> YCbCr, DCT
     for (size_t i = 0; i < tab_taille[1]; i++) {
@@ -51,13 +50,17 @@ int main(int argc, char const *argv[])
         quantification_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
       }
     }
-    for (size_t i = 0; i < 8; i++) {
-      for (size_t j = 0; j < 8; j++) {
-        printf("%x\t", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[j+i*8]);
-      }
-      printf("\n");
-    }
 
+
+    // for (size_t i = 0; i < 8; i++) {
+    //   for (size_t j = 0; j < 8; j++) {
+    //     printf("%x\t", tableau_de_mcu[i][j].tableau_de_bloc[0].y[j+i*8+3]);
+    //   }
+    //   printf("\n");
+    // }
+
+
+    //
     struct jpeg_desc *jpeg = jpeg_desc_create();
     jpeg_desc_set_ppm_filename(jpeg, argv[1]);
     jpeg_desc_set_jpeg_filename(jpeg, strcat(argv[1], "jpeg"));

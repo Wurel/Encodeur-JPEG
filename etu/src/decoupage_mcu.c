@@ -34,7 +34,7 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
     uint8_t *tableau = malloc(sizeof(uint8_t)*(atoi(hauteur)*atoi(largeur) + 3));
     // 1 car 1 pixel = 1 byte
     tableau[0] = 1;
-
+  
 
     //ATTENTION BIDOUILLE
 
