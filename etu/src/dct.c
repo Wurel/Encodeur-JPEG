@@ -11,7 +11,7 @@ void dct_bloc(uint8_t *composante, int16_t *nouvelle_composante)
   //changement d'intervalle: [0, 255] vers [-128, 127]
   //transformee en cosinus discrete
   //copie de la composante
-  for (size_t k = 0; k < 64; k++)
+  for (int32_t k = 0; k < 64; k++)
   {
     //calcul de C(i) et C(j)
     float c_i = 1;
@@ -26,7 +26,7 @@ void dct_bloc(uint8_t *composante, int16_t *nouvelle_composante)
     }
     //calcul de la transformee avec changement d'intervalle
     float somme = 0;
-    for (size_t p = 0; p < 64; p++)
+    for (int32_t p = 0; p < 64; p++)
     {
       //i et j indices de l'ancienne composante, x et y de la nouvelle
       uint8_t x = p/8;
