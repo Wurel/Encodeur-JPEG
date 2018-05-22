@@ -51,7 +51,7 @@ void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre)
 
 //se fait appeler par la fonction AC DC et donne le symbole DC pour un indice de tableau de bloc donné
 //Attention c'est dans le cas N&B
-void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , uint16_t predicateur)
+void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur)
 {
   //cas du premier bloc
   // if (predicateur == 0)
@@ -66,13 +66,13 @@ void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint8_t indice_i,
   // }
 }
 
-void ecriture_DC_cb(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , uint16_t predicateur)
+void ecriture_DC_cb(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur)
 {
   int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].cb[0] - predicateur;
   ecriture_symbole_DC(stream, nombre_dc);
 }
 
-void ecriture_DC_cr(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , uint16_t predicateur)
+void ecriture_DC_cr(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur)
 {
   int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].cr[0] - predicateur;
   ecriture_symbole_DC(stream, nombre_dc);
@@ -172,7 +172,6 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_
     {
       for (uint32_t j = 0; j < v; j++)
       {
-        printf("numero mcu  %d   %d\n", i, j );
         ecriture_DC_y(stream, tab , i, j, predicateur_y);
         predicateur_y = tab[i][j].tableau_de_bloc_apres_dct[0].y[0];
         AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].y, 0);

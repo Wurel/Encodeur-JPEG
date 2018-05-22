@@ -126,17 +126,14 @@ uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
         rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i*largeur + largeur + 3];
       }
       else if (i >= hauteur){
-        printf("ajout\n");
         rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[hauteur*largeur + hauteur + 3];
       }
       else{
         rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i * largeur + j + 3];
       }
     }
-    printf("fin ligne\n");
   }
   free(tableau_rgb);
-  printf("fin\n");
   return rgb_bonne_taille;
 }
 
