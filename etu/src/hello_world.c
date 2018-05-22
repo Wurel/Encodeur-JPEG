@@ -40,8 +40,8 @@ int main(int argc, char const *argv[])
     // }
     tableau_de_mcu = decoupage_mc(argv[1],1,1);
 // RGB -> YCbCr, DCT
-    for (uint32_t i = 0; i < tab_taille[1]; i++) {
-      for (uint32_t j = 0; j < tab_taille[0]; j++) {
+    for (uint32_t i = 0; i < ajustement_taille(hauteur)/8; i++) {
+      for (uint32_t j = 0; j < ajustement_taille(largeur)/8; j++) {
         //rgb 2 ycbcr
         transformation_bloc_rgb_ycbcr(&tableau_de_mcu[i][j].tableau_de_bloc[0]);
         // DCT
@@ -55,7 +55,7 @@ int main(int argc, char const *argv[])
         tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr = malloc(sizeof(int16_t)*64);
         dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[0].cr, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr);
 
-        // //Zigzag
+        // // //Zigzag
         tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y =
                                 zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
 
@@ -64,19 +64,19 @@ int main(int argc, char const *argv[])
 
         tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr =
                                 zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr);
-
-        //Quantification
-
-        quantification_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
-        quantification_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cb);
-        quantification_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr);
+        //
+        // //Quantification
+        //
+        quantification_Y(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
+        quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cb);
+        quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr);
 
       }
     }
 
     // for (uint32_t i = 0; i < 8; i++) {
     //   for (uint32_t j = 0; j < 8; j++) {
-    //     printf("%x\t", tableau_de_mcu[0][0].tableau_de_bloc[0].cr[j+i*8]);
+    //     printf("%x\t", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[j+i*8]);
     //   }
     //   printf("\n");
     // }
@@ -84,12 +84,13 @@ int main(int argc, char const *argv[])
     //
     //
     // //
+    // printf("dct %d\n", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
     struct jpeg_desc *jpeg = jpeg_desc_create();
     jpeg_desc_set_ppm_filename(jpeg, argv[1]);
     jpeg_desc_set_jpeg_filename(jpeg, strcat(argv[1], "jpeg"));
     jpeg_desc_set_nb_components(jpeg, tipe);
-    jpeg_desc_set_image_width(jpeg, tab_taille[0]*8); // atttention h1 V1
-    jpeg_desc_set_image_height(jpeg, tab_taille[1]*8);
+    jpeg_desc_set_image_width(jpeg, largeur); // atttention h1 V1
+    jpeg_desc_set_image_height(jpeg, hauteur);
 
     jpeg_desc_set_sampling_factor(jpeg, Y, H, 1);
     jpeg_desc_set_sampling_factor(jpeg, Y, V, 1);
@@ -117,7 +118,8 @@ int main(int argc, char const *argv[])
     struct bitstream *bits; //= bitstream_create("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/test.jpeg");
     bits = jpeg_desc_get_bitstream(jpeg);
     // ecriture_symbole_DC(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
-    ecriture_AC_DC_complete(bits, tableau_de_mcu, tab_taille[1], tab_taille[0], tipe);
+    printf("%d %d \n", ajustement_taille(largeur)/8, ajustement_taille(hauteur)/8);
+    ecriture_AC_DC_complete(bits, tableau_de_mcu, ajustement_taille(hauteur)/8, ajustement_taille(largeur)/8, tipe);
     jpeg_write_footer(jpeg);
     jpeg_desc_destroy(jpeg);
     //free tableau_de_mcu
