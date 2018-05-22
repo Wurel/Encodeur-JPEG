@@ -79,7 +79,7 @@ int16_t* zigzag_composante(int16_t *composante)
     return zigzag;
 }
 
-void quantification_composante(int16_t *composante)
+void quantification_Y(int16_t *composante)
 {
   for (uint16_t i = 0; i < 64; i++)
   {
@@ -87,6 +87,13 @@ void quantification_composante(int16_t *composante)
   }
 }
 
+void quantification_Cb_Cr(int16_t *composante)
+{
+  for (uint16_t i = 0; i < 64; i++)
+  {
+    composante[i] = composante[i]/compressed_CbCr_table[i];
+  }
+}
 
 // int main(int argc, char const *argv[])
 // {

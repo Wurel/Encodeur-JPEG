@@ -55,7 +55,7 @@ int main(int argc, char const *argv[])
         tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr = malloc(sizeof(int16_t)*64);
         dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[0].cr, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr);
 
-        // //Zigzag
+        // // //Zigzag
         tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y =
                                 zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
 
@@ -64,19 +64,19 @@ int main(int argc, char const *argv[])
 
         tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr =
                                 zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr);
-
-        //Quantification
-
-        quantification_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
-        quantification_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cb);
-        quantification_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr);
+        //
+        // //Quantification
+        //
+        quantification_Y(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].y);
+        quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cb);
+        quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0].cr);
 
       }
     }
 
     // for (uint32_t i = 0; i < 8; i++) {
     //   for (uint32_t j = 0; j < 8; j++) {
-    //     printf("%x\t", tableau_de_mcu[0][0].tableau_de_bloc[0].cr[j+i*8]);
+    //     printf("%x\t", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[j+i*8]);
     //   }
     //   printf("\n");
     // }
@@ -84,7 +84,7 @@ int main(int argc, char const *argv[])
     //
     //
     // //
-    printf("%d\n", tableau_de_mcu[0][1].tableau_de_bloc_apres_dct[0].y[0]);
+    // printf("dct %d\n", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
     struct jpeg_desc *jpeg = jpeg_desc_create();
     jpeg_desc_set_ppm_filename(jpeg, argv[1]);
     jpeg_desc_set_jpeg_filename(jpeg, strcat(argv[1], "jpeg"));
