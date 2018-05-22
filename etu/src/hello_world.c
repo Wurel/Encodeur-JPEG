@@ -86,7 +86,7 @@ int main(int argc, char const *argv[])
     jpeg_desc_set_nb_components(jpeg, tipe);
     jpeg_desc_set_image_width(jpeg, tab_taille[0]*8); // atttention h1 V1
     jpeg_desc_set_image_height(jpeg, tab_taille[1]*8);
-    
+
     jpeg_desc_set_sampling_factor(jpeg, Y, H, 1);
     jpeg_desc_set_sampling_factor(jpeg, Y, V, 1);
     jpeg_desc_set_huffman_table(jpeg, DC, Y, huffman_table_build(htables_nb_symb_per_lengths[0][0], htables_symbols[0][0], htables_nb_symbols[0][0]));
