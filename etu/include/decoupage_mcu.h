@@ -18,6 +18,13 @@
 //   uint8_t cb[64];
 //   uint8_t cr[64];
 // };
+uint8_t type(const char *ppm_filename);
+
+uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1);
+
+uint32_t ajustement_taille(int32_t taille);
+
+uint32_t *taille_tableau_x8(const char * ppm_filename, int8_t h1, int8_t v1);
 
 
 extern struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1);
