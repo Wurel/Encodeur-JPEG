@@ -116,23 +116,59 @@ uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
   uint32_t largeur = taille_tableau_x8(ppm_filename, h1, v1)[0];
   uint32_t hauteur_objectif = ajustement_taille(hauteur);
   uint32_t largeur_objectif = ajustement_taille(largeur);
-  uint8_t * rgb_bonne_taille = malloc((hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
-  uint8_t *tableau_rgb = malloc(sizeof(uint8_t)*(hauteur * largeur + 3));
+  uint8_t * rgb_bonne_taille = malloc((3*hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
+  uint8_t *tableau_rgb = malloc(sizeof(uint8_t)*(3*hauteur * largeur + 3));
   tableau_rgb = recuperation_rgb(ppm_filename);
   rgb_bonne_taille[0] = tableau_rgb[0];
-  for (uint32_t i = 0; i < hauteur_objectif; i++) {
-    for (uint32_t j = 0; j < largeur_objectif; j++) {
-      if (j >= largeur) {
-        rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i*largeur + largeur + 3];
-      }
-      else if (i >= hauteur){
-        rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[hauteur*largeur + hauteur + 3];
-      }
-      else{
-        rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i * largeur + j + 3];
+  if (tableau_rgb[0] == 1) {
+    for (uint32_t i = 0; i < hauteur_objectif; i++) {
+      for (uint32_t j = 0; j < largeur_objectif; j++) {
+        if (j >= largeur) {
+          printf("ajout\n");
+          rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i*largeur + largeur + 3];
+        }
+        else if (i >= hauteur){
+          printf("ajout\n");
+          rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[hauteur*largeur + hauteur + 3];
+        }
+        else{
+          rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i * largeur + j + 3];
+        }
       }
     }
   }
+  else{
+    for (uint32_t i = 0; i < hauteur_objectif; i++) {
+      for (uint32_t j = 0; j < largeur_objectif; j++) {
+        if (j >= largeur) {
+          printf("ajout\n");
+          rgb_bonne_taille[i*largeur_objectif + 3*j+3] = tableau_rgb[i*largeur + 3*largeur + 3];
+          rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = tableau_rgb[i*largeur + 3*largeur + 3+1];
+          rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = tableau_rgb[i*largeur + 3*largeur + 3+2];
+        }
+        else if (i >= hauteur){
+          printf("ajout\n");
+          rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[hauteur*largeur + hauteur + 3];
+          // ATTENTION potentiellement probleme
+
+
+          //ATTENTION
+          rgb_bonne_taille[i*largeur_objectif + j+3+1] = tableau_rgb[hauteur*largeur + hauteur + 3+1];
+          rgb_bonne_taille[i*largeur_objectif + j+3+2] = tableau_rgb[hauteur*largeur + hauteur + 3+2];
+        }
+        else{
+          rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3] = tableau_rgb[i * largeur*3 + 3*j + 3];
+          rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+1] = tableau_rgb[i * largeur*3 + 3*j + 3+1];
+          rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+2] = tableau_rgb[i * largeur*3 + 3*j + 3+2];
+        }
+      }
+    }
+  }
+  // for (uint32_t i = 0; i < hauteur_objectif; i++) {
+  //   for (uint32_t j = 0; j < largeur_objectif; j++) {
+  //     printf("%x%x%x\n", rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3], rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+1], rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+2]);
+  //   }
+  // }
   free(tableau_rgb);
   return rgb_bonne_taille;
 }
@@ -213,7 +249,8 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
     uint32_t largeur = taille_tableau_x8(ppm_filename, h1, v1)[0];
     uint32_t hauteur_objectif = ajustement_taille(hauteur);
     uint32_t largeur_objectif = ajustement_taille(largeur);
-    uint8_t * tab_rgb = malloc((hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
+    printf("tailt%d %d\n", hauteur_objectif, largeur_objectif);
+    uint8_t * tab_rgb = malloc((3*hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
     if (tab_rgb == NULL){
       printf("erreur d'allocation\n");
       exit(0);
@@ -294,6 +331,7 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
         if (tab_rgb[0] == 0)
         {
           printf("coul\n");
+
         int32_t indice_ligne = 0;
         for (uint32_t k = 0; k < hauteur_objectif*largeur_objectif; k++)
         {
@@ -314,6 +352,7 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
           int32_t j_prime = j*8 + k%8;
           int32_t nombre;
           nombre = tab_rgb[3*k + 3] + tab_rgb[3*k + 1 + 3]*16*16 + tab_rgb[3*k + 2 + 3]*16*16*16*16;
+          // printf("%x%x%x\n", tab_rgb[3*k+3], tab_rgb[3*k+4], tab_rgb[3*k+5]);
           tableau_de_mcu[i/8][j/8].tableau_de_bloc[0].rgb[k%8+indice_ligne*8] = nombre;
           // tableau_de_mcu[k/largeur_objectif/8][k%largeur_objectif/8].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
         }
