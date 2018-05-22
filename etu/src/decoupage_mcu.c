@@ -3,7 +3,7 @@
 
 uint8_t type(const char *ppm_filename){
   char *type;
-  type = malloc(2*sizeof(char));
+  type = malloc(100*sizeof(char));
   FILE *ppm;
   ppm = fopen(ppm_filename, "r");
   if (ppm==NULL)
@@ -12,13 +12,15 @@ uint8_t type(const char *ppm_filename){
     exit(0);
   }
   fscanf(ppm, "%s", type);
+  printf("%s\n", type);
   fclose(ppm);
-  printf("dif %d\n", strcmp(type, "P5"));
   if (!strcmp(type, "P5"))
   {
+    free(type);
     return 1;
   }
   else{
+    free(type);
     return 3;
   }
 
@@ -29,16 +31,16 @@ uint8_t type(const char *ppm_filename){
 
 uint8_t *recuperation_rgb(const char *ppm_filename)
 {
-  uint32_t largeur1 = taille_tableau_x8(ppm_filename, 1, 1)[0];
-  uint32_t hauteur1 = taille_tableau_x8(ppm_filename, 1, 1)[1];
   char *type;
-  type = malloc(2*sizeof(char));
-  char *largeur;
-  largeur = malloc(sizeof(char));
-  char *hauteur;
-  hauteur = malloc(sizeof(char));
+  type = malloc(100*sizeof(char));
+  // char *largeur;
+  // largeur = malloc(sizeof(char));
+  // char *hauteur;
+  // hauteur = malloc(sizeof(char));
   char *poubelle;
   poubelle = malloc(50*sizeof(char));
+  uint32_t largeur;
+  uint32_t hauteur;
   FILE *ppm;
   ppm = fopen(ppm_filename, "r");
   if (ppm==NULL)
@@ -48,14 +50,14 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   }
   /* recupere les parametres pour creer un tableau adapte */
   fscanf(ppm, "%s", type);
-  fscanf(ppm, "%s", largeur);
-  fscanf(ppm, "%s", hauteur);
+  fscanf(ppm, "%d", &largeur);
+  fscanf(ppm, "%d", &hauteur);
   fread(poubelle, 1, 5, ppm);
   // fprintf(stderr, "erreur\n");
   if (!strcmp(type, "P5"))
   {
+    uint8_t *tableau = malloc(sizeof(uint8_t)*(hauteur*largeur + 3));
     printf("negro\n");
-    uint8_t *tableau = malloc(sizeof(uint8_t)*(atoi(hauteur)*atoi(largeur) + 3));
     // 1 car 1 pixel = 1 byte
     tableau[0] = 1;
 
@@ -65,14 +67,18 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
 
     tableau[1] = 0;
     tableau[2] = 0;
-    fread(tableau + 3, 1, atoi(largeur)*atoi(hauteur), ppm);
+    fread(tableau + 3, 1, largeur*hauteur, ppm);
     fclose(ppm);
+    free(type);
+    // free(largeur);
+    // free(hauteur);
+    free(poubelle);
     return tableau;
   }
   if (!strcmp(type, "P6"))
   {
     printf("image en couleur\n");
-    uint8_t *tableau = malloc(sizeof(uint8_t)*3*(atoi(hauteur)*atoi(largeur) + 3));
+    uint8_t *tableau = malloc(sizeof(uint8_t)*(3*hauteur*largeur + 3));
     // 1 car 1 pixel = 1 byte
     tableau[0] = 0;
 
@@ -82,8 +88,12 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
 
     tableau[1] = 0;
     tableau[2] = 0;
-    fread(tableau + 3, 1, 3*atoi(largeur)*atoi(hauteur), ppm);
+    fread(tableau + 3, 1, 3*largeur*hauteur, ppm);
     fclose(ppm);
+    free(type);
+    // free(largeur);
+    // free(hauteur);
+    free(poubelle);
     return tableau;
   }
   printf("mauvais type d'image\n");
@@ -123,6 +133,7 @@ uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
       }
     }
   }
+  free(tableau_rgb);
   return rgb_bonne_taille;
 }
 
@@ -131,11 +142,13 @@ uint32_t *taille_tableau_x8(const char * ppm_filename, int8_t h1, int8_t v1)
   if (h1 == 1 && v1 == 1)
   {
     char *type;
-    type = malloc(2*sizeof(char));
-    char *largeur;
-    largeur = malloc(sizeof(char));
-    char *hauteur;
-    hauteur = malloc(sizeof(char));
+    type = malloc(100*sizeof(char));
+    // char *largeur;
+    // largeur = malloc(sizeof(char));
+    // char *hauteur;
+    // hauteur = malloc(sizeof(char));
+    uint32_t largeur = 0;
+    uint32_t hauteur = 0;
     FILE *ppm;
     ppm = fopen(ppm_filename, "r");
     if (ppm==NULL)
@@ -145,11 +158,14 @@ uint32_t *taille_tableau_x8(const char * ppm_filename, int8_t h1, int8_t v1)
     }
     uint32_t *tab = malloc(2*sizeof(uint32_t));
     fscanf(ppm, "%s", type);
-    fscanf(ppm, "%s", largeur);
-    fscanf(ppm, "%s", hauteur);
-    tab[0] = atoi(largeur);
-    tab[1] = atoi(hauteur);
+    fscanf(ppm, "%d", &largeur);
+    fscanf(ppm, "%d", &hauteur);
+    tab[0] = largeur;
+    tab[1] = hauteur;
     fclose(ppm);
+    free(type);
+    // free(largeur);
+    // free(hauteur);
     return tab;
   }
 }
@@ -162,11 +178,13 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
   if (h1 == 1 && v1 == 1)
   {
     char *type;
-    type = malloc(2*sizeof(char));
-    char *largeur;
-    largeur = malloc(sizeof(char));
-    char *hauteur;
-    hauteur = malloc(sizeof(char));
+    type = malloc(100*sizeof(char));
+    // char *largeur;
+    // largeur = malloc(sizeof(char));
+    // char *hauteur;
+    // hauteur = malloc(sizeof(char));
+    uint32_t largeur = 0;
+    uint32_t hauteur = 0;
     FILE *ppm;
     ppm = fopen(ppm_filename, "r");
     if (ppm==NULL)
@@ -176,11 +194,12 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
     }
     uint32_t *tab = malloc(2*sizeof(uint32_t));
     fscanf(ppm, "%s", type);
-    fscanf(ppm, "%s", largeur);
-    fscanf(ppm, "%s", hauteur);
-    tab[0] = atoi(largeur)/8;
-    tab[1] = atoi(hauteur)/8;
+    fscanf(ppm, "%d", &largeur);
+    fscanf(ppm, "%d", &hauteur);
+    tab[0] = largeur/8;
+    tab[1] = hauteur/8;
     fclose(ppm);
+    free(type);
     return tab;
   }
 }
@@ -188,8 +207,6 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
 //prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
 struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
 {
-  // uint32_t largeur = taille_tableau(ppm_filename, h1, v1)[0]*8;
-  // uint32_t hauteur = taille_tableau(ppm_filename, h1, v1)[1]*8;
   if(h1 == 1 && v1 == 1)
   {
     uint32_t hauteur = taille_tableau_x8(ppm_filename, h1, v1)[1];
@@ -197,8 +214,6 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
     uint32_t hauteur_objectif = ajustement_taille(hauteur);
     uint32_t largeur_objectif = ajustement_taille(largeur);
     uint8_t * tab_rgb = malloc((hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
-    // uint8_t *tab_rgb = malloc((large/ur*hauteur + 3)*sizeof(uint8_t));
-
     if (tab_rgb == NULL){
       printf("erreur d'allocation\n");
       exit(0);
@@ -213,15 +228,15 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
           printf("erreur d'allocation\n");
           exit(0);
         }
-        for (size_t i = 0; i < hauteur_objectif/8; i++) {
+        for (uint32_t i = 0; i < hauteur_objectif/8; i++) {
           tableau_de_mcu[i] = malloc(largeur_objectif/8 * sizeof(**tableau_de_mcu));
           if (tableau_de_mcu[i] == NULL){
             printf("erreur d'allocation\n");
             exit(0);
           }
         }
-        for (size_t i = 0; i < hauteur_objectif/8; i++) {
-          for (size_t j = 0; j < largeur_objectif/8; j++) {
+        for (uint32_t i = 0; i < hauteur_objectif/8; i++) {
+          for (uint32_t j = 0; j < largeur_objectif/8; j++) {
             tableau_de_mcu[i][j].tableau_de_bloc = malloc(h1*v1*sizeof(struct bloc));
             if (tableau_de_mcu[i][j].tableau_de_bloc == NULL){
               printf("erreur d'allocation\n");
@@ -277,7 +292,6 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
         }
       }
         if (tab_rgb[0] == 0)
-        //cas négro
         {
           printf("coul\n");
         int32_t indice_ligne = 0;
@@ -304,6 +318,7 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
           // tableau_de_mcu[k/largeur_objectif/8][k%largeur_objectif/8].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
         }
       }
+      free(tab_rgb);
       return tableau_de_mcu;
       }
     }
