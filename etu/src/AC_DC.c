@@ -46,6 +46,7 @@ void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre)
   //printf("nombre%d, magnitude %d \n",nombre, magnitude );
   int16_t bits = retourne_bits(nombre, magnitude);
   bitstream_write_nbits(stream, bits, magnitude, 0);
+  printf("nombre %d, ecriture DC symbole_decode %x et magnitude %x\n",nombre,  symbole_decode, magnitude);
 }
 
 
@@ -62,6 +63,7 @@ void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint8_t indice_i,
   // else
   // {
   int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].y[0] - predicateur;
+
   ecriture_symbole_DC(stream, nombre_dc);
   // }
 }
@@ -83,6 +85,8 @@ void ecriture_DC_cr(struct bitstream *stream, struct mcu **tab, uint8_t indice_i
 
 void ecriture_symbole_AC(struct bitstream *stream, uint32_t symbole_decode, uint8_t *nbits)
 {
+    printf("ecriture AC symbole_decode  %x\n", symbole_decode);
+
     bitstream_write_nbits(stream, symbole_decode, *nbits, 0);
 }
 
@@ -122,6 +126,7 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
     else
     {
       uint8_t magnitude = retourne_magnitude(composante[i]);
+      printf("magnitude AC %d\n",magnitude );
       int8_t bit = retourne_bits(composante[i], magnitude);
       //On veut concaténer
       uint8_t *nbits = malloc(sizeof(uint8_t));
@@ -167,19 +172,23 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_
     int16_t predicateur_y = 0;
     int16_t predicateur_cb = 0;
     int16_t predicateur_cr = 0;
+    printf("h:   %d   et v :%d\n", h, v);
 
     for (uint32_t i = 0; i < h; i++)
     {
       for (uint32_t j = 0; j < v; j++)
       {
         printf("numero mcu  %d   %d\n", i, j );
+        printf("----------------- y\n");
         ecriture_DC_y(stream, tab , i, j, predicateur_y);
         predicateur_y = tab[i][j].tableau_de_bloc_apres_dct[0].y[0];
         AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].y, 0);
+        printf("---------------------cb\n");
 
         ecriture_DC_cb(stream, tab, i, j, predicateur_cb);
         predicateur_cb = tab[i][j].tableau_de_bloc_apres_dct[0].cb[0];
         AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].cb, 1);
+        printf("------------------------cr\n" );
 
         ecriture_DC_cr(stream, tab, i, j, predicateur_cr);
         predicateur_cr = tab[i][j].tableau_de_bloc_apres_dct[0].cr[0];
