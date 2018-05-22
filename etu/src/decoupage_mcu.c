@@ -122,11 +122,11 @@ uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
   rgb_bonne_taille[0] = tableau_rgb[0];
   for (uint32_t i = 0; i < hauteur_objectif; i++) {
     for (uint32_t j = 0; j < largeur_objectif; j++) {
-      if (j > largeur ) {
+      if (j >= largeur) {
         rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i*largeur + largeur + 3];
       }
-      else if (i > hauteur){
-        rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i*largeur + hauteur + 3];
+      else if (i >= hauteur){
+        rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[hauteur*largeur + hauteur + 3];
       }
       else{
         rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i * largeur + j + 3];

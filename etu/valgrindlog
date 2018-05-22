@@ -1,144 +1,144 @@
-==27215== Memcheck, a memory error detector
-==27215== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
-==27215== Using Valgrind-3.12.0 and LibVEX; rerun with -h for copyright info
-==27215== Command: ./ppm2jpeg /user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm
-==27215== Parent PID: 12723
-==27215== 
-==27215== 
-==27215== HEAP SUMMARY:
-==27215==     in use at exit: 28,284 bytes in 735 blocks
-==27215==   total heap usage: 806 allocs, 71 frees, 37,745 bytes allocated
-==27215== 
-==27215== 1 bytes in 1 blocks are definitely lost in loss record 1 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x4011E2: AC_composante_puis_huffman (AC_DC.c:120)
-==27215==    by 0x4012EA: ecriture_AC_DC_complete (AC_DC.c:139)
-==27215==    by 0x4033D0: main (hello_world.c:120)
-==27215== 
-==27215== 8 bytes in 1 blocks are definitely lost in loss record 2 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401D74: taille_tableau_x8 (decoupage_mcu.c:159)
-==27215==    by 0x401B09: rgb_rembourre (decoupage_mcu.c:115)
-==27215==    by 0x402CB3: main (hello_world.c:30)
-==27215== 
-==27215== 8 bytes in 1 blocks are definitely lost in loss record 3 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401D74: taille_tableau_x8 (decoupage_mcu.c:159)
-==27215==    by 0x401B22: rgb_rembourre (decoupage_mcu.c:116)
-==27215==    by 0x402CB3: main (hello_world.c:30)
-==27215== 
-==27215== 8 bytes in 1 blocks are definitely lost in loss record 4 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401D74: taille_tableau_x8 (decoupage_mcu.c:159)
-==27215==    by 0x401F9B: decoupage_mc (decoupage_mcu.c:212)
-==27215==    by 0x402CCB: main (hello_world.c:41)
-==27215== 
-==27215== 8 bytes in 1 blocks are definitely lost in loss record 5 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401D74: taille_tableau_x8 (decoupage_mcu.c:159)
-==27215==    by 0x401FB4: decoupage_mc (decoupage_mcu.c:213)
-==27215==    by 0x402CCB: main (hello_world.c:41)
-==27215== 
-==27215== 8 bytes in 1 blocks are definitely lost in loss record 6 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401D74: taille_tableau_x8 (decoupage_mcu.c:159)
-==27215==    by 0x401B09: rgb_rembourre (decoupage_mcu.c:115)
-==27215==    by 0x40202F: decoupage_mc (decoupage_mcu.c:221)
-==27215==    by 0x402CCB: main (hello_world.c:41)
-==27215== 
-==27215== 8 bytes in 1 blocks are definitely lost in loss record 7 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401D74: taille_tableau_x8 (decoupage_mcu.c:159)
-==27215==    by 0x401B22: rgb_rembourre (decoupage_mcu.c:116)
-==27215==    by 0x40202F: decoupage_mc (decoupage_mcu.c:221)
-==27215==    by 0x402CCB: main (hello_world.c:41)
-==27215== 
-==27215== 12 bytes in 1 blocks are definitely lost in loss record 10 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x402C02: main (hello_world.c:22)
-==27215== 
-==27215== 12 bytes in 1 blocks are definitely lost in loss record 11 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x402C31: main (hello_world.c:24)
-==27215== 
-==27215== 32 (8 direct, 24 indirect) bytes in 1 blocks are definitely lost in loss record 153 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x402071: decoupage_mc (decoupage_mcu.c:226)
-==27215==    by 0x402CCB: main (hello_world.c:41)
-==27215== 
-==27215== 67 bytes in 1 blocks are definitely lost in loss record 225 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x402C9B: main (hello_world.c:29)
-==27215== 
-==27215== 67 bytes in 1 blocks are definitely lost in loss record 226 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401B5A: rgb_rembourre (decoupage_mcu.c:119)
-==27215==    by 0x402CB3: main (hello_world.c:30)
-==27215== 
-==27215== 67 bytes in 1 blocks are definitely lost in loss record 227 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401B7B: rgb_rembourre (decoupage_mcu.c:120)
-==27215==    by 0x402CB3: main (hello_world.c:30)
-==27215== 
-==27215== 67 bytes in 1 blocks are definitely lost in loss record 228 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401FEC: decoupage_mc (decoupage_mcu.c:216)
-==27215==    by 0x402CCB: main (hello_world.c:41)
-==27215== 
-==27215== 67 bytes in 1 blocks are definitely lost in loss record 229 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x401B7B: rgb_rembourre (decoupage_mcu.c:120)
-==27215==    by 0x40202F: decoupage_mc (decoupage_mcu.c:221)
-==27215==    by 0x402CCB: main (hello_world.c:41)
-==27215== 
-==27215== 128 bytes in 1 blocks are definitely lost in loss record 268 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x402D63: main (hello_world.c:49)
-==27215== 
-==27215== 128 bytes in 1 blocks are definitely lost in loss record 269 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x402DED: main (hello_world.c:52)
-==27215== 
-==27215== 128 bytes in 1 blocks are definitely lost in loss record 270 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x402E79: main (hello_world.c:55)
-==27215== 
-==27215== 408 (24 direct, 384 indirect) bytes in 1 blocks are definitely lost in loss record 296 of 311
-==27215==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==27215==    by 0x4021F5: decoupage_mc (decoupage_mcu.c:245)
-==27215==    by 0x402CCB: main (hello_world.c:41)
-==27215== 
-==27215== 932 (40 direct, 892 indirect) bytes in 1 blocks are definitely lost in loss record 306 of 311
-==27215==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
-==27215==    by 0x40480A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
-==27215==    by 0x40316C: main (hello_world.c:96)
-==27215== 
-==27215== 932 (40 direct, 892 indirect) bytes in 1 blocks are definitely lost in loss record 307 of 311
-==27215==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
-==27215==    by 0x40480A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
-==27215==    by 0x400EA2: ecriture_symbole_DC (AC_DC.c:37)
-==27215==    by 0x400FA7: ecriture_DC (AC_DC.c:63)
-==27215==    by 0x401291: ecriture_AC_DC_complete (AC_DC.c:137)
-==27215==    by 0x4033D0: main (hello_world.c:120)
-==27215== 
-==27215== 12,594 (40 direct, 12,554 indirect) bytes in 1 blocks are definitely lost in loss record 310 of 311
-==27215==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
-==27215==    by 0x40480A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
-==27215==    by 0x4031B5: main (hello_world.c:98)
-==27215== 
-==27215== 12,594 (40 direct, 12,554 indirect) bytes in 1 blocks are definitely lost in loss record 311 of 311
-==27215==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
-==27215==    by 0x40480A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
-==27215==    by 0x401025: AC_composante_puis_huffman (AC_DC.c:80)
-==27215==    by 0x4012EA: ecriture_AC_DC_complete (AC_DC.c:139)
-==27215==    by 0x4033D0: main (hello_world.c:120)
-==27215== 
-==27215== LEAK SUMMARY:
-==27215==    definitely lost: 984 bytes in 23 blocks
-==27215==    indirectly lost: 27,300 bytes in 712 blocks
-==27215==      possibly lost: 0 bytes in 0 blocks
-==27215==    still reachable: 0 bytes in 0 blocks
-==27215==         suppressed: 0 bytes in 0 blocks
-==27215== 
-==27215== For counts of detected and suppressed errors, rerun with: -v
-==27215== ERROR SUMMARY: 23 errors from 23 contexts (suppressed: 0 from 0)
+==14358== Memcheck, a memory error detector
+==14358== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==14358== Using Valgrind-3.12.0 and LibVEX; rerun with -h for copyright info
+==14358== Command: ./ppm2jpeg /user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm
+==14358== Parent PID: 12668
+==14358== 
+==14358== 
+==14358== HEAP SUMMARY:
+==14358==     in use at exit: 28,284 bytes in 735 blocks
+==14358==   total heap usage: 806 allocs, 71 frees, 37,745 bytes allocated
+==14358== 
+==14358== 1 bytes in 1 blocks are definitely lost in loss record 1 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x4012E9: AC_composante_puis_huffman (AC_DC.c:137)
+==14358==    by 0x401402: ecriture_AC_DC_complete (AC_DC.c:159)
+==14358==    by 0x403563: main (hello_world.c:120)
+==14358== 
+==14358== 8 bytes in 1 blocks are definitely lost in loss record 2 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
+==14358==    by 0x401C79: rgb_rembourre (decoupage_mcu.c:115)
+==14358==    by 0x402E53: main (hello_world.c:30)
+==14358== 
+==14358== 8 bytes in 1 blocks are definitely lost in loss record 3 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
+==14358==    by 0x401C92: rgb_rembourre (decoupage_mcu.c:116)
+==14358==    by 0x402E53: main (hello_world.c:30)
+==14358== 
+==14358== 8 bytes in 1 blocks are definitely lost in loss record 4 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
+==14358==    by 0x40210B: decoupage_mc (decoupage_mcu.c:212)
+==14358==    by 0x402E6B: main (hello_world.c:41)
+==14358== 
+==14358== 8 bytes in 1 blocks are definitely lost in loss record 5 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
+==14358==    by 0x402124: decoupage_mc (decoupage_mcu.c:213)
+==14358==    by 0x402E6B: main (hello_world.c:41)
+==14358== 
+==14358== 8 bytes in 1 blocks are definitely lost in loss record 6 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
+==14358==    by 0x401C79: rgb_rembourre (decoupage_mcu.c:115)
+==14358==    by 0x40219F: decoupage_mc (decoupage_mcu.c:221)
+==14358==    by 0x402E6B: main (hello_world.c:41)
+==14358== 
+==14358== 8 bytes in 1 blocks are definitely lost in loss record 7 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
+==14358==    by 0x401C92: rgb_rembourre (decoupage_mcu.c:116)
+==14358==    by 0x40219F: decoupage_mc (decoupage_mcu.c:221)
+==14358==    by 0x402E6B: main (hello_world.c:41)
+==14358== 
+==14358== 12 bytes in 1 blocks are definitely lost in loss record 10 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x402DA2: main (hello_world.c:22)
+==14358== 
+==14358== 12 bytes in 1 blocks are definitely lost in loss record 11 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x402DD1: main (hello_world.c:24)
+==14358== 
+==14358== 32 (8 direct, 24 indirect) bytes in 1 blocks are definitely lost in loss record 153 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x4021E1: decoupage_mc (decoupage_mcu.c:226)
+==14358==    by 0x402E6B: main (hello_world.c:41)
+==14358== 
+==14358== 67 bytes in 1 blocks are definitely lost in loss record 225 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x402E3B: main (hello_world.c:29)
+==14358== 
+==14358== 67 bytes in 1 blocks are definitely lost in loss record 226 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x401CCA: rgb_rembourre (decoupage_mcu.c:119)
+==14358==    by 0x402E53: main (hello_world.c:30)
+==14358== 
+==14358== 67 bytes in 1 blocks are definitely lost in loss record 227 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x401CEB: rgb_rembourre (decoupage_mcu.c:120)
+==14358==    by 0x402E53: main (hello_world.c:30)
+==14358== 
+==14358== 67 bytes in 1 blocks are definitely lost in loss record 228 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x40215C: decoupage_mc (decoupage_mcu.c:216)
+==14358==    by 0x402E6B: main (hello_world.c:41)
+==14358== 
+==14358== 67 bytes in 1 blocks are definitely lost in loss record 229 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x401CEB: rgb_rembourre (decoupage_mcu.c:120)
+==14358==    by 0x40219F: decoupage_mc (decoupage_mcu.c:221)
+==14358==    by 0x402E6B: main (hello_world.c:41)
+==14358== 
+==14358== 128 bytes in 1 blocks are definitely lost in loss record 268 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x402F03: main (hello_world.c:49)
+==14358== 
+==14358== 128 bytes in 1 blocks are definitely lost in loss record 269 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x402F8D: main (hello_world.c:52)
+==14358== 
+==14358== 128 bytes in 1 blocks are definitely lost in loss record 270 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x403019: main (hello_world.c:55)
+==14358== 
+==14358== 408 (24 direct, 384 indirect) bytes in 1 blocks are definitely lost in loss record 296 of 311
+==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
+==14358==    by 0x402365: decoupage_mc (decoupage_mcu.c:245)
+==14358==    by 0x402E6B: main (hello_world.c:41)
+==14358== 
+==14358== 932 (40 direct, 892 indirect) bytes in 1 blocks are definitely lost in loss record 306 of 311
+==14358==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
+==14358==    by 0x40499A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
+==14358==    by 0x4032FF: main (hello_world.c:96)
+==14358== 
+==14358== 932 (40 direct, 892 indirect) bytes in 1 blocks are definitely lost in loss record 307 of 311
+==14358==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
+==14358==    by 0x40499A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
+==14358==    by 0x400EA2: ecriture_symbole_DC (AC_DC.c:38)
+==14358==    by 0x400FA7: ecriture_DC_y (AC_DC.c:65)
+==14358==    by 0x4013A4: ecriture_AC_DC_complete (AC_DC.c:157)
+==14358==    by 0x403563: main (hello_world.c:120)
+==14358== 
+==14358== 12,594 (40 direct, 12,554 indirect) bytes in 1 blocks are definitely lost in loss record 310 of 311
+==14358==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
+==14358==    by 0x40499A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
+==14358==    by 0x403348: main (hello_world.c:98)
+==14358== 
+==14358== 12,594 (40 direct, 12,554 indirect) bytes in 1 blocks are definitely lost in loss record 311 of 311
+==14358==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
+==14358==    by 0x40499A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
+==14358==    by 0x40112C: AC_composante_puis_huffman (AC_DC.c:95)
+==14358==    by 0x401402: ecriture_AC_DC_complete (AC_DC.c:159)
+==14358==    by 0x403563: main (hello_world.c:120)
+==14358== 
+==14358== LEAK SUMMARY:
+==14358==    definitely lost: 984 bytes in 23 blocks
+==14358==    indirectly lost: 27,300 bytes in 712 blocks
+==14358==      possibly lost: 0 bytes in 0 blocks
+==14358==    still reachable: 0 bytes in 0 blocks
+==14358==         suppressed: 0 bytes in 0 blocks
+==14358== 
+==14358== For counts of detected and suppressed errors, rerun with: -v
+==14358== ERROR SUMMARY: 23 errors from 23 contexts (suppressed: 0 from 0)
