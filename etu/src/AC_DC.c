@@ -32,19 +32,21 @@ int16_t retourne_bits(int16_t nombre, uint8_t magnitude)
 
 
 
-void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre)
+void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre, uint8_t indice)
 {
   uint32_t symbole_decode;
-  struct huff_table *mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][0],
-                      htables_symbols[0][0],
-                      htables_nb_symbols[0][0]);
+  struct huff_table *mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][indice],
+                      htables_symbols[0][indice],
+                      htables_nb_symbols[0][indice]);
   uint8_t magnitude = retourne_magnitude(nombre);
   uint8_t *nbits = malloc(sizeof(uint8_t));
   symbole_decode = huffman_table_get_path(mon_arbre, magnitude, nbits);
+  printf("%d\n", symbole_decode);
   bitstream_write_nbits(stream, symbole_decode, *nbits, 0);
   free(nbits);
   //printf("nombre%d, magnitude %d \n",nombre, magnitude );
   int16_t bits = retourne_bits(nombre, magnitude);
+  printf("%d\n", bits);
   bitstream_write_nbits(stream, bits, magnitude, 0);
 }
 
@@ -62,20 +64,20 @@ void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint8_t indice_i,
   // else
   // {
   int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].y[0] - predicateur;
-  ecriture_symbole_DC(stream, nombre_dc);
+  ecriture_symbole_DC(stream, nombre_dc, 0);
   // }
 }
 
 void ecriture_DC_cb(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur)
 {
   int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].cb[0] - predicateur;
-  ecriture_symbole_DC(stream, nombre_dc);
+  ecriture_symbole_DC(stream, nombre_dc, 1);
 }
 
 void ecriture_DC_cr(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur)
 {
   int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].cr[0] - predicateur;
-  ecriture_symbole_DC(stream, nombre_dc);
+  ecriture_symbole_DC(stream, nombre_dc, 2);
 }
 
 
@@ -116,6 +118,7 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
         compteur_zeros = 0;
         uint8_t *nbits = malloc(sizeof(uint8_t));
         uint32_t symbole_decode = huffman_table_get_path(mon_arbre, 240, nbits);
+        printf("%d\n", symbole_decode);
         ecriture_symbole_AC(stream, symbole_decode, nbits);
       }
     }
@@ -126,7 +129,9 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
       //On veut concaténer
       uint8_t *nbits = malloc(sizeof(uint8_t));
       uint32_t symbole_decode = huffman_table_get_path(mon_arbre, compteur_zeros*16+magnitude, nbits);
+      printf("%d\n", symbole_decode);
       ecriture_symbole_AC(stream, symbole_decode, nbits);
+      printf("%d\n", bit);
       ecriture_symbole_AC(stream, bit, &magnitude);
       compteur_zeros = 0;
       free(nbits);
@@ -136,6 +141,7 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
   {
     uint8_t *nbits = malloc(sizeof(uint8_t));
     uint32_t symbole_decode = huffman_table_get_path(mon_arbre, 0, nbits);
+    printf("%d\n", symbole_decode);
     ecriture_symbole_AC(stream, symbole_decode, nbits);
   }
 }

@@ -13,7 +13,7 @@ uint8_t retourne_magnitude(int16_t nombre);
 int16_t retourne_bits(int16_t nombre, uint8_t magnitude);
 
 
-void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre);
+void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre, uint8_t indice);
 void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur);
 void ecriture_DC_cb(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur);
 void ecriture_DC_cr(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur);

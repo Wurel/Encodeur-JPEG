@@ -10,8 +10,8 @@ void transformation_bloc_rgb_ycbcr(struct bloc *blo)
       uint32_t vert = (blo->rgb[j+8*i]- (bleu << 16)) >> 8;
       uint32_t rouge = blo->rgb[j+8*i]-bleu*(16*16*16*16)-vert*(16*16);
       blo->y[j+8*i] = 0.299*rouge + 0.587*vert + 0.114*bleu;
-      blo->cb[j+8*i] = ceil(-0.1687*rouge - 0.3313*vert + 0.5*bleu +128);
-      blo->cr[j+8*i] = ceil(0.5*rouge - 0.4187*vert - 0.0813*bleu +128);
+      blo->cb[j+8*i] = floor(-0.1687*rouge - 0.3313*vert + 0.5*bleu +128);
+      blo->cr[j+8*i] = floor(0.5*rouge - 0.4187*vert - 0.0813*bleu +128);
     }
   }
 }
