@@ -137,6 +137,10 @@ int main(int argc, char const *argv[])
         free(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct);
       }
     }
+    for (uint32_t i = 0; i <tab_taille[1]; i++) {
+      free(tableau_de_mcu[i]);
+    }
+    free(tableau_de_mcu);
     free(tab_taille);
 
 

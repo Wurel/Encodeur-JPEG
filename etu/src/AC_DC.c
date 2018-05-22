@@ -48,6 +48,7 @@ void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre, uint8_t indic
   int16_t bits = retourne_bits(nombre, magnitude);
   printf("%d\n", bits);
   bitstream_write_nbits(stream, bits, magnitude, 0);
+  huffman_table_destroy(mon_arbre);
 }
 
 
@@ -143,7 +144,9 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
     uint32_t symbole_decode = huffman_table_get_path(mon_arbre, 0, nbits);
     printf("%d\n", symbole_decode);
     ecriture_symbole_AC(stream, symbole_decode, nbits);
+    free(nbits);
   }
+  huffman_table_destroy(mon_arbre);
 }
 
 
