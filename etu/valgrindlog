@@ -1,144 +1,587 @@
-==14358== Memcheck, a memory error detector
-==14358== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
-==14358== Using Valgrind-3.12.0 and LibVEX; rerun with -h for copyright info
-==14358== Command: ./ppm2jpeg /user/6/poraa/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/images/invader.pgm
-==14358== Parent PID: 12668
-==14358== 
-==14358== 
-==14358== HEAP SUMMARY:
-==14358==     in use at exit: 28,284 bytes in 735 blocks
-==14358==   total heap usage: 806 allocs, 71 frees, 37,745 bytes allocated
-==14358== 
-==14358== 1 bytes in 1 blocks are definitely lost in loss record 1 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x4012E9: AC_composante_puis_huffman (AC_DC.c:137)
-==14358==    by 0x401402: ecriture_AC_DC_complete (AC_DC.c:159)
-==14358==    by 0x403563: main (hello_world.c:120)
-==14358== 
-==14358== 8 bytes in 1 blocks are definitely lost in loss record 2 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
-==14358==    by 0x401C79: rgb_rembourre (decoupage_mcu.c:115)
-==14358==    by 0x402E53: main (hello_world.c:30)
-==14358== 
-==14358== 8 bytes in 1 blocks are definitely lost in loss record 3 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
-==14358==    by 0x401C92: rgb_rembourre (decoupage_mcu.c:116)
-==14358==    by 0x402E53: main (hello_world.c:30)
-==14358== 
-==14358== 8 bytes in 1 blocks are definitely lost in loss record 4 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
-==14358==    by 0x40210B: decoupage_mc (decoupage_mcu.c:212)
-==14358==    by 0x402E6B: main (hello_world.c:41)
-==14358== 
-==14358== 8 bytes in 1 blocks are definitely lost in loss record 5 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
-==14358==    by 0x402124: decoupage_mc (decoupage_mcu.c:213)
-==14358==    by 0x402E6B: main (hello_world.c:41)
-==14358== 
-==14358== 8 bytes in 1 blocks are definitely lost in loss record 6 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
-==14358==    by 0x401C79: rgb_rembourre (decoupage_mcu.c:115)
-==14358==    by 0x40219F: decoupage_mc (decoupage_mcu.c:221)
-==14358==    by 0x402E6B: main (hello_world.c:41)
-==14358== 
-==14358== 8 bytes in 1 blocks are definitely lost in loss record 7 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x401EE4: taille_tableau_x8 (decoupage_mcu.c:159)
-==14358==    by 0x401C92: rgb_rembourre (decoupage_mcu.c:116)
-==14358==    by 0x40219F: decoupage_mc (decoupage_mcu.c:221)
-==14358==    by 0x402E6B: main (hello_world.c:41)
-==14358== 
-==14358== 12 bytes in 1 blocks are definitely lost in loss record 10 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x402DA2: main (hello_world.c:22)
-==14358== 
-==14358== 12 bytes in 1 blocks are definitely lost in loss record 11 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x402DD1: main (hello_world.c:24)
-==14358== 
-==14358== 32 (8 direct, 24 indirect) bytes in 1 blocks are definitely lost in loss record 153 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x4021E1: decoupage_mc (decoupage_mcu.c:226)
-==14358==    by 0x402E6B: main (hello_world.c:41)
-==14358== 
-==14358== 67 bytes in 1 blocks are definitely lost in loss record 225 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x402E3B: main (hello_world.c:29)
-==14358== 
-==14358== 67 bytes in 1 blocks are definitely lost in loss record 226 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x401CCA: rgb_rembourre (decoupage_mcu.c:119)
-==14358==    by 0x402E53: main (hello_world.c:30)
-==14358== 
-==14358== 67 bytes in 1 blocks are definitely lost in loss record 227 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x401CEB: rgb_rembourre (decoupage_mcu.c:120)
-==14358==    by 0x402E53: main (hello_world.c:30)
-==14358== 
-==14358== 67 bytes in 1 blocks are definitely lost in loss record 228 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x40215C: decoupage_mc (decoupage_mcu.c:216)
-==14358==    by 0x402E6B: main (hello_world.c:41)
-==14358== 
-==14358== 67 bytes in 1 blocks are definitely lost in loss record 229 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x401CEB: rgb_rembourre (decoupage_mcu.c:120)
-==14358==    by 0x40219F: decoupage_mc (decoupage_mcu.c:221)
-==14358==    by 0x402E6B: main (hello_world.c:41)
-==14358== 
-==14358== 128 bytes in 1 blocks are definitely lost in loss record 268 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x402F03: main (hello_world.c:49)
-==14358== 
-==14358== 128 bytes in 1 blocks are definitely lost in loss record 269 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x402F8D: main (hello_world.c:52)
-==14358== 
-==14358== 128 bytes in 1 blocks are definitely lost in loss record 270 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x403019: main (hello_world.c:55)
-==14358== 
-==14358== 408 (24 direct, 384 indirect) bytes in 1 blocks are definitely lost in loss record 296 of 311
-==14358==    at 0x4C29BE3: malloc (vg_replace_malloc.c:299)
-==14358==    by 0x402365: decoupage_mc (decoupage_mcu.c:245)
-==14358==    by 0x402E6B: main (hello_world.c:41)
-==14358== 
-==14358== 932 (40 direct, 892 indirect) bytes in 1 blocks are definitely lost in loss record 306 of 311
-==14358==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
-==14358==    by 0x40499A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
-==14358==    by 0x4032FF: main (hello_world.c:96)
-==14358== 
-==14358== 932 (40 direct, 892 indirect) bytes in 1 blocks are definitely lost in loss record 307 of 311
-==14358==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
-==14358==    by 0x40499A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
-==14358==    by 0x400EA2: ecriture_symbole_DC (AC_DC.c:38)
-==14358==    by 0x400FA7: ecriture_DC_y (AC_DC.c:65)
-==14358==    by 0x4013A4: ecriture_AC_DC_complete (AC_DC.c:157)
-==14358==    by 0x403563: main (hello_world.c:120)
-==14358== 
-==14358== 12,594 (40 direct, 12,554 indirect) bytes in 1 blocks are definitely lost in loss record 310 of 311
-==14358==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
-==14358==    by 0x40499A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
-==14358==    by 0x403348: main (hello_world.c:98)
-==14358== 
-==14358== 12,594 (40 direct, 12,554 indirect) bytes in 1 blocks are definitely lost in loss record 311 of 311
-==14358==    at 0x4C2B975: calloc (vg_replace_malloc.c:711)
-==14358==    by 0x40499A: huffman_table_build (in /user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/ppm2jpeg)
-==14358==    by 0x40112C: AC_composante_puis_huffman (AC_DC.c:95)
-==14358==    by 0x401402: ecriture_AC_DC_complete (AC_DC.c:159)
-==14358==    by 0x403563: main (hello_world.c:120)
-==14358== 
-==14358== LEAK SUMMARY:
-==14358==    definitely lost: 984 bytes in 23 blocks
-==14358==    indirectly lost: 27,300 bytes in 712 blocks
-==14358==      possibly lost: 0 bytes in 0 blocks
-==14358==    still reachable: 0 bytes in 0 blocks
-==14358==         suppressed: 0 bytes in 0 blocks
-==14358== 
-==14358== For counts of detected and suppressed errors, rerun with: -v
-==14358== ERROR SUMMARY: 23 errors from 23 contexts (suppressed: 0 from 0)
+==5108== Memcheck, a memory error detector
+==5108== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==5108== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==5108== Command: ./ppm2jpeg /home/aurelien/Encodeur-JPEG/etu/images/horizontal.ppm
+==5108== 
+**** [v3] REF Module:          jpeg_writer ****
+**** [v3] REF Module:              huffman ****
+**** [v3] REF Module:            bitstream ****
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400CC4: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D3C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D12: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400DCC: retourne_bits (AC_DC.c:22)
+==5108==    by 0x400F1A: ecriture_symbole_DC (AC_DC.c:48)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E60E1: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Use of uninitialised value of size 8
+==5108==    at 0x51E2C9B: _itoa_word (_itoa.c:179)
+==5108==    by 0x51E741F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E2CA5: _itoa_word (_itoa.c:179)
+==5108==    by 0x51E741F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E7521: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E618F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E6210: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x400F49: ecriture_symbole_DC (AC_DC.c:50)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x401186: AC_composante_puis_huffman (AC_DC.c:107)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x4011EA: AC_composante_puis_huffman (AC_DC.c:114)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400CC4: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D3C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D12: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400DCC: retourne_bits (AC_DC.c:22)
+==5108==    by 0x401285: AC_composante_puis_huffman (AC_DC.c:129)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4010F7: ecriture_symbole_AC (AC_DC.c:89)
+==5108==    by 0x4012E9: AC_composante_puis_huffman (AC_DC.c:134)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E60E1: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Use of uninitialised value of size 8
+==5108==    at 0x51E2C9B: _itoa_word (_itoa.c:179)
+==5108==    by 0x51E741F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E2CA5: _itoa_word (_itoa.c:179)
+==5108==    by 0x51E741F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E7521: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E618F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E6210: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4010F7: ecriture_symbole_AC (AC_DC.c:89)
+==5108==    by 0x401312: AC_composante_puis_huffman (AC_DC.c:136)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D7C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400CC4: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D12: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D3C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D7C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x400EFF: ecriture_symbole_DC (AC_DC.c:45)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400DCC: retourne_bits (AC_DC.c:22)
+==5108==    by 0x400F1A: ecriture_symbole_DC (AC_DC.c:48)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E60E1: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E7521: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E618F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E6210: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x400F49: ecriture_symbole_DC (AC_DC.c:50)
+==5108==    by 0x40103C: ecriture_DC_cb (AC_DC.c:75)
+==5108==    by 0x401594: ecriture_AC_DC_complete (AC_DC.c:188)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x401186: AC_composante_puis_huffman (AC_DC.c:107)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x4011EA: AC_composante_puis_huffman (AC_DC.c:114)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400CC4: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D12: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D3C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D7C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400DCC: retourne_bits (AC_DC.c:22)
+==5108==    by 0x401285: AC_composante_puis_huffman (AC_DC.c:129)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E60E1: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E7521: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E618F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E6210: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4010F7: ecriture_symbole_AC (AC_DC.c:89)
+==5108==    by 0x401312: AC_composante_puis_huffman (AC_DC.c:136)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400CC4: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D3C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D12: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x400EFF: ecriture_symbole_DC (AC_DC.c:45)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400DCC: retourne_bits (AC_DC.c:22)
+==5108==    by 0x400F1A: ecriture_symbole_DC (AC_DC.c:48)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E60E1: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E7521: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E618F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E6210: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x400F33: ecriture_symbole_DC (AC_DC.c:49)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x401186: AC_composante_puis_huffman (AC_DC.c:107)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x4011EA: AC_composante_puis_huffman (AC_DC.c:114)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400CC4: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D12: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D3C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D7C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x40126A: AC_composante_puis_huffman (AC_DC.c:128)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400DCC: retourne_bits (AC_DC.c:22)
+==5108==    by 0x401285: AC_composante_puis_huffman (AC_DC.c:129)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E60E1: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E7521: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E618F: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x51E6210: vfprintf (vfprintf.c:1642)
+==5108==    by 0x51EEE35: printf (printf.c:33)
+==5108==    by 0x4012FE: AC_composante_puis_huffman (AC_DC.c:135)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4010F7: ecriture_symbole_AC (AC_DC.c:89)
+==5108==    by 0x401312: AC_composante_puis_huffman (AC_DC.c:136)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D7C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4010F7: ecriture_symbole_AC (AC_DC.c:89)
+==5108==    by 0x4012E9: AC_composante_puis_huffman (AC_DC.c:134)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x400D7C: retourne_magnitude (AC_DC.c:12)
+==5108==    by 0x400EA8: ecriture_symbole_DC (AC_DC.c:41)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4010F7: ecriture_symbole_AC (AC_DC.c:89)
+==5108==    by 0x401388: AC_composante_puis_huffman (AC_DC.c:146)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4010F7: ecriture_symbole_AC (AC_DC.c:89)
+==5108==    by 0x4012E9: AC_composante_puis_huffman (AC_DC.c:134)
+==5108==    by 0x40166E: ecriture_AC_DC_complete (AC_DC.c:194)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4010F7: ecriture_symbole_AC (AC_DC.c:89)
+==5108==    by 0x401388: AC_composante_puis_huffman (AC_DC.c:146)
+==5108==    by 0x401570: ecriture_AC_DC_complete (AC_DC.c:186)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4010F7: ecriture_symbole_AC (AC_DC.c:89)
+==5108==    by 0x401388: AC_composante_puis_huffman (AC_DC.c:146)
+==5108==    by 0x4015EF: ecriture_AC_DC_complete (AC_DC.c:190)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x400EFF: ecriture_symbole_DC (AC_DC.c:45)
+==5108==    by 0x400FC8: ecriture_DC_y (AC_DC.c:68)
+==5108==    by 0x40151A: ecriture_AC_DC_complete (AC_DC.c:184)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Conditional jump or move depends on uninitialised value(s)
+==5108==    at 0x40512C: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x400F49: ecriture_symbole_DC (AC_DC.c:50)
+==5108==    by 0x4010BC: ecriture_DC_cr (AC_DC.c:81)
+==5108==    by 0x401613: ecriture_AC_DC_complete (AC_DC.c:192)
+==5108==    by 0x4037C6: main (hello_world.c:122)
+==5108== 
+==5108== Syscall param write(buf) points to uninitialised byte(s)
+==5108==    at 0x52960C4: write (write.c:26)
+==5108==    by 0x5214BA6: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1255)
+==5108==    by 0x5216781: new_do_write (fileops.c:510)
+==5108==    by 0x5216781: _IO_do_write@@GLIBC_2.2.5 (fileops.c:486)
+==5108==    by 0x5215CA7: _IO_file_close_it@@GLIBC_2.2.5 (fileops.c:173)
+==5108==    by 0x520808E: fclose@@GLIBC_2.2.5 (iofclose.c:58)
+==5108==    by 0x4051EF: bitstream_destroy (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x403EDC: jpeg_desc_destroy (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x4037D8: main (hello_world.c:124)
+==5108==  Address 0x12550c8c is 2,700 bytes inside a block of size 4,096 alloc'd
+==5108==    at 0x4C2FB0F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5108==    by 0x5207E0B: _IO_file_doallocate (filedoalloc.c:101)
+==5108==    by 0x5217BC5: _IO_doallocbuf (genops.c:398)
+==5108==    by 0x5216D37: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:812)
+==5108==    by 0x4050D8: bitstream_write_nbits (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x40405E: jpeg_write_header (in /home/aurelien/Encodeur-JPEG/etu/ppm2jpeg)
+==5108==    by 0x40372A: main (hello_world.c:117)
+==5108== 
+==5108== 
+==5108== HEAP SUMMARY:
+==5108==     in use at exit: 29,593,505 bytes in 16,645 blocks
+==5108==   total heap usage: 2,379,055 allocs, 2,362,410 frees, 1,290,630,358 bytes allocated
+==5108== 
+==5108== LEAK SUMMARY:
+==5108==    definitely lost: 2,680,071 bytes in 8,674 blocks
+==5108==    indirectly lost: 26,913,434 bytes in 7,971 blocks
+==5108==      possibly lost: 0 bytes in 0 blocks
+==5108==    still reachable: 0 bytes in 0 blocks
+==5108==         suppressed: 0 bytes in 0 blocks
+==5108== Rerun with --leak-check=full to see details of leaked memory
+==5108== 
+==5108== For counts of detected and suppressed errors, rerun with: -v
+==5108== Use --track-origins=yes to see where uninitialised values come from
+==5108== ERROR SUMMARY: 27680 errors from 80 contexts (suppressed: 0 from 0)

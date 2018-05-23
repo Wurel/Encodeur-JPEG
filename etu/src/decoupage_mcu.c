@@ -112,8 +112,11 @@ uint32_t ajustement_taille(int32_t taille)
 
 uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
 {
-  uint32_t hauteur = taille_tableau_x8(ppm_filename, h1, v1)[1];
-  uint32_t largeur = taille_tableau_x8(ppm_filename, h1, v1)[0];
+  uint32_t * tab_taille_x8 = malloc(2*sizeof(uint32_t));
+  tab_taille_x8 = taille_tableau_x8(ppm_filename, h1, v1);
+  uint32_t hauteur = tab_taille_x8[1];
+  uint32_t largeur = tab_taille_x8[0];
+  free(tab_taille_x8);
   uint32_t hauteur_objectif = ajustement_taille(hauteur);
   uint32_t largeur_objectif = ajustement_taille(largeur);
   uint8_t * rgb_bonne_taille = malloc((3*hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
