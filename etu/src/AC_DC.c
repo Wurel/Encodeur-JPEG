@@ -43,7 +43,6 @@ void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre, uint8_t indic
   symbole_decode = huffman_table_get_path(mon_arbre, magnitude, nbits);
   bitstream_write_nbits(stream, symbole_decode, *nbits, 0);
   free(nbits);
-  //printf("nombre%d, magnitude %d \n",nombre, magnitude );
   int16_t bits = retourne_bits(nombre, magnitude);
   bitstream_write_nbits(stream, bits, magnitude, 0);
   huffman_table_destroy(mon_arbre);
@@ -52,30 +51,21 @@ void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre, uint8_t indic
 
 //se fait appeler par la fonction AC DC et donne le symbole DC pour un indice de tableau de bloc donné
 //Attention c'est dans le cas N&B
-void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur)
+void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j ,uint8_t indice_k, int16_t predicateur)
 {
-  //cas du premier bloc
-  // if (predicateur == 0)
-  // {
-  //   predicateur = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].y[0];
-  //   ecriture_symbole_DC(stream, *predicateur);
-  // }
-  // else
-  // {
-  int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].y[0] - predicateur;
+  int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[indice_k].y[0] - predicateur;
   ecriture_symbole_DC(stream, nombre_dc, 0);
-  // }
 }
 
-void ecriture_DC_cb(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur)
+void ecriture_DC_cb(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , uint8_t indice_k, int16_t predicateur)
 {
-  int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].cb[0] - predicateur;
+  int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[indice_k].cb[0] - predicateur;
   ecriture_symbole_DC(stream, nombre_dc, 1);
 }
 
-void ecriture_DC_cr(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , int16_t predicateur)
+void ecriture_DC_cr(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j ,uint8_t indice_k, int16_t predicateur)
 {
-  int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[0].cr[0] - predicateur;
+  int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[indice_k].cr[0] - predicateur;
   ecriture_symbole_DC(stream, nombre_dc, 2);
 }
 
@@ -123,7 +113,7 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
     else
     {
       uint8_t magnitude = retourne_magnitude(composante[i]);
-      int8_t bit = retourne_bits(composante[i], magnitude);
+      int16_t bit = retourne_bits(composante[i], magnitude);
       //On veut concaténer
       uint8_t *nbits = malloc(sizeof(uint8_t));
       uint32_t symbole_decode = huffman_table_get_path(mon_arbre, compteur_zeros*16+magnitude, nbits);
@@ -146,18 +136,20 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
 
 
 
-void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_t h, uint32_t v, uint8_t type )
+void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_t h, uint32_t v, uint8_t h1, uint8_t v1, uint8_t type )
 {
   //pour Y (cas de base)
   //(pour N&B il ne fait que cette première partie)
   if (type == 1)
   {
     int16_t predicateur = 0;
-    for (uint32_t i = 0; i < h; i++)
+    for (uint32_t i = 0; i < v; i++)
     {
-      for (uint32_t j = 0; j < v; j++)
+      for (uint32_t j = 0; j < h; j++)
       {
-        ecriture_DC_y(stream, tab, i, j, predicateur);
+        //attention v1=h1=1
+        // k = 0
+        ecriture_DC_y(stream, tab, i, j, 0, predicateur);
         predicateur = tab[i][j].tableau_de_bloc_apres_dct[0].y[0];
         AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].y, 0);
       }
@@ -170,24 +162,27 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_
     int16_t predicateur_y = 0;
     int16_t predicateur_cb = 0;
     int16_t predicateur_cr = 0;
-
-    for (uint32_t i = 0; i < h; i++)
+    for (uint32_t i = 0; i < v; i++)
     {
-      for (uint32_t j = 0; j < v; j++)
+      for (uint32_t j = 0; j < h; j++)
       {
-        ecriture_DC_y(stream, tab , i, j, predicateur_y);
-        predicateur_y = tab[i][j].tableau_de_bloc_apres_dct[0].y[0];
-        AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].y, 0);
+        for (uint8_t k = 0; k < h1*v1; k++) {
+          ecriture_DC_y(stream, tab , i, j, k, predicateur_y);
+          predicateur_y = tab[i][j].tableau_de_bloc_apres_dct[k].y[0];
+          AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[k].y, 0);
+        }
 
-        ecriture_DC_cb(stream, tab, i, j, predicateur_cb);
-        predicateur_cb = tab[i][j].tableau_de_bloc_apres_dct[0].cb[0];
-        AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].cb, 1);
+        for (uint8_t k = 0; k < h1*v1; k++) {
+          ecriture_DC_cb(stream,tab ,i ,j ,k, predicateur_cb);
+          predicateur_cb = tab[i][j].tableau_de_bloc_apres_dct[k].cb[0];
+          AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[k].cb, 1);
 
-        ecriture_DC_cr(stream, tab, i, j, predicateur_cr);
-        predicateur_cr = tab[i][j].tableau_de_bloc_apres_dct[0].cr[0];
-        AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[0].cr, 2);
-
-        //printf("predicateur_y %d, predicateur_cb %d, predicateur_cr %d \n",predicateur_y, predicateur_cb, predicateur_cr);
+        }
+        for (uint8_t k = 0; k < h1*v1; k++) {
+          ecriture_DC_cr(stream,tab ,i ,j ,k,  predicateur_cr);
+          predicateur_cr = tab[i][j].tableau_de_bloc_apres_dct[k].cr[0];
+          AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[k].cr, 2);
+        }
       }
     }
   }

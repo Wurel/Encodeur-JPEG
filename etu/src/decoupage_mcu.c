@@ -12,7 +12,6 @@ uint8_t type(const char *ppm_filename){
     exit(0);
   }
   fscanf(ppm, "%s", type);
-  printf("%s\n", type);
   fclose(ppm);
   if (!strcmp(type, "P5"))
   {
@@ -238,8 +237,6 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
 //prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
 struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
 {
-  if(h1 == 1 && v1 == 1)
-  {
     uint32_t hauteur = taille_tableau_x8(ppm_filename)[1];
     uint32_t largeur = taille_tableau_x8(ppm_filename)[0];
     uint32_t hauteur_objectif = ajustement_taille(hauteur, v1);
@@ -304,76 +301,39 @@ struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
           }
         }
 
-        int32_t indice_ligne = 0;
+        // int32_t indice_ligne = 0;
         for (uint32_t k = 0; k < hauteur_objectif*largeur_objectif; k++)
         {
-          // if (k % largeur_objectif == 0 && (k != 0)) {
-          //   indice_ligne ++;
-          // }
-          // if (indice_ligne == 8) {
-          //   indice_ligne = 0;
-          // }
-          uint32_t i = k/largeur_objectif;
-          uint32_t j = k%largeur_objectif;
+            uint32_t i = k/largeur_objectif;
+            uint32_t j = k%largeur_objectif;
 
-          uint32_t i_mcu = i/8/h1;
-          uint32_t j_mcu = j/8/v1;
+            uint32_t i_mcu = i/8/v1;
+            uint32_t j_mcu = j/8/h1;
 
-          uint8_t i_bloc = (i - i_mcu * v1 * 8) / 8; //indice bloc dans un tableau de bloc comme si c'était bidimensionnel
-          uint8_t j_bloc = (j - j_mcu * h1 * 8) / 8;
-          uint8_t k_bloc = i_bloc * v1 + j_bloc; //On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
+            uint8_t i_bloc = (i - i_mcu * v1 * 8) / 8; //indice bloc dans un tableau de bloc comme si c'était bidimensionnel
+            uint8_t j_bloc = (j - j_mcu * h1 * 8) / 8;
+            uint8_t k_bloc = i_bloc * h1 + j_bloc; //On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
 
-          uint8_t i_coefficient = i - i_mcu * v1 * 8 - i_bloc * 8;//indice coefficient dans un bloc comme si c'était bidimensionnel
-          uint8_t j_coefficient = j - j_mcu * h1 * 8 - j_bloc * 8;
-          uint8_t k_coefficient = 8 * i_coefficient + j_coefficient;//On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
-          // int32_t i_prime = i-8*(k/largeur_objectif/8);
-          // int32_t j_prime = j*8 + k%8;
-          int32_t coefficient;
-          if (tab_rgb[0] == 1)
-          //cas négro
-          {
-            printf("negro\n");
-            coefficient = tab_rgb[k + 3] + tab_rgb[k + 3]*16*16 + tab_rgb[k + 3]*16*16*16*16;
-          }
-          else
-          {
-            printf("coul aurélien\n");
-            coefficient = tab_rgb[3*k + 3] + tab_rgb[3*k + 1 + 3]*16*16 + tab_rgb[3*k + 2 + 3]*16*16*16*16;
-          }
+            uint8_t i_coefficient = i - i_mcu * v1 * 8 - i_bloc * 8;//indice coefficient dans un bloc comme si c'était bidimensionnel
+            uint8_t j_coefficient = j - j_mcu * h1 * 8 - j_bloc * 8;
+            uint8_t k_coefficient = 8 * i_coefficient + j_coefficient;//On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
+            // int32_t i_prime = i-8*(k/largeur_objectif/8);
+            // int32_t j_prime = j*8 + k%8;
+            int32_t coefficient;
+            if (tab_rgb[0] == 1)
+            //cas négro
+            {
+              coefficient = tab_rgb[k + 3] + tab_rgb[k + 3]*16*16 + tab_rgb[k + 3]*16*16*16*16;
+            }
+            else
+            {
+              coefficient = tab_rgb[3*k + 3] + tab_rgb[3*k + 1 + 3]*16*16 + tab_rgb[3*k + 2 + 3]*16*16*16*16;
+            }
 
-          //tableau_de_mcu[i/8][j/8].tableau_de_bloc[0].rgb[k%8+indice_ligne*8] = nombre;
-          tableau_de_mcu[i_mcu][j_mcu].tableau_de_bloc[k_bloc].rgb[k_coefficient] = coefficient;
+            // printf("i : %d, j : %d \n\ni_mcu : %d, j_mcu : %d \nk_bloc : %d \nk_coefficient : %d\n\n\n ",i,j,i_mcu,j_mcu, k_bloc, k_coefficient );
+            tableau_de_mcu[i_mcu][j_mcu].tableau_de_bloc[k_bloc].rgb[k_coefficient] = coefficient;
         }
-      //   if (tab_rgb[0] == 0)
-      //   {
-      //
-      //
-      //   int32_t indice_ligne = 0;
-      //   for (uint32_t k = 0; k < hauteur_objectif*largeur_objectif; k++)
-      //   {
-      //     if (k % largeur_objectif == 0 && (k != 0)) {
-      //       indice_ligne ++;
-      //     }
-      //     if (indice_ligne == 8) {
-      //       indice_ligne = 0;
-      //     }
-      //     uint32_t i = k/largeur_objectif;
-      //     uint32_t j = k%largeur_objectif;
-      //     // uint32_t j = k%hauteur_objectif;
-      //     // printf("%d\n", k);
-      //     // int32_t i_prime = k/hauteur - 8*i;
-      //     // int32_t j_prime = k%hauteur -j*8;
-      //     int32_t i_prime = i-8*(k/largeur_objectif/8);
-      //     // int32_t j_prime = j-8*(k%largeur_objectif/8);
-      //     int32_t j_prime = j*8 + k%8;
-      //     int32_t nombre;
-      //     // printf("%x%x%x\n", tab_rgb[3*k+3], tab_rgb[3*k+4], tab_rgb[3*k+5]);
-      //     tableau_de_mcu[i/8][j/8].tableau_de_bloc[0].rgb[k%8+indice_ligne*8] = nombre;
-      //     // tableau_de_mcu[k/largeur_objectif/8][k%largeur_objectif/8].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
-      //   }
-      // }
       free(tab_rgb);
       return tableau_de_mcu;
       }
-    }
   }
