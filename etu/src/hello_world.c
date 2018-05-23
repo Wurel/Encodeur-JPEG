@@ -11,27 +11,30 @@
 #include "bitstream.h"
 #include "huffman.h"
 #include <unistd.h>
+#include "recuperation.h"
 
 
 int main(int argc, char const *argv[])
 {
     printf("Au boulot!\n");
-    uint8_t sample = malloc(2*3*sizeof(uint8_t));
-    recuperation_argument(argc, argv, "salut", sample);
+    uint8_t sample[6] = {1,1,1,1,1,1};
+    char sortie[200] = "";
+    char entree[200];
+    recuperation_argument(argc, argv, entree, sortie, sample);
+    uint8_t tipe = type(entree);
     uint8_t h1 = sample[0];
     uint8_t v1 = sample[1];
-    uint8_t tipe = type(argv[1]);
     printf("%d\n", tipe);
     struct mcu **tableau_de_mcu;
     uint32_t *tab_taille = malloc(3*sizeof(uint32_t));
-    tab_taille = taille_tableau(argv[1],1,1);
+    tab_taille = taille_tableau(entree,1,1);
     uint32_t *tab_taille_x8 = malloc(3*sizeof(uint32_t));
-    tab_taille_x8 = taille_tableau_x8(argv[1]);
+    tab_taille_x8 = taille_tableau_x8(entree);
     uint32_t largeur = tab_taille_x8[0];
     uint32_t hauteur = tab_taille_x8[1];
     free(tab_taille_x8);
     uint8_t *tab_rgb_rembourre = malloc(ajustement_taille(largeur,v1)*ajustement_taille(hauteur, h1)+3*sizeof(uint8_t)); //Bizarreeeeeeeeeeeeeee
-    tab_rgb_rembourre = rgb_rembourre(argv[1], h1, v1);
+    tab_rgb_rembourre = rgb_rembourre(entree, h1, v1);
     // Découpage
     // printf("%d\n", largeur);
     // // printf("%d\n", ajustement_taille(largeur));
@@ -42,7 +45,7 @@ int main(int argc, char const *argv[])
     //   printf("\n");
     //   printf("\n");
     // }
-    tableau_de_mcu = decoupage_mc(argv[1],h1,v1);
+    tableau_de_mcu = decoupage_mc(entree,h1,v1);
 // RGB -> YCbCr, DCT
     for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/8; i++) {
       for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/8; j++) {
@@ -90,8 +93,8 @@ int main(int argc, char const *argv[])
     // //
     // printf("dct %d\n", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
     struct jpeg_desc *jpeg = jpeg_desc_create();
-    jpeg_desc_set_ppm_filename(jpeg, argv[1]);
-    jpeg_desc_set_jpeg_filename(jpeg, strcat(argv[1], "jpeg"));
+    jpeg_desc_set_ppm_filename(jpeg, entree);
+    jpeg_desc_set_jpeg_filename(jpeg, sortie);
     jpeg_desc_set_nb_components(jpeg, tipe);
     jpeg_desc_set_image_width(jpeg, largeur); // atttention h1 V1
     jpeg_desc_set_image_height(jpeg, hauteur);
