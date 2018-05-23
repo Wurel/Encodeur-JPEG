@@ -23,9 +23,6 @@ uint8_t type(const char *ppm_filename){
     free(type);
     return 3;
   }
-
-
-
 }
 
 
@@ -100,25 +97,26 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   exit(1);
 }
 
-uint32_t ajustement_taille(int32_t taille)
+//Taille en pixels avec rembourrage
+uint32_t ajustement_taille(int32_t taille, uint8_t h1ouv1)
 {
   uint32_t nouvelle_taille = taille;
-  while (nouvelle_taille % 8 != 0) {
+  while (nouvelle_taille % (8 * h1ouv1) != 0) {
     nouvelle_taille ++;
   }
   return nouvelle_taille;
 }
 
 
-uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
+uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
 {
   uint32_t * tab_taille_x8 = malloc(2*sizeof(uint32_t));
-  tab_taille_x8 = taille_tableau_x8(ppm_filename, h1, v1);
+  tab_taille_x8 = taille_tableau_x8(ppm_filename);
   uint32_t hauteur = tab_taille_x8[1];
   uint32_t largeur = tab_taille_x8[0];
   free(tab_taille_x8);
-  uint32_t hauteur_objectif = ajustement_taille(hauteur);
-  uint32_t largeur_objectif = ajustement_taille(largeur);
+  uint32_t hauteur_objectif = ajustement_taille(hauteur, v1);
+  uint32_t largeur_objectif = ajustement_taille(largeur, h1);
   uint8_t * rgb_bonne_taille = malloc((3*hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
   uint8_t *tableau_rgb = malloc(sizeof(uint8_t)*(3*hauteur * largeur + 3));
   tableau_rgb = recuperation_rgb(ppm_filename);
@@ -127,11 +125,9 @@ uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
     for (uint32_t i = 0; i < hauteur_objectif; i++) {
       for (uint32_t j = 0; j < largeur_objectif; j++) {
         if (j >= largeur) {
-          printf("ajout\n");
           rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i*largeur + largeur + 3];
         }
         else if (i >= hauteur){
-          printf("ajout\n");
           rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[hauteur*largeur + hauteur + 3];
         }
         else{
@@ -144,13 +140,11 @@ uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
     for (uint32_t i = 0; i < hauteur_objectif; i++) {
       for (uint32_t j = 0; j < largeur_objectif; j++) {
         if (j >= largeur) {
-          printf("ajout\n");
           rgb_bonne_taille[i*largeur_objectif + 3*j+3] = tableau_rgb[i*largeur + 3*largeur + 3];
           rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = tableau_rgb[i*largeur + 3*largeur + 3+1];
           rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = tableau_rgb[i*largeur + 3*largeur + 3+2];
         }
         else if (i >= hauteur){
-          printf("ajout\n");
           rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[hauteur*largeur + hauteur + 3];
           // ATTENTION potentiellement probleme
 
@@ -176,37 +170,35 @@ uint8_t *rgb_rembourre(const char *ppm_filename, int8_t h1, int8_t v1)
   return rgb_bonne_taille;
 }
 
-uint32_t *taille_tableau_x8(const char * ppm_filename, int8_t h1, int8_t v1)
+//Retourne en pixels hauteur et largeur de l'image
+uint32_t *taille_tableau_x8(const char * ppm_filename)
 {
-  if (h1 == 1 && v1 == 1)
+  char *type;
+  type = malloc(100*sizeof(char));
+  // char *largeur;
+  // largeur = malloc(sizeof(char));
+  // char *hauteur;
+  // hauteur = malloc(sizeof(char));
+  uint32_t largeur = 0;
+  uint32_t hauteur = 0;
+  FILE *ppm;
+  ppm = fopen(ppm_filename, "r");
+  if (ppm==NULL)
   {
-    char *type;
-    type = malloc(100*sizeof(char));
-    // char *largeur;
-    // largeur = malloc(sizeof(char));
-    // char *hauteur;
-    // hauteur = malloc(sizeof(char));
-    uint32_t largeur = 0;
-    uint32_t hauteur = 0;
-    FILE *ppm;
-    ppm = fopen(ppm_filename, "r");
-    if (ppm==NULL)
-    {
-      printf("Ouverture du fichier impossible\n");
-      exit(0);
-    }
-    uint32_t *tab = malloc(2*sizeof(uint32_t));
-    fscanf(ppm, "%s", type);
-    fscanf(ppm, "%d", &largeur);
-    fscanf(ppm, "%d", &hauteur);
-    tab[0] = largeur;
-    tab[1] = hauteur;
-    fclose(ppm);
-    free(type);
-    // free(largeur);
-    // free(hauteur);
-    return tab;
+    printf("Ouverture du fichier impossible\n");
+    exit(0);
   }
+  uint32_t *tab = malloc(2*sizeof(uint32_t));
+  fscanf(ppm, "%s", type);
+  fscanf(ppm, "%d", &largeur);
+  fscanf(ppm, "%d", &hauteur);
+  tab[0] = largeur;
+  tab[1] = hauteur;
+  fclose(ppm);
+  free(type);
+  // free(largeur);
+  // free(hauteur);
+  return tab;
 }
 
 
@@ -244,57 +236,64 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
 }
 
 //prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
-struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
+struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
 {
   if(h1 == 1 && v1 == 1)
   {
-    uint32_t hauteur = taille_tableau_x8(ppm_filename, h1, v1)[1];
-    uint32_t largeur = taille_tableau_x8(ppm_filename, h1, v1)[0];
-    uint32_t hauteur_objectif = ajustement_taille(hauteur);
-    uint32_t largeur_objectif = ajustement_taille(largeur);
-    printf("tailt%d %d\n", hauteur_objectif, largeur_objectif);
+    uint32_t hauteur = taille_tableau_x8(ppm_filename)[1];
+    uint32_t largeur = taille_tableau_x8(ppm_filename)[0];
+    uint32_t hauteur_objectif = ajustement_taille(hauteur, v1);
+    uint32_t largeur_objectif = ajustement_taille(largeur, h1);
     uint8_t * tab_rgb = malloc((3*hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
     if (tab_rgb == NULL){
       printf("erreur d'allocation\n");
       exit(0);
     }
-    tab_rgb = rgb_rembourre(ppm_filename, 1, 1);
-    // tab_rgb = recuperation_rgb(ppm_filename);
-      if (largeur_objectif % 8 == 0 && hauteur_objectif % 8 ==0) // on fait juste le cas multiple de 8
+    tab_rgb = rgb_rembourre(ppm_filename, h1, v1);
+      //allocation memoire du tableau de mcu
+      //tableau bidimensionnel (ligne colonne)
+      if (largeur_objectif % 8*h1 == 0 && hauteur_objectif % 8*v1 ==0)//juste une verif
       {
         struct mcu **tableau_de_mcu;
-        tableau_de_mcu = malloc(hauteur_objectif/8*sizeof(*tableau_de_mcu));
+        tableau_de_mcu = malloc(hauteur_objectif/8/v1*sizeof(*tableau_de_mcu));
         if (tableau_de_mcu == NULL){
           printf("erreur d'allocation\n");
           exit(0);
         }
-        for (uint32_t i = 0; i < hauteur_objectif/8; i++) {
-          tableau_de_mcu[i] = malloc(largeur_objectif/8 * sizeof(**tableau_de_mcu));
+        for (uint32_t i = 0; i < hauteur_objectif/(v1*8); i++) {
+          tableau_de_mcu[i] = malloc(largeur_objectif/8/h1 * sizeof(**tableau_de_mcu));
           if (tableau_de_mcu[i] == NULL){
             printf("erreur d'allocation\n");
             exit(0);
           }
         }
-        for (uint32_t i = 0; i < hauteur_objectif/8; i++) {
-          for (uint32_t j = 0; j < largeur_objectif/8; j++) {
+        //allocation memoire des tableaux de blocs
+        //tableau unidim (parcours de la lecture)
+        for (uint32_t i = 0; i < hauteur_objectif/(8*v1); i++) {
+          for (uint32_t j = 0; j < largeur_objectif/(8*h1); j++) {
             tableau_de_mcu[i][j].tableau_de_bloc = malloc(h1*v1*sizeof(struct bloc));
             if (tableau_de_mcu[i][j].tableau_de_bloc == NULL){
               printf("erreur d'allocation\n");
               exit(0);
             }
+            //allocation des tableaux blocs apres dct
+            //tableau unidim (parcours de la lecture)
             tableau_de_mcu[i][j].tableau_de_bloc_apres_dct = malloc(h1*v1*sizeof(struct bloc_apres_dct));
             if (tableau_de_mcu[i][j].tableau_de_bloc_apres_dct == NULL){
               printf("erreur d'allocation\n");
               exit(0);
             }
-            struct bloc bloc0;
-            tableau_de_mcu[i][j].tableau_de_bloc[0] = bloc0;
-            struct bloc_apres_dct bloc1;
-            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[0] = bloc1;
             tableau_de_mcu[i][j].h = h1;
             tableau_de_mcu[i][j].v = v1;
-            for (int k = 0; k < h1*v1; k++) {
-              tableau_de_mcu[i][j].tableau_de_bloc[k].rgb = malloc((hauteur_objectif*largeur_objectif)*sizeof(uint32_t));
+            //allocation des blocs
+
+            for (uint8_t k = 0; k < h1*v1; k++) {
+              struct bloc bloc0;
+              tableau_de_mcu[i][j].tableau_de_bloc[k] = bloc0;
+              struct bloc_apres_dct bloc1;
+              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k] = bloc1;
+              //Allocation attributs des blocs
+              tableau_de_mcu[i][j].tableau_de_bloc[k].rgb = malloc((hauteur_objectif*largeur_objectif)*sizeof(uint32_t)); //Allocation trop grande à 1ere vue
               tableau_de_mcu[i][j].tableau_de_bloc[k].y = malloc(64*sizeof(uint8_t));
               tableau_de_mcu[i][j].tableau_de_bloc[k].cb = malloc(64*sizeof(uint8_t));
               tableau_de_mcu[i][j].tableau_de_bloc[k].cr = malloc(64*sizeof(uint8_t));
@@ -304,62 +303,75 @@ struct mcu **decoupage_mc(const char *ppm_filename, int8_t h1, int8_t v1)
             }
           }
         }
-        if (tab_rgb[0] == 1)
-        //cas négro
-        {
-        int32_t indice_ligne = 0;
-        for (uint32_t k = 0; k < hauteur_objectif*largeur_objectif; k++)
-        {
-          if (k % largeur_objectif == 0 && (k != 0)) {
-            indice_ligne ++;
-          }
-          if (indice_ligne == 8) {
-            indice_ligne = 0;
-          }
-          uint32_t i = k/largeur_objectif;
-          uint32_t j = k%largeur_objectif;
-          // uint32_t j = k%hauteur_objectif;
-          // printf("%d\n", k);
-          // int32_t i_prime = k/hauteur - 8*i;
-          // int32_t j_prime = k%hauteur -j*8;
-          int32_t i_prime = i-8*(k/largeur_objectif/8);
-          // int32_t j_prime = j-8*(k%largeur_objectif/8);
-          int32_t j_prime = j*8 + k%8;
-          int32_t nombre;
-          nombre = tab_rgb[k + 3] + tab_rgb[k + 3]*16*16 + tab_rgb[k + 3]*16*16*16*16;
-          tableau_de_mcu[i/8][j/8].tableau_de_bloc[0].rgb[k%8+indice_ligne*8] = nombre;
-          // tableau_de_mcu[k/largeur_objectif/8][k%largeur_objectif/8].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
-        }
-      }
-        if (tab_rgb[0] == 0)
-        {
-          printf("coul\n");
 
         int32_t indice_ligne = 0;
         for (uint32_t k = 0; k < hauteur_objectif*largeur_objectif; k++)
         {
-          if (k % largeur_objectif == 0 && (k != 0)) {
-            indice_ligne ++;
-          }
-          if (indice_ligne == 8) {
-            indice_ligne = 0;
-          }
+          // if (k % largeur_objectif == 0 && (k != 0)) {
+          //   indice_ligne ++;
+          // }
+          // if (indice_ligne == 8) {
+          //   indice_ligne = 0;
+          // }
           uint32_t i = k/largeur_objectif;
           uint32_t j = k%largeur_objectif;
-          // uint32_t j = k%hauteur_objectif;
-          // printf("%d\n", k);
-          // int32_t i_prime = k/hauteur - 8*i;
-          // int32_t j_prime = k%hauteur -j*8;
-          int32_t i_prime = i-8*(k/largeur_objectif/8);
-          // int32_t j_prime = j-8*(k%largeur_objectif/8);
-          int32_t j_prime = j*8 + k%8;
-          int32_t nombre;
-          nombre = tab_rgb[3*k + 3] + tab_rgb[3*k + 1 + 3]*16*16 + tab_rgb[3*k + 2 + 3]*16*16*16*16;
-          // printf("%x%x%x\n", tab_rgb[3*k+3], tab_rgb[3*k+4], tab_rgb[3*k+5]);
-          tableau_de_mcu[i/8][j/8].tableau_de_bloc[0].rgb[k%8+indice_ligne*8] = nombre;
-          // tableau_de_mcu[k/largeur_objectif/8][k%largeur_objectif/8].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
+
+          uint32_t i_mcu = i/8/h1;
+          uint32_t j_mcu = j/8/v1;
+
+          uint8_t i_bloc = (i - i_mcu * v1 * 8) / 8; //indice bloc dans un tableau de bloc comme si c'était bidimensionnel
+          uint8_t j_bloc = (j - j_mcu * h1 * 8) / 8;
+          uint8_t k_bloc = i_bloc * v1 + j_bloc; //On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
+
+          uint8_t i_coefficient = i - i_mcu * v1 * 8 - i_bloc * 8;//indice coefficient dans un bloc comme si c'était bidimensionnel
+          uint8_t j_coefficient = j - j_mcu * h1 * 8 - j_bloc * 8;
+          uint8_t k_coefficient = 8 * i_coefficient + j_coefficient;//On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
+          // int32_t i_prime = i-8*(k/largeur_objectif/8);
+          // int32_t j_prime = j*8 + k%8;
+          int32_t coefficient;
+          if (tab_rgb[0] == 1)
+          //cas négro
+          {
+            printf("negro\n");
+            coefficient = tab_rgb[k + 3] + tab_rgb[k + 3]*16*16 + tab_rgb[k + 3]*16*16*16*16;
+          }
+          else
+          {
+            printf("coul aurélien\n");
+            coefficient = tab_rgb[3*k + 3] + tab_rgb[3*k + 1 + 3]*16*16 + tab_rgb[3*k + 2 + 3]*16*16*16*16;
+          }
+
+          //tableau_de_mcu[i/8][j/8].tableau_de_bloc[0].rgb[k%8+indice_ligne*8] = nombre;
+          tableau_de_mcu[i_mcu][j_mcu].tableau_de_bloc[k_bloc].rgb[k_coefficient] = coefficient;
         }
-      }
+      //   if (tab_rgb[0] == 0)
+      //   {
+      //
+      //
+      //   int32_t indice_ligne = 0;
+      //   for (uint32_t k = 0; k < hauteur_objectif*largeur_objectif; k++)
+      //   {
+      //     if (k % largeur_objectif == 0 && (k != 0)) {
+      //       indice_ligne ++;
+      //     }
+      //     if (indice_ligne == 8) {
+      //       indice_ligne = 0;
+      //     }
+      //     uint32_t i = k/largeur_objectif;
+      //     uint32_t j = k%largeur_objectif;
+      //     // uint32_t j = k%hauteur_objectif;
+      //     // printf("%d\n", k);
+      //     // int32_t i_prime = k/hauteur - 8*i;
+      //     // int32_t j_prime = k%hauteur -j*8;
+      //     int32_t i_prime = i-8*(k/largeur_objectif/8);
+      //     // int32_t j_prime = j-8*(k%largeur_objectif/8);
+      //     int32_t j_prime = j*8 + k%8;
+      //     int32_t nombre;
+      //     // printf("%x%x%x\n", tab_rgb[3*k+3], tab_rgb[3*k+4], tab_rgb[3*k+5]);
+      //     tableau_de_mcu[i/8][j/8].tableau_de_bloc[0].rgb[k%8+indice_ligne*8] = nombre;
+      //     // tableau_de_mcu[k/largeur_objectif/8][k%largeur_objectif/8].tableau_de_bloc[0].rgb[i_prime*8+j_prime] = nombre;
+      //   }
+      // }
       free(tab_rgb);
       return tableau_de_mcu;
       }

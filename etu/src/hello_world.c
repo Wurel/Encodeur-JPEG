@@ -18,18 +18,20 @@ int main(int argc, char const *argv[])
     printf("Au boulot!\n");
     uint8_t sample = malloc(2*3*sizeof(uint8_t));
     recuperation_argument(argc, argv, "salut", sample);
+    uint8_t h1 = sample[0];
+    uint8_t v1 = sample[1];
     uint8_t tipe = type(argv[1]);
     printf("%d\n", tipe);
     struct mcu **tableau_de_mcu;
     uint32_t *tab_taille = malloc(3*sizeof(uint32_t));
     tab_taille = taille_tableau(argv[1],1,1);
     uint32_t *tab_taille_x8 = malloc(3*sizeof(uint32_t));
-    tab_taille_x8 = taille_tableau_x8(argv[1], 1, 1);
+    tab_taille_x8 = taille_tableau_x8(argv[1]);
     uint32_t largeur = tab_taille_x8[0];
     uint32_t hauteur = tab_taille_x8[1];
     free(tab_taille_x8);
-    uint8_t *tab_rgb_rembourre = malloc((ajustement_taille(largeur)*ajustement_taille(hauteur)+3)*sizeof(uint8_t));
-    tab_rgb_rembourre = rgb_rembourre(argv[1], 1, 1);
+    uint8_t *tab_rgb_rembourre = malloc(ajustement_taille(largeur,v1)*ajustement_taille(hauteur, h1)+3*sizeof(uint8_t)); //Bizarreeeeeeeeeeeeeee
+    tab_rgb_rembourre = rgb_rembourre(argv[1], h1, v1);
     // Découpage
     // printf("%d\n", largeur);
     // // printf("%d\n", ajustement_taille(largeur));
@@ -40,10 +42,10 @@ int main(int argc, char const *argv[])
     //   printf("\n");
     //   printf("\n");
     // }
-    tableau_de_mcu = decoupage_mc(argv[1],1,1);
+    tableau_de_mcu = decoupage_mc(argv[1],h1,v1);
 // RGB -> YCbCr, DCT
-    for (uint32_t i = 0; i < ajustement_taille(hauteur)/8; i++) {
-      for (uint32_t j = 0; j < ajustement_taille(largeur)/8; j++) {
+    for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/8; i++) {
+      for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/8; j++) {
         //rgb 2 ycbcr
         transformation_bloc_rgb_ycbcr(&tableau_de_mcu[i][j].tableau_de_bloc[0]);
         // DCT
@@ -120,8 +122,8 @@ int main(int argc, char const *argv[])
     struct bitstream *bits; //= bitstream_create("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/test.jpeg");
     bits = jpeg_desc_get_bitstream(jpeg);
     // ecriture_symbole_DC(bits, tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
-    printf("%d %d \n", ajustement_taille(largeur)/8, ajustement_taille(hauteur)/8);
-    ecriture_AC_DC_complete(bits, tableau_de_mcu, ajustement_taille(hauteur)/8, ajustement_taille(largeur)/8, tipe);
+    // printf("%d %d \n", ajustement_taille(largeur, h1)/8, ajustement_taille(hauteur, v1)/8);
+    ecriture_AC_DC_complete(bits, tableau_de_mcu, ajustement_taille(hauteur, v1)/8, ajustement_taille(largeur, h1)/8, tipe);
     jpeg_write_footer(jpeg);
     jpeg_desc_destroy(jpeg);
     //free tableau_de_mcu
@@ -143,7 +145,7 @@ int main(int argc, char const *argv[])
       free(tableau_de_mcu[i]);
     }
     free(tableau_de_mcu);
-    free(tab_taille);
+   free(tab_taille);
 
 
     return EXIT_SUCCESS;

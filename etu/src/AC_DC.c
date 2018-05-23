@@ -41,12 +41,10 @@ void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre, uint8_t indic
   uint8_t magnitude = retourne_magnitude(nombre);
   uint8_t *nbits = malloc(sizeof(uint8_t));
   symbole_decode = huffman_table_get_path(mon_arbre, magnitude, nbits);
-  printf("%d\n", symbole_decode);
   bitstream_write_nbits(stream, symbole_decode, *nbits, 0);
   free(nbits);
   //printf("nombre%d, magnitude %d \n",nombre, magnitude );
   int16_t bits = retourne_bits(nombre, magnitude);
-  printf("%d\n", bits);
   bitstream_write_nbits(stream, bits, magnitude, 0);
   huffman_table_destroy(mon_arbre);
 }
@@ -119,7 +117,6 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
         compteur_zeros = 0;
         uint8_t *nbits = malloc(sizeof(uint8_t));
         uint32_t symbole_decode = huffman_table_get_path(mon_arbre, 240, nbits);
-        printf("%d\n", symbole_decode);
         ecriture_symbole_AC(stream, symbole_decode, nbits);
       }
     }
@@ -130,9 +127,7 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
       //On veut concaténer
       uint8_t *nbits = malloc(sizeof(uint8_t));
       uint32_t symbole_decode = huffman_table_get_path(mon_arbre, compteur_zeros*16+magnitude, nbits);
-      printf("%d\n", symbole_decode);
       ecriture_symbole_AC(stream, symbole_decode, nbits);
-      printf("%d\n", bit);
       ecriture_symbole_AC(stream, bit, &magnitude);
       compteur_zeros = 0;
       free(nbits);
@@ -142,7 +137,6 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
   {
     uint8_t *nbits = malloc(sizeof(uint8_t));
     uint32_t symbole_decode = huffman_table_get_path(mon_arbre, 0, nbits);
-    printf("%d\n", symbole_decode);
     ecriture_symbole_AC(stream, symbole_decode, nbits);
     free(nbits);
   }
