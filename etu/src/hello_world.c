@@ -12,6 +12,7 @@
 #include "huffman.h"
 #include <unistd.h>
 #include "recuperation.h"
+#include "module_jpeg.h"
 
 
 int main(int argc, char const *argv[])
@@ -80,7 +81,6 @@ int main(int argc, char const *argv[])
 
       }
     }
-
     // for (uint32_t i = 0; i < 8; i++) {
     //   for (uint32_t j = 0; j < 8; j++) {
     //     printf("%x\t", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[j+i*8]);
