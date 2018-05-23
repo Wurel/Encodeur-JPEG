@@ -5,12 +5,12 @@
 #include <string.h>
 #include <math.h>
 
-void echantillonage_horizontal(struct mcu)
+void echantillonage_horizontal(struct mcu ma_mcu)
 {
-    for (i=0; i<mcu.v; i++)
+    for (uint8_t i=0; i<ma_mcu.v; i++)
     {
-        struct bloc bloc1 = mcu.tableau_de_bloc[2*i];
-        struct bloc bloc2 = mcu.tableau_de_bloc[2*i+1];
+        struct bloc bloc1 = ma_mcu.tableau_de_bloc[2*i];
+        struct bloc bloc2 = ma_mcu.tableau_de_bloc[2*i+1];
         for(uint8_t k=0;k<63;k+2)
         {
             //1er bloc
@@ -24,7 +24,7 @@ void echantillonage_horizontal(struct mcu)
 
             //Moyenne
             uint8_t moy_bleu = (bleu1+bleu2)/2;
-            uint8_t moy_touge = (rouge1+rouge2)/2;
+            uint8_t moy_rouge = (rouge1+rouge2)/2;
             uint8_t moy_vert = (vert1+vert2)/2;
 
             //Calcul des nouveaux cb et cr
@@ -50,7 +50,7 @@ void echantillonage_horizontal(struct mcu)
 
             //Moyenne
             moy_bleu = (bleu1+bleu2)/2;
-            moy_touge = (rouge1+rouge2)/2;
+            moy_rouge = (rouge1+rouge2)/2;
             moy_vert = (vert1+vert2)/2;
 
             //Calcul des nouveaux cb et cr
