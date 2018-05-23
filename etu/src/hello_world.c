@@ -16,6 +16,8 @@
 int main(int argc, char const *argv[])
 {
     printf("Au boulot!\n");
+    uint8_t sample = malloc(2*3*sizeof(uint8_t));
+    recuperation_argument(argc, argv, "salut", sample);
     uint8_t tipe = type(argv[1]);
     printf("%d\n", tipe);
     struct mcu **tableau_de_mcu;
