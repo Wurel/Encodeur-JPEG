@@ -1,3 +1,0 @@
-**** [v3] REF Module:          jpeg_writer ****
-**** [v3] REF Module:              huffman ****
-**** [v3] REF Module:            bitstream ****
