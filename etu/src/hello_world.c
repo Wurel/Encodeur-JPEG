@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include "recuperation.h"
 #include "module_jpeg.h"
+#include "down_sampler.h"
 
 
 int main(int argc, char const *argv[])
@@ -50,8 +51,18 @@ int main(int argc, char const *argv[])
         for (size_t k = 0; k < h1*v1; k++) {
           //rgb 2 ycbcr
           transformation_bloc_rgb_ycbcr(&tableau_de_mcu[i][j].tableau_de_bloc[k]);
+        }
+        //DOWN SAMPLER
+        if(h2==h3 && h2<h1)
+        {
+            echantillonnage_horizontal(tableau_de_mcu[i][j]);
+        }
+        if (v2==v3 && v2<v1)
+        {
+            echantillonnage_vertical(tableau_de_mcu[i][j]);
+        }
+        for(size_t k=0; k<h1*v1; k++) {
           // DCT
-
           tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y = malloc(sizeof(int16_t)*64);
           dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[k].y, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y);
 
@@ -86,6 +97,7 @@ int main(int argc, char const *argv[])
         }
       }
     }
+
     // for (uint32_t i = 0; i < 8; i++) {
     //   for (uint32_t j = 0; j < 8; j++) {
     //     printf("%x\t", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[j+i*8]);
@@ -97,6 +109,7 @@ int main(int argc, char const *argv[])
     //
     // //
     // printf("dct %d\n", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
+
 
     //pour Y est seul truc pour le cas N&B
     struct jpeg_desc *jpeg = jpeg_desc_create();
@@ -132,7 +145,7 @@ int main(int argc, char const *argv[])
     jpeg_write_header(jpeg);
     struct bitstream *bits; //= bitstream_create("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/test.jpeg");
     bits = jpeg_desc_get_bitstream(jpeg);
-    ecriture_AC_DC_complete(bits, tableau_de_mcu, ajustement_taille(largeur, h1)/8/h1, ajustement_taille(hauteur, v1)/8/v1, h1, v1, type_couleur);
+    ecriture_AC_DC_complete(bits, tableau_de_mcu, ajustement_taille(largeur, h1)/8/h1, ajustement_taille(hauteur, v1)/8/v1, h1, v1, h2, v2, h3, v3, type_couleur);
     jpeg_write_footer(jpeg);
     jpeg_desc_destroy(jpeg);
     //free tableau_de_mcu
