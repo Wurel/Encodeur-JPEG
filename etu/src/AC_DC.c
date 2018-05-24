@@ -136,7 +136,7 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
 
 
 
-void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_t h, uint32_t v, uint8_t h1, uint8_t v1, uint8_t type )
+void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_t h, uint32_t v, uint8_t h1, uint8_t v1, uint8_t h2, uint8_t v2, uint8_t h3, uint8_t v3, uint8_t type )
 {
   //pour Y (cas de base)
   //(pour N&B il ne fait que cette première partie)
@@ -176,12 +176,36 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_
           ecriture_DC_cb(stream,tab ,i ,j ,k, predicateur_cb);
           predicateur_cb = tab[i][j].tableau_de_bloc_apres_dct[k].cb[0];
           AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[k].cb, 1);
-
+          if(h2==h3 && h2<h1)
+          {
+              k++;
+          }
+          if(v2==v3 && v2<v1)
+          {
+              //On teste si on est en bout de ligne : si oui, on saute une ligne
+              if ((k+1)%h1 == 0)
+              {
+                  k+=h1;
+              }
+          }
         }
+
         for (uint8_t k = 0; k < h1*v1; k++) {
           ecriture_DC_cr(stream,tab ,i ,j ,k,  predicateur_cr);
           predicateur_cr = tab[i][j].tableau_de_bloc_apres_dct[k].cr[0];
           AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[k].cr, 2);
+          if(h2==h3 && h2<h1)
+          {
+              k++;
+          }
+          if(v2==v3 && v2<v1)
+          {
+            //On teste si on est en bout de ligne : si oui, on saute une ligne
+            if ((k+1)%h1 == 0)
+            {
+                k+=h1;
+            }
+          }
         }
       }
     }
