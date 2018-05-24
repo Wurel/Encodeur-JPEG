@@ -143,7 +143,7 @@ uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
           rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = tableau_rgb[i*largeur + 3*largeur + 3+1];
           rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = tableau_rgb[i*largeur + 3*largeur + 3+2];
         }
-        if (i >= hauteur){
+        if (i >= hauteur && j < largeur){
           // rgb_bonne_taille[i*largeur_objectif + 3*j+3] = tableau_rgb[(hauteur-1)*largeur + j + 3];
           // // ATTENTION potentiellement probleme
           //
@@ -232,6 +232,7 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
     free(type);
     return tab;
   }
+  exit(1);
 }
 
 //prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
@@ -336,4 +337,5 @@ struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
       free(tab_rgb);
       return tableau_de_mcu;
       }
+      exit(1);
   }
