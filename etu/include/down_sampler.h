@@ -10,6 +10,6 @@
 
 extern void echantillonnage_horizontal(struct mcu, uint8_t facteur);
 
-extern void echantillonnage_vertical(struct mcu, uint8_t facteur);
+extern void echantillonnage_vertical(struct mcu, uint8_t facteur, uint8_t facteur_horizontal);
 
 #endif /* down_sampler */
