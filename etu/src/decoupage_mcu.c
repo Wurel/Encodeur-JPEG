@@ -138,21 +138,21 @@ uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
   else{
     for (uint32_t i = 0; i < hauteur_objectif; i++) {
       for (uint32_t j = 0; j < largeur_objectif; j++) {
-        if (j >= largeur) {
+        if (j >= largeur && i < hauteur) {
           rgb_bonne_taille[i*largeur_objectif + 3*j+3] = tableau_rgb[i*largeur + 3*largeur + 3];
           rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = tableau_rgb[i*largeur + 3*largeur + 3+1];
           rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = tableau_rgb[i*largeur + 3*largeur + 3+2];
         }
-        else if (i >= hauteur){
-          rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[hauteur*largeur + hauteur + 3];
-          // ATTENTION potentiellement probleme
-
-
-          //ATTENTION
-          rgb_bonne_taille[i*largeur_objectif + j+3+1] = tableau_rgb[hauteur*largeur + hauteur + 3+1];
-          rgb_bonne_taille[i*largeur_objectif + j+3+2] = tableau_rgb[hauteur*largeur + hauteur + 3+2];
+        if (i >= hauteur){
+          // rgb_bonne_taille[i*largeur_objectif + 3*j+3] = tableau_rgb[(hauteur-1)*largeur + j + 3];
+          // // ATTENTION potentiellement probleme
+          //
+          //
+          // //ATTENTION
+          // rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = tableau_rgb[(hauteur-1)*largeur + j + 3+1];
+          // rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = tableau_rgb[(hauteur-1)*largeur + j + 3+2];
         }
-        else{
+        if (j< largeur && i < hauteur){
           rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3] = tableau_rgb[i * largeur*3 + 3*j + 3];
           rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+1] = tableau_rgb[i * largeur*3 + 3*j + 3+1];
           rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+2] = tableau_rgb[i * largeur*3 + 3*j + 3+2];
