@@ -55,11 +55,11 @@ int main(int argc, char const *argv[])
         //DOWN SAMPLER
         if(h2==h3 && h2<h1)
         {
-            echantillonnage_horizontal(tableau_de_mcu[i][j]);
+            echantillonnage_horizontal(tableau_de_mcu[i][j], h1/h2);
         }
         if (v2==v3 && v2<v1)
         {
-            echantillonnage_vertical(tableau_de_mcu[i][j]);
+            echantillonnage_vertical(tableau_de_mcu[i][j], v1/v2);
         }
         for(size_t k=0; k<h1*v1; k++) {
           // DCT

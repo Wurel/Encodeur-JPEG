@@ -8,8 +8,8 @@
 #include <math.h>
 #include "structures.h"
 
-extern void echantillonnage_horizontal(struct mcu);
+extern void echantillonnage_horizontal(struct mcu, uint8_t facteur);
 
-extern void echantillonnage_vertical(struct mcu);
+extern void echantillonnage_vertical(struct mcu, uint8_t facteur);
 
 #endif /* down_sampler */
