@@ -110,8 +110,6 @@ int main(int argc, char const *argv[])
     // //
     // printf("dct %d\n", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
 
-
-    //pour Y est seul truc pour le cas N&B
     struct jpeg_desc *jpeg = jpeg_desc_create();
     jpeg_desc_set_ppm_filename(jpeg, entree);
     jpeg_desc_set_jpeg_filename(jpeg, sortie);
