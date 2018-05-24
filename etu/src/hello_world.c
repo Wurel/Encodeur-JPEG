@@ -38,8 +38,8 @@ int main(int argc, char const *argv[])
     uint32_t largeur = tab_taille_x8[0];
     uint32_t hauteur = tab_taille_x8[1];
     free(tab_taille_x8);
-    uint8_t *tab_rgb_rembourre = malloc(ajustement_taille(largeur,v1)*ajustement_taille(hauteur, h1)+3*sizeof(uint8_t)); //Bizarreeeeeeeeeeeeeee
-    tab_rgb_rembourre = rgb_rembourre(entree, h1, v1);
+    // uint8_t *tab_rgb_rembourre = malloc(ajustement_taille(largeur,v1)*ajustement_taille(hauteur, h1)+3*sizeof(uint8_t)); //Bizarreeeeeeeeeeeeeee
+    // tab_rgb_rembourre = rgb_rembourre(entree, h1, v1);
     // Découpage
     tableau_de_mcu = decoupage_mc(entree,h1,v1);
 // RGB -> YCbCr, DCT
@@ -87,6 +87,7 @@ int main(int argc, char const *argv[])
           quantification_Y(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y);
           quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
           quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
+          // printf("mcu : [%d, %d]\n", i,j);
           // for (size_t p = 0; p < 8; p++) {
           //   for (size_t h = 0; h < 8; h++) {
           //     printf("%hx\t", tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y[p*8+h]);
@@ -119,9 +120,14 @@ int main(int argc, char const *argv[])
 
     jpeg_desc_set_sampling_factor(jpeg, Y, H, h1);
     jpeg_desc_set_sampling_factor(jpeg, Y, V, v1);
-    jpeg_desc_set_huffman_table(jpeg, DC, Y, huffman_table_build(htables_nb_symb_per_lengths[0][0], htables_symbols[0][0], htables_nb_symbols[0][0]));
+    struct huff_table *mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][0],
+                          htables_symbols[0][0],
+                          htables_nb_symbols[0][0]);
+    // jpeg_desc_set_huffman_table(jpeg, DC, Y, huffman_table_build(htables_nb_symb_per_lengths[0][0], htables_symbols[0][0], htables_nb_symbols[0][0]));
+    jpeg_desc_set_huffman_table(jpeg, DC, Y, mon_arbre);
     // jpeg_desc_set_huffman_table(jpeg, DC, Cb, huffman_table_build(htables_nb_symb_per_lengths[0][1], htables_symbols[0][1], htables_nb_symbols[0][1]));
-    jpeg_desc_set_huffman_table(jpeg, AC, Y, huffman_table_build(htables_nb_symb_per_lengths[1][0], htables_symbols[1][0], htables_nb_symbols[1][0]));
+    mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[1][0], htables_symbols[1][0], htables_nb_symbols[1][0]);
+    jpeg_desc_set_huffman_table(jpeg, AC, Y, mon_arbre);
     // jpeg_desc_set_huffman_table(jpeg, AC, Cb, huffman_table_build(htables_nb_symb_per_lengths[1][1], htables_symbols[1][1], htables_nb_symbols[1][1]));
     jpeg_desc_set_quantization_table(jpeg, Y, compressed_Y_table);
 
@@ -129,17 +135,20 @@ int main(int argc, char const *argv[])
       //couleur
       jpeg_desc_set_sampling_factor(jpeg, Cb, H, h2);
       jpeg_desc_set_sampling_factor(jpeg, Cb, V, v2);
-      jpeg_desc_set_huffman_table(jpeg, DC, Cb, huffman_table_build(htables_nb_symb_per_lengths[0][1], htables_symbols[0][1], htables_nb_symbols[0][1]));
-      jpeg_desc_set_huffman_table(jpeg, AC, Cb, huffman_table_build(htables_nb_symb_per_lengths[1][1], htables_symbols[1][1], htables_nb_symbols[1][1]));
+      mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][1], htables_symbols[0][1], htables_nb_symbols[0][1]);
+      jpeg_desc_set_huffman_table(jpeg, DC, Cb, mon_arbre);
+      mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[1][1], htables_symbols[1][1], htables_nb_symbols[1][1]);
+      jpeg_desc_set_huffman_table(jpeg, AC, Cb, mon_arbre);
       jpeg_desc_set_quantization_table(jpeg, Cb, compressed_CbCr_table);
 
       jpeg_desc_set_sampling_factor(jpeg, Cr, H, h3);
       jpeg_desc_set_sampling_factor(jpeg, Cr, V, v3);
-      jpeg_desc_set_huffman_table(jpeg, DC, Cr, huffman_table_build(htables_nb_symb_per_lengths[0][2], htables_symbols[0][2], htables_nb_symbols[0][2]));
-      jpeg_desc_set_huffman_table(jpeg, AC, Cr, huffman_table_build(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]));
+      mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][2], htables_symbols[0][2], htables_nb_symbols[0][2]);
+      jpeg_desc_set_huffman_table(jpeg, DC, Cr, mon_arbre);
+      mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]);
+      jpeg_desc_set_huffman_table(jpeg, AC, Cr, mon_arbre);
       jpeg_desc_set_quantization_table(jpeg, Cr, compressed_CbCr_table);
     }
-
     jpeg_write_header(jpeg);
     struct bitstream *bits; //= bitstream_create("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/test.jpeg");
     bits = jpeg_desc_get_bitstream(jpeg);
@@ -168,6 +177,7 @@ int main(int argc, char const *argv[])
     }
     free(tableau_de_mcu);
    free(tab_taille);
+   huffman_table_destroy(mon_arbre);
 
 
     return EXIT_SUCCESS;

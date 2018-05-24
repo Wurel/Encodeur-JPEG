@@ -108,6 +108,7 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
         uint8_t *nbits = malloc(sizeof(uint8_t));
         uint32_t symbole_decode = huffman_table_get_path(mon_arbre, 240, nbits);
         ecriture_symbole_AC(stream, symbole_decode, nbits);
+        free(nbits);
       }
     }
     else

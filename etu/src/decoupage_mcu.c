@@ -53,7 +53,6 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   if (!strcmp(type, "P5"))
   {
     uint8_t *tableau = malloc(sizeof(uint8_t)*(hauteur*largeur + 3));
-    printf("negro\n");
     // 1 car 1 pixel = 1 byte
     tableau[0] = 1;
 
@@ -73,7 +72,6 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   }
   if (!strcmp(type, "P6"))
   {
-    printf("image en couleur\n");
     uint8_t *tableau = malloc(sizeof(uint8_t)*(3*hauteur*largeur + 3));
     // 1 car 1 pixel = 1 byte
     tableau[0] = 0;
@@ -123,14 +121,17 @@ uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
   if (tableau_rgb[0] == 1) {
     for (uint32_t i = 0; i < hauteur_objectif; i++) {
       for (uint32_t j = 0; j < largeur_objectif; j++) {
-        if (j >= largeur) {
-          rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i*largeur + largeur + 3];
-        }
-        else if (i >= hauteur){
-          rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[hauteur*largeur + hauteur + 3];
+        // if (j >= largeur) {
+        //   rgb_bonne_taille[i*largeur_objectif + j+3] = 0;
+        // }
+        // else if (i >= hauteur){
+        //   rgb_bonne_taille[i*largeur_objectif + j+3] = 0;
+        // }
+        if(j < largeur && i < hauteur){
+          rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i * largeur + j + 3];
         }
         else{
-          rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i * largeur + j + 3];
+          rgb_bonne_taille[i*largeur_objectif + j+3] = 0;
         }
       }
     }
@@ -138,24 +139,34 @@ uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
   else{
     for (uint32_t i = 0; i < hauteur_objectif; i++) {
       for (uint32_t j = 0; j < largeur_objectif; j++) {
-        if (j >= largeur && i < hauteur) {
-          rgb_bonne_taille[i*largeur_objectif + 3*j+3] = tableau_rgb[i*largeur + 3*largeur + 3];
-          rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = tableau_rgb[i*largeur + 3*largeur + 3+1];
-          rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = tableau_rgb[i*largeur + 3*largeur + 3+2];
-        }
-        if (i >= hauteur && j < largeur){
-          // rgb_bonne_taille[i*largeur_objectif + 3*j+3] = tableau_rgb[(hauteur-1)*largeur + j + 3];
-          // // ATTENTION potentiellement probleme
-          //
-          //
-          // //ATTENTION
-          // rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = tableau_rgb[(hauteur-1)*largeur + j + 3+1];
-          // rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = tableau_rgb[(hauteur-1)*largeur + j + 3+2];
-        }
+        // if (j >= largeur && i < hauteur) {
+        //   rgb_bonne_taille[i*largeur_objectif + 3*j+3] = 0;
+        //   rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = 0;
+        //   rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = 0;
+        // }
+        // if (i >= hauteur && j < largeur){
+        //   // ATTENTION potentiellement probleme
+        //
+        //
+        //   //ATTENTION
+        //   rgb_bonne_taille[i*largeur_objectif + 3*j+3] = 0;
+        //   rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = 0;
+        //   rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = 0;
+        // }
+        // if (i > hauteur && j > largeur) {
+        //   rgb_bonne_taille[i*largeur_objectif + 3*j+3] = 0;
+        //   rgb_bonne_taille[i*largeur_objectif + 3*j+3+1] = 0;
+        //   rgb_bonne_taille[i*largeur_objectif + 3*j+3+2] = 0;
+        // }
         if (j< largeur && i < hauteur){
           rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3] = tableau_rgb[i * largeur*3 + 3*j + 3];
           rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+1] = tableau_rgb[i * largeur*3 + 3*j + 3+1];
           rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+2] = tableau_rgb[i * largeur*3 + 3*j + 3+2];
+        }
+        else{
+          rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3] = 0;
+          rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+1] = 0;
+          rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+2] = 0;
         }
       }
     }
