@@ -186,7 +186,7 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_
               //On teste si on est en bout de ligne : si oui, on saute une ligne
               if ((k+1)%h1 == 0)
               {
-                  k+=h1;
+                  k+=h1*v1/v2 -1;
               }
           }
         }
@@ -204,7 +204,7 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_
             //On teste si on est en bout de ligne : si oui, on saute une ligne
             if ((k+1)%h1 == 0)
             {
-                k+=h1;
+                k+=h1*v1/v2 -1;
             }
           }
         }

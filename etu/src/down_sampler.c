@@ -56,9 +56,9 @@ void echantillonnage_horizontal(struct mcu ma_mcu, uint8_t facteur)
     }
 }
 
-void echantillonnage_vertical(struct mcu ma_mcu, uint8_t facteur)
+void echantillonnage_vertical(struct mcu ma_mcu, uint8_t facteur, uint8_t facteur_horizontal)
 {
-    for (uint8_t i=0; i<(ma_mcu.v)*ma_mcu.h - ma_mcu.h*(facteur-1); i++)
+    for (uint8_t i=0; i<(ma_mcu.v)*ma_mcu.h - ma_mcu.h*(facteur-1); i=i+facteur_horizontal)
     {
         for (uint8_t m=0; m<facteur; m++)
         {
@@ -91,7 +91,7 @@ void echantillonnage_vertical(struct mcu ma_mcu, uint8_t facteur)
 
                 //place dans le nouveau tableau
                 uint8_t j;
-                j = k - ((k - k%8) / facteur) + 64*m/facteur;;
+                j = (k-k%8)/facteur + k%8 + 64*m/facteur;;
                 //On remplace
                 ma_mcu.tableau_de_bloc[i].cb[j] = new_cb;
                 ma_mcu.tableau_de_bloc[i].cr[j] = new_cr;
@@ -105,12 +105,12 @@ void echantillonnage_vertical(struct mcu ma_mcu, uint8_t facteur)
         //copie dans les autres blocs
         for (uint8_t m=1; m<facteur; m++)
         {
-          ma_mcu.tableau_de_bloc[facteur*i+m*ma_mcu.h].cb = ma_mcu.tableau_de_bloc[facteur*i].cb;
-          ma_mcu.tableau_de_bloc[facteur*i+m*ma_mcu.h].cr = ma_mcu.tableau_de_bloc[facteur*i].cr;
+          ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cb = ma_mcu.tableau_de_bloc[i].cb;
+          ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cr = ma_mcu.tableau_de_bloc[i].cr;
         }
         if((i+1)%ma_mcu.h==0)
         {
-            i+=ma_mcu.h;
+            i+=ma_mcu.h*facteur-1;
         }
     }
 }
