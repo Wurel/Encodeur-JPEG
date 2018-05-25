@@ -14,7 +14,7 @@
 #include "recuperation.h"
 #include "module_jpeg.h"
 #include "down_sampler.h"
-
+#include "huffman_eleve.h"
 
 int main(int argc, char const *argv[])
 {
@@ -55,11 +55,11 @@ int main(int argc, char const *argv[])
         //DOWN SAMPLER
         if(h2==h3 && h2<h1)
         {
-            echantillonnage_horizontal(tableau_de_mcu[i][j]);
+            echantillonnage_horizontal(tableau_de_mcu[i][j], h1/h2);
         }
         if (v2==v3 && v2<v1)
         {
-            echantillonnage_vertical(tableau_de_mcu[i][j]);
+            echantillonnage_vertical(tableau_de_mcu[i][j], v1/v2);
         }
         for(size_t k=0; k<h1*v1; k++) {
           // DCT
@@ -111,8 +111,6 @@ int main(int argc, char const *argv[])
     // //
     // printf("dct %d\n", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
 
-
-    //pour Y est seul truc pour le cas N&B
     struct jpeg_desc *jpeg = jpeg_desc_create();
     jpeg_desc_set_ppm_filename(jpeg, entree);
     jpeg_desc_set_jpeg_filename(jpeg, sortie);
@@ -180,7 +178,6 @@ int main(int argc, char const *argv[])
     free(tableau_de_mcu);
    free(tab_taille);
    huffman_table_destroy(mon_arbre);
-
 
     return EXIT_SUCCESS;
 }

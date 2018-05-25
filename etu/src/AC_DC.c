@@ -179,7 +179,7 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_
           AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[k].cb, 1);
           if(h2==h3 && h2<h1)
           {
-              k++;
+              k+=(h1/h2)-1;
           }
           if(v2==v3 && v2<v1)
           {
@@ -197,7 +197,7 @@ void ecriture_AC_DC_complete(struct bitstream *stream, struct mcu **tab, uint32_
           AC_composante_puis_huffman(stream, tab[i][j].tableau_de_bloc_apres_dct[k].cr, 2);
           if(h2==h3 && h2<h1)
           {
-              k++;
+              k+=(h1/h2)-1;
           }
           if(v2==v3 && v2<v1)
           {
