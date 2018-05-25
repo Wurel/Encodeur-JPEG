@@ -19,6 +19,7 @@
 int main(int argc, char const *argv[])
 {
     printf("Au boulot!\n");
+    // struct huff_table_eleve *mon_arbre_test = huffman_table_build_eleve(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]);
     uint8_t sample[6] = {1,1,1,1,1,1};
     char sortie[200] = "";
     char entree[200];
@@ -188,6 +189,7 @@ int main(int argc, char const *argv[])
     free(tableau_de_mcu);
    free(tab_taille);
    huffman_table_destroy(mon_arbre);
+
 
     return EXIT_SUCCESS;
 }

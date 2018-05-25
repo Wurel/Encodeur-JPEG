@@ -18,6 +18,8 @@ void creation_arbre(struct huff_table_eleve *arbre, uint8_t profondeur);
 void sature_papa(struct huff_table_eleve *fils, struct huff_table_eleve *pere);
 void ecriture(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols, struct huff_table_eleve  *racine);
 
+void recherche_arbre(struct huff_table_eleve *ht, uint8_t value, uint8_t *nbits, uint32_t* chemin);
+
 static struct huff_table_eleve *racine= NULL;
 
 
@@ -77,6 +79,9 @@ void ecriture(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols
   printf("coucou\n");
   for (uint8_t i = 0; i < 16; i++) {
     for (size_t j = 0; j < nb_symb_per_lengths[i]; j++) {
+      if (elements_ecrits == nb_symbols) {
+        return;
+      }
       courant = racine;
       while (courant -> profondeur != i + 1 && courant -> fils[0] != NULL) {
         if (courant ->fils[0] -> sature == 0) {
@@ -86,8 +91,9 @@ void ecriture(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols
           courant = courant -> fils[1];
         }
       }
-      printf("j'ecris %d\n", symbols[elements_ecrits]);
+      // printf("j'ecris %d\n", symbols[elements_ecrits]);
       courant -> valeur_feuille = symbols[elements_ecrits];
+      courant -> bool_feuille = 1;
       courant -> sature = 1;
       elements_ecrits ++;
       sature_papa(courant, courant -> pere);
@@ -99,6 +105,29 @@ void sature_papa(struct huff_table_eleve *fils, struct huff_table_eleve *pere) {
   if(fils == (pere->fils[1])){
     pere -> sature = 1;
     sature_papa(pere, pere -> pere);
+  }
+}
+
+uint32_t huffman_table_get_path_eleve(struct huff_table_eleve *ht, uint8_t value, uint8_t *nbits){
+  uint32_t *chemin = malloc(sizeof(uint32_t));
+  recherche_arbre(ht, value, nbits, chemin);
+  return *chemin;
+}
+
+void recherche_arbre(struct huff_table_eleve *ht, uint8_t value, uint8_t *nbits, uint32_t *chemin){
+  struct huff_table_eleve *courant = malloc(sizeof(struct huff_table_eleve *));
+  courant = ht;
+  if(courant -> bool_feuille != 1 && courant -> profondeur != 16){
+    // printf("%d\n", chemin + (2<<courant->profondeur));
+    recherche_arbre(courant->fils[0], value, nbits, chemin);
+    chemin = chemin + (2<< courant -> profondeur);
+    // printf("%d\n", *chemin);
+    recherche_arbre(courant->fils[1], value, nbits, chemin );
+  }
+  if (courant -> bool_feuille == 1 && courant -> valeur_feuille == value) {
+    nbits = &courant -> profondeur;
+    printf("trouve\n");
+    printf("%d\n", *chemin);
   }
 }
 
@@ -178,14 +207,17 @@ void sature_papa(struct huff_table_eleve *fils, struct huff_table_eleve *pere) {
 //   }
 // }
 
-  // int main() {
-  //   uint8_t nb_symb_per_lengths[5] = {0,2,1,3};
-  //   uint8_t symbols[6] = {5,4,8,16,32,54};
-  //   racine = huffman_table_build_eleve(nb_symb_per_lengths, symbols, 6);
-  //   if (racine -> pere == NULL) {
-  //     printf("c'est nul\n");
-  //   }
-  //   printf("fin\n");
-  //   // printf("valeur_feuille %d\n", racine->fils[0]->fils[0]->valeur_feuille);
-  //   return 0;
-  // }
+int main() {
+  uint8_t nb_symb_per_lengths[5] = {0,2,1,3};
+  uint8_t symbols[6] = {5,4,8,16,32,54};
+  racine = huffman_table_build_eleve(nb_symb_per_lengths, symbols, 6);
+  uint8_t *nbits = malloc(sizeof(uint8_t));
+  printf("on obtient %d\n", huffman_table_get_path_eleve(racine, 16, nbits));
+  printf("des bits %d\n", *nbits);
+  if (racine -> pere == NULL) {
+    printf("c'est nul\n");
+  }
+  printf("fin\n");
+  // printf("valeur_feuille %d\n", racine->fils[0]->fils[0]->valeur_feuille);
+  return 0;
+}
