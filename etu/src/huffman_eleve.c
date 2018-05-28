@@ -3,17 +3,8 @@
 #include <math.h>
 #include <stdio.h>
 
-struct huff_table_eleve{
-  uint8_t profondeur;
-  struct huff_table_eleve *pere;
-  struct huff_table_eleve *fils[2];
-  uint8_t bool_feuille;
-  uint32_t valeur_feuille;
 
-  uint8_t sature;
-};
-// void creation_et_ecrit(struct huff_table_eleve *arbre, uint32_t nombre_de_symbole_a_ecrire, uint8_t *symbols, uint8_t nb_symbols, uint8_t i, uint8_t *j);
-// void creation_arbre(struct huff_table_eleve *arbre, uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols, uint8_t i, uint8_t *j);
+
 struct huff_table_eleve *huffman_table_build_eleve(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols);
 void creation_arbre(struct huff_table_eleve *arbre, uint8_t profondeur);
 void sature_papa(struct huff_table_eleve *fils, struct huff_table_eleve *pere);
@@ -24,12 +15,34 @@ uint32_t recherche_arbre(struct huff_table_eleve *ht, uint8_t value, uint8_t *nb
 static struct huff_table_eleve *racine= NULL;
 
 
+/* structure représentant un arbre de Huffman. */
+struct huff_table_eleve{
+  uint8_t profondeur;
+  struct huff_table_eleve *pere;
+  struct huff_table_eleve *fils[2];
+  uint8_t bool_feuille;
+  uint32_t valeur_feuille;
+  uint8_t sature;
+  uint8_t nb_symbols
+};
+// void creation_et_ecrit(struct huff_table_eleve *arbre, uint32_t nombre_de_symbole_a_ecrire, uint8_t *symbols, uint8_t nb_symbols, uint8_t i, uint8_t *j);
+// void creation_arbre(struct huff_table_eleve *arbre, uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols, uint8_t i, uint8_t *j);
+
+
+/*
+    Construit un arbre de Huffman à partir d'une table de symboles comme
+    présenté en section 2.10.1 du sujet. nb_symb_per_lengths est un tableau
+    contenant le nombre de symboles pour chaque longueur, symbols est le
+    tableau des symboles ordonnés, et nb_symbols représente la taille du
+    tableau symbols.
+*/
 struct huff_table_eleve *huffman_table_build_eleve(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols){
   racine = malloc(sizeof(struct huff_table_eleve*));
   racine -> pere = NULL;
   racine -> bool_feuille = 0;
-  //rajout pour le patheleve
-  racine -> profondeur = 0;
+  racine -> profondeur = 0;  //rajout pour le path_eleve
+  racine -> nb_symbols = nb_symbols; //rajout pour le get_symbols_eleve:
+
   // racine -> fils = malloc(2*sizeof(struct huff_table_eleve*));
   // struct huff_table_eleve *fils_0 = malloc(sizeof(struct huff_table_eleve));
   // // fils_0 -> profondeur = (arbre -> profondeur) + 1;
@@ -51,6 +64,7 @@ struct huff_table_eleve *huffman_table_build_eleve(uint8_t *nb_symb_per_lengths,
   return racine;
 }
 
+/* creer les noeuds de l'arbre de maniere recurssive */
 void creation_arbre(struct huff_table_eleve *arbre, uint8_t profondeur){
   if (profondeur == 16) {
     return;
@@ -76,6 +90,8 @@ void creation_arbre(struct huff_table_eleve *arbre, uint8_t profondeur){
   }
 }
 
+
+/* ecrit les syboles aux emplacements voulus  */
 void ecriture(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols, struct huff_table_eleve  *racine) {
   struct huff_table_eleve *courant = malloc(sizeof(struct huff_table_eleve));
   uint32_t elements_ecrits = 0;
@@ -104,6 +120,10 @@ void ecriture(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols
   }
 }
 
+/*
+met le parametre sature du des noeud de l'arbre de huffman quand tout
+ses fils sont saturés (quand les feuille ont une valeur)
+*/
 void sature_papa(struct huff_table_eleve *fils, struct huff_table_eleve *pere) {
   if(fils == (pere->fils[1])){
     pere -> sature = 1;
@@ -116,7 +136,6 @@ void sature_papa(struct huff_table_eleve *fils, struct huff_table_eleve *pere) {
     valeur value. nbits est un paramètre de sortie permettant de stocker la
     longueur du chemin.
 */
-
 uint32_t huffman_table_get_path_eleve(struct huff_table_eleve *ht, uint8_t value, uint8_t *nbits){
   uint32_t *chemin = malloc(sizeof(uint32_t));
   uint32_t *result_chemin = malloc(sizeof(uint32_t));
@@ -133,6 +152,7 @@ uint32_t huffman_table_get_path_eleve(struct huff_table_eleve *ht, uint8_t value
   return *result_chemin;
 }
 
+/* parcours de l'arbre de maniere récursive pour trouver le symbole correspondant à la valeur donné */
 uint32_t recherche_arbre(struct huff_table_eleve *courant, uint8_t value, uint8_t *nbits, uint32_t *chemin,
                                  uint32_t *result_chemin){
   //condition d'arret:
@@ -173,8 +193,38 @@ uint32_t recherche_arbre(struct huff_table_eleve *courant, uint8_t value, uint8_
   }
 }
 
-// 
-//
+/*
+    Retourne le tableau des symboles associé à l'arbre de Huffman passé en
+    paramètre.
+*/
+uint8_t *huffman_table_get_symbols_eleve(struct huff_table_eleve *ht)
+{
+  uint8_t *tab_symboles = malloc(sizeof(uint8_t)*(ht-> nb_symbols));
+
+}
+
+/*
+Détruit l'arbre de Huffman passé en paramètre et libère toute la mémoire
+qui lui est associée.
+*/
+void huffman_table_destroy_eleve(struct huff_table_eleve *ht)
+{
+  //descente
+  if (ht->profondeur != 16)
+  {
+    huffman_table_destroy_eleve(ht->fils[0]);
+    huffman_table_destroy_eleve(ht->fils[1]);
+    free(ht);
+  }
+  else //remonte en faisant des frees
+  {
+    free(ht->fils[0]);
+    free(ht->fils[1]);
+  }
+}
+
+
+//main de test
 // int main() {
 //   uint8_t nb_symb_per_lengths[5] = {0,2,1,5};
 //   uint8_t symbols[8] = {5,4,8,16,32,54,11,12};
