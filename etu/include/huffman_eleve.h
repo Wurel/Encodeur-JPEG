@@ -19,4 +19,9 @@ void sature_papa(struct huff_table_eleve *fils, struct huff_table_eleve *pere);
 
 void ecriture(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols, struct huff_table_eleve  *racine);
 
+uint32_t huffman_table_get_path_eleve(struct huff_table_eleve *ht, uint8_t value, uint8_t *nbits);
+
+uint32_t recherche_arbre(struct huff_table_eleve *courant, uint8_t value, uint8_t *nbits, uint32_t *chemin);
+
+
 #endif /* HUFFMAN_H_ELEVE */
