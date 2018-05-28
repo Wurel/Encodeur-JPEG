@@ -19,7 +19,6 @@ void recuperation_argument(int argc, char const *argv[], char *entree, char *sor
         // printf("%s\n", sortie);
       }
       else if (strncmp("--sample=", argv[i], 9)==0){
-        printf("attention on ne sample pas des images noires et blanches  \n");
         sample[0] = argv[i][9]-48;
         sample[1] = argv[i][11]-48;
         sample[2] = argv[i][13]-48;
