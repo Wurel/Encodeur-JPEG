@@ -18,7 +18,7 @@
 
 int main(int argc, char const *argv[])
 {
-    printf("Au boulot!\n");
+    printf("Au boulot!\n\n");
     // struct huff_table_eleve *mon_arbre_test = huffman_table_build_eleve(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]);
     uint8_t sample[6] = {1,1,1,1,1,1};
     char sortie[200] = "";
@@ -31,6 +31,20 @@ int main(int argc, char const *argv[])
     uint8_t v2 = sample[3];
     uint8_t h3 = sample[4];
     uint8_t v3 = sample[5];
+    if (h1+h2+h3+v1+v2+v3 > 10)
+    {
+        printf("Somme des facteurs d'échantillonnages trop grande ... Sortie du programme :'(\n");
+        exit(1);
+    }
+    if (h2 > h1 || h3 > h1 || v2 > v1 || v3 > v1 || h2 != h3 || v2 != v3)
+    {
+        printf("Facteurs d'échantillonnages incohérents ... Sortie du programme :'( \n");
+        exit(1);
+    }
+    if ((h1 != 1 && h1 != 2 && h1 != 4) || (v1 != 1 && v1 != 2 && v1 != 4))
+    {
+        printf("Valeurs de h1xv1 impossible ... Sortie du programme\n");
+    }
     struct mcu **tableau_de_mcu;
     uint32_t *tab_taille = malloc(3*sizeof(uint32_t));
     tab_taille = taille_tableau(entree,1,1);
@@ -55,14 +69,25 @@ int main(int argc, char const *argv[])
         }
         //DOWN SAMPLER
         uint8_t facteur_horizontal = 1;
-        if(h2==h3 && h2<h1)
+        if (type_couleur == 3)
         {
-            echantillonnage_horizontal(tableau_de_mcu[i][j], h1/h2);
-            facteur_horizontal = h1/h2;
+            if(h2<h1)
+            {
+                echantillonnage_horizontal(tableau_de_mcu[i][j], h1/h2);
+                facteur_horizontal = h1/h2;
+            }
+            if (v2<v1)
+            {
+                echantillonnage_vertical(tableau_de_mcu[i][j], v1/v2, facteur_horizontal);
+            }
         }
-        if (v2==v3 && v2<v1)
+        else
         {
-            echantillonnage_vertical(tableau_de_mcu[i][j], v1/v2, facteur_horizontal);
+            if (h2<h1 || v2<v1)
+            {
+                printf("L'image est en nuance de gris => On ne fait pas de sous-échantillonage\n");
+                printf("Le programme continue ...\n");
+            }
         }
         for(size_t k=0; k<h1*v1; k++) {
           // DCT
