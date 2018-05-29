@@ -43,7 +43,9 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
     for (uint32_t i = 0; i < 64; i++) {
       bitstream_write_nbits(jdesc->bits, compressed_Y_table[i], 8, 1);
     }
-    if (jpeg_desc_get_nb_components(jdesc) == 3) {//Si on a une image en couleur
+    if (N == 3) {//Si on a une image en couleur
+      bitstream_write_nbits(jdesc->bits, 0xFFDB, 16, 1);
+      bitstream_write_nbits(jdesc->bits, 0x0043, 16, 1);
       bitstream_write_nbits(jdesc->bits, 0x01, 8, 1);
       for (uint32_t i = 0; i < 64; i++) {
         bitstream_write_nbits(jdesc->bits, compressed_CbCr_table[i], 8, 1);
@@ -53,17 +55,17 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
     bitstream_flush(jdesc->bits);
     bitstream_write_nbits(jdesc->bits, 0xFFC0, 16, 1);
       //Taille dépendante du nombre de composante (1 ou 3)
-    if (jpeg_desc_get_nb_components(jdesc) == 3) {//Si on a une image en couleur
+    if (N == 3) {//Si on a une image en couleur, longueur = 11
       bitstream_write_nbits(jdesc->bits, 0x0011, 16, 1);
     }
     else{ //Sinon
       bitstream_write_nbits(jdesc->bits, 0x000B, 16, 1);
     }
-    bitstream_write_nbits(jdesc->bits, 0x08, 8, 1);
-    bitstream_write_nbits(jdesc->bits, jpeg_desc_get_image_height(jdesc), 16, 1);
-    bitstream_write_nbits(jdesc->bits, jpeg_desc_get_image_width(jdesc), 16, 1);
+    bitstream_write_nbits(jdesc->bits, 0x08, 8, 1); //Précision
+    bitstream_write_nbits(jdesc->bits, jpeg_desc_get_image_height(jdesc), 16, 1); //hauteur
+    bitstream_write_nbits(jdesc->bits, jpeg_desc_get_image_width(jdesc), 16, 1); //largeur
       //On écrit le nombre de composante N (1 ou 3)
-    if (jpeg_desc_get_nb_components(jdesc) == 3) {
+    if (N == 3) {
       bitstream_write_nbits(jdesc->bits, 0x0003, 8, 1);
     }
     else{
@@ -74,9 +76,9 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
     bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[0][0], 4, 1);
     bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[0][1], 4, 1);
     bitstream_write_nbits(jdesc->bits, 0, 8, 1);
-    if (jpeg_desc_get_nb_components(jdesc) == 3) {
+    if (N == 3) {
       for (size_t i = 1; i < 3; i++) {
-        bitstream_write_nbits(jdesc->bits, i+1, 1, 1);
+        bitstream_write_nbits(jdesc->bits, i+1, 8, 1);
         bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[i][0], 4, 1);
         bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[i][1], 4, 1);
         bitstream_write_nbits(jdesc->bits, 1, 8, 1);
@@ -88,26 +90,17 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
     if (N == 3) {
       o = 2;
     }
-    for (size_t k = 0; k < o; k++) {
-      for (size_t l = 0; l < 2; l++) {
+    for (uint8_t k = 0; k < 2; k++) {
+      for (uint8_t l = 0; l < 1; l++) {
         bitstream_write_nbits(jdesc->bits, 0xFFC4, 16, 1);
-        bitstream_write_nbits(jdesc->bits, 3+16 + htables_nb_symbols[l][k], 16, 1);
+        bitstream_write_nbits(jdesc->bits, 3+16 + htables_nb_symbols[k][l], 16, 1);
         bitstream_write_nbits(jdesc->bits, 0, 3, 1);
-        bitstream_write_nbits(jdesc->bits, k+l, 1, 1);
+        bitstream_write_nbits(jdesc->bits, k, 1, 1);
         bitstream_write_nbits(jdesc->bits, 0, 4, 1);
         for (uint8_t i = 0; i < 16; i++) {
-          bitstream_write_nbits(jdesc->bits, htables_nb_symb_per_lengths[l][k][i], 8, 1);
+          bitstream_write_nbits(jdesc->bits, htables_nb_symb_per_lengths[k][l][i], 8, 1);
         }
-        // uint8_t i = 0;
-        // uint8_t m = 0;
-        // while (i<htables_nb_symbols[k][l]) {
-        //   for (uint8_t j = 0; j < htables_nb_symb_per_lengths[k][l][m]; j++) {
-        //     printf("i = %d\n", htables_symbols[k][l][i]);
-        //     bitstream_write_nbits(jdesc->bits, htables_symbols[k][l][i], m+1, 0);
-        //     i ++;
-        //   }
-        //   m ++;
-        // }
+
         uint8_t compteur = 0;
         for (uint8_t i = 0; i < 16; i++) {
           for (uint8_t j = 0; j < htables_nb_symb_per_lengths[k][l][i]; j++) {
@@ -117,14 +110,32 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
         }
       }
     }
+
+    if (N == 3) {
+      for (uint8_t k = 0; k < 2; k++) {
+        for (uint8_t l = 1; l < 2; l++) {
+          bitstream_write_nbits(jdesc->bits, 0xFFC4, 16, 1);
+          bitstream_write_nbits(jdesc->bits, 3+16 + htables_nb_symbols[k][l], 16, 1);
+          bitstream_write_nbits(jdesc->bits, 0, 3, 1);
+          bitstream_write_nbits(jdesc->bits, k, 1, 1);
+          bitstream_write_nbits(jdesc->bits, 1, 4, 1);
+          for (uint8_t i = 0; i < 16; i++) {
+            bitstream_write_nbits(jdesc->bits, htables_nb_symb_per_lengths[k][l][i], 8, 1);
+          }
+
+          uint8_t compteur = 0;
+          for (uint8_t i = 0; i < 16; i++) {
+            for (uint8_t j = 0; j < htables_nb_symb_per_lengths[k][l][i]; j++) {
+              bitstream_write_nbits(jdesc->bits, htables_symbols[k][l][compteur], 8, 1);
+              compteur ++;
+            }
+          }
+        }
+      }
+    }
+
     bitstream_flush(jdesc->bits);
-    // bitstream_write_nbits(jdesc->bits, 0xffda, 16, 1);
-    // bitstream_write_nbits(jdesc->bits, 2*N+6, 16, 1);
-    // bitstream_write_nbits(jdesc->bits, N, 8, 1);
-    // for (uint8_t i = 0; i < N; i++) {
-    //   bitstream_write_nbits(jdesc->bits, i, 8, 1);
-    //   bitstream_write_nbits(jdesc->bits, N, 8, 1);
-    // }
+
     if (N == 1) {
       bitstream_write_nbits(jdesc->bits, 0xffda, 16, 1);
       bitstream_write_nbits(jdesc->bits, 0x08, 16, 1);
@@ -137,12 +148,15 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
     else{
       bitstream_write_nbits(jdesc->bits, 0xffda, 16, 1);
       bitstream_write_nbits(jdesc->bits, 0x0c, 16, 1);
-      bitstream_write_nbits(jdesc->bits, 03, 8, 1);
+      bitstream_write_nbits(jdesc->bits, 0x03, 8, 1);
       bitstream_write_nbits(jdesc->bits, 0x0100, 16, 1);
       bitstream_write_nbits(jdesc->bits, 0x0211, 16, 1);
       bitstream_write_nbits(jdesc->bits, 0x0311, 16, 1);
     }
-    bitstream_write_nbits(jdesc->bits, 0x003f, 16, 1);
+    bitstream_write_nbits(jdesc->bits, 0, 8, 1);
+    bitstream_write_nbits(jdesc->bits, 0x3f, 8, 1);
+    bitstream_write_nbits(jdesc->bits, 0, 8, 1);
+
 }
 
 void jpeg_write_footer(struct jpeg_desc *jdesc){
