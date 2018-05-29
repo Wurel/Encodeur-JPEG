@@ -322,13 +322,13 @@ struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
             uint32_t i_mcu = i/8/v1;
             uint32_t j_mcu = j/8/h1;
 
-            uint8_t i_bloc = (i - i_mcu * v1 * 8) / 8; //indice bloc dans un tableau de bloc comme si c'était bidimensionnel
-            uint8_t j_bloc = (j - j_mcu * h1 * 8) / 8;
-            uint8_t k_bloc = i_bloc * h1 + j_bloc; //On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
+            uint32_t i_bloc = (i - i_mcu * v1 * 8) / 8; //indice bloc dans un tableau de bloc comme si c'était bidimensionnel
+            uint32_t j_bloc = (j - j_mcu * h1 * 8) / 8;
+            uint32_t k_bloc = i_bloc * h1 + j_bloc; //On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
 
-            uint8_t i_coefficient = i - i_mcu * v1 * 8 - i_bloc * 8;//indice coefficient dans un bloc comme si c'était bidimensionnel
-            uint8_t j_coefficient = j - j_mcu * h1 * 8 - j_bloc * 8;
-            uint8_t k_coefficient = 8 * i_coefficient + j_coefficient;//On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
+            uint32_t i_coefficient = i - i_mcu * v1 * 8 - i_bloc * 8;//indice coefficient dans un bloc comme si c'était bidimensionnel
+            uint32_t j_coefficient = j - j_mcu * h1 * 8 - j_bloc * 8;
+            uint32_t k_coefficient = 8 * i_coefficient + j_coefficient;//On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
             // int32_t i_prime = i-8*(k/largeur_objectif/8);
             // int32_t j_prime = j*8 + k%8;
             int32_t coefficient;

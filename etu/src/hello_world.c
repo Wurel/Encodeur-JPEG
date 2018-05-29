@@ -8,15 +8,14 @@
 #include "htables.h"
 #include "qtables.h"
 #include "bitstream.h"
+//#include "module_bitstream.h" //Le notre !
 #include "huffman.h"
 #include <unistd.h>
 #include "recuperation.h"
-#include "module_jpeg.h"
 #include "down_sampler.h"
 #include "huffman_eleve.h"
-// #include "jpeg_writer.h"
-#include "module_jpeg.h"
-
+#include "jpeg_writer.h"
+// #include "module_jpeg.h"
 
 int main(int argc, char const *argv[])
 {
@@ -33,6 +32,16 @@ int main(int argc, char const *argv[])
     uint8_t v2 = sample[3];
     uint8_t h3 = sample[4];
     uint8_t v3 = sample[5];
+    if (type_couleur == 1 && (h1 != 1 || v1 != 1 || h2 != 1 || v2 != 1 || h3 != 1 || v3 != 1))
+    {
+        printf("Image en nuance de gris, le programme continue avec des facteurs d'échantillonnages égaux à 1...\n");
+        h1 = 1;
+        h2 = 1;
+        h3 = 1;
+        v1 = 1;
+        v2 = 1;
+        v3 = 1;
+    }
     if (h1+h2+h3+v1+v2+v3 > 10)
     {
         printf("Somme des facteurs d'échantillonnages trop grande ... Sortie du programme :'(\n");
@@ -81,14 +90,6 @@ int main(int argc, char const *argv[])
             if (v2<v1)
             {
                 echantillonnage_vertical(tableau_de_mcu[i][j], v1/v2, facteur_horizontal);
-            }
-        }
-        else
-        {
-            if (h2<h1 || v2<v1)
-            {
-                printf("L'image est en nuance de gris => On ne fait pas de sous-échantillonage\n");
-                printf("Le programme continue ...\n");
             }
         }
         for(size_t k=0; k<h1*v1; k++) {

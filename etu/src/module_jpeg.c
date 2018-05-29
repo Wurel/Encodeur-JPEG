@@ -3,6 +3,7 @@
 #include "qtables.h"
 #include "htables.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 struct jpeg_desc *jpeg_desc_create(void){
     struct jpeg_desc *jpeg = malloc(sizeof(struct jpeg_desc));
@@ -30,7 +31,7 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
     bitstream_write_nbits(jdesc->bits, 0xffe0, 16, 1);
     bitstream_write_nbits(jdesc->bits, 0x0010, 16, 1);
     bitstream_write_nbits(jdesc->bits, 0x4a46, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x4649, 16, 1);
+    bitstream_write_nbits(jdesc->bits, 0x4946, 16, 1);
     bitstream_write_nbits(jdesc->bits, 0x0001, 16, 1);
     bitstream_write_nbits(jdesc->bits, 0x0100, 16, 1);
     bitstream_write_nbits(jdesc->bits, 0x0000, 16, 1);
@@ -152,10 +153,11 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
       bitstream_write_nbits(jdesc->bits, 0x0100, 16, 1);
       bitstream_write_nbits(jdesc->bits, 0x0211, 16, 1);
       bitstream_write_nbits(jdesc->bits, 0x0311, 16, 1);
+      bitstream_write_nbits(jdesc->bits, 0, 8, 1);
+      bitstream_write_nbits(jdesc->bits, 0x3f, 8, 1);
+      bitstream_write_nbits(jdesc->bits, 0, 8, 1);
     }
-    bitstream_write_nbits(jdesc->bits, 0, 8, 1);
-    bitstream_write_nbits(jdesc->bits, 0x3f, 8, 1);
-    bitstream_write_nbits(jdesc->bits, 0, 8, 1);
+    bitstream_flush(jdesc->bits);
 
 }
 

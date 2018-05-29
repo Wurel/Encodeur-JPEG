@@ -1,5 +1,6 @@
 #ifndef module_jpeg_eleve
 #define module_jpeg_eleve
+
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -57,6 +58,7 @@ extern struct jpeg_desc *jpeg_desc_create(void);
     bitstream est positionné juste après l'écriture de l'entête SOS, à
     l'emplacement du premier octet de données brutes à écrire.
 */
+
 extern void jpeg_desc_write_header(struct jpeg_desc *jdesc);
 
 /* Ecrit le footer JPEG (marqueur EOI) dans le fichier de sortie. */
@@ -67,6 +69,7 @@ extern void jpeg_write_footer(struct jpeg_desc *jdesc);
     associée est libérée.
 */
 extern void jpeg_desc_destroy(struct jpeg_desc *jdesc);
+
 
 
 /* Ecrit le nom du fichier de sortie jpeg_filename dans le jpeg_desc jdesc. */
@@ -166,5 +169,6 @@ extern void jpeg_desc_set_quantization_table(struct jpeg_desc *jdesc, enum color
 */
 extern uint8_t *jpeg_desc_get_quantization_table(struct jpeg_desc *jdesc,
                                                  enum color_component cc);
+
 
   #endif /* module_jpeg_eleve */
