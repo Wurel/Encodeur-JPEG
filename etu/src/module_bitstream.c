@@ -51,7 +51,7 @@ void bitstream_write_nbits(struct bitstream *stream, uint32_t value, uint8_t nbi
   *stream -> valeur = (*stream -> valeur << nbits) +value;
   *stream -> nb_bits = *stream -> nb_bits  + nbits;
   //printf("nb_bits = %d\n",*stream -> nb_bits );
-  while (*stream -> nb_bits > 8 )
+  while (*stream -> nb_bits >= 8 )
   {
     //printf("cas >8 \n");
     *a_ecrire = *stream -> valeur >> (*stream -> nb_bits -8);
