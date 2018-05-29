@@ -52,19 +52,19 @@ void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre, uint8_t indic
 
 //se fait appeler par la fonction AC DC et donne le symbole DC pour un indice de tableau de bloc donné
 //Attention c'est dans le cas N&B
-void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j ,uint8_t indice_k, int16_t predicateur)
+void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint32_t indice_i, uint32_t indice_j ,uint8_t indice_k, int16_t predicateur)
 {
   int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[indice_k].y[0] - predicateur;
   ecriture_symbole_DC(stream, nombre_dc, 0);
 }
 
-void ecriture_DC_cb(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j , uint8_t indice_k, int16_t predicateur)
+void ecriture_DC_cb(struct bitstream *stream, struct mcu **tab, uint32_t indice_i, uint32_t indice_j , uint8_t indice_k, int16_t predicateur)
 {
   int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[indice_k].cb[0] - predicateur;
   ecriture_symbole_DC(stream, nombre_dc, 1);
 }
 
-void ecriture_DC_cr(struct bitstream *stream, struct mcu **tab, uint8_t indice_i, uint8_t indice_j ,uint8_t indice_k, int16_t predicateur)
+void ecriture_DC_cr(struct bitstream *stream, struct mcu **tab, uint32_t indice_i, uint32_t indice_j ,uint8_t indice_k, int16_t predicateur)
 {
   int16_t nombre_dc = tab[indice_i][indice_j].tableau_de_bloc_apres_dct[indice_k].cr[0] - predicateur;
   ecriture_symbole_DC(stream, nombre_dc, 2);

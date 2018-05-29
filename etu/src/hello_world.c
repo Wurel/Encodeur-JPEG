@@ -14,8 +14,8 @@
 #include "recuperation.h"
 #include "down_sampler.h"
 #include "huffman_eleve.h"
-// #include "jpeg_writer.h"
-#include "module_jpeg.h"
+#include "jpeg_writer.h"
+// #include "module_jpeg.h"
 
 int main(int argc, char const *argv[])
 {
