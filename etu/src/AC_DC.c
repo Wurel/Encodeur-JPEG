@@ -3,7 +3,8 @@
 #include "bitstream.h"
 // #include "module_bitstream.h"
 #include <stdlib.h>
-#include "huffman.h"
+//#include "huffman.h"
+#include "huffman_eleve.h"
 #include "htables.h"
 #include <stdio.h>
 
@@ -46,7 +47,8 @@ void ecriture_symbole_DC(struct bitstream *stream, int16_t nombre, uint8_t indic
   free(nbits);
   int16_t bits = retourne_bits(nombre, magnitude);
   bitstream_write_nbits(stream, bits, magnitude, 0);
-  huffman_table_destroy(mon_arbre);
+  uint32_t* compteur = malloc(sizeof(uint32_t));
+  huffman_table_destroy(&mon_arbre, compteur);
 }
 
 
@@ -132,7 +134,8 @@ void AC_composante_puis_huffman(struct bitstream *stream, int16_t *composante, u
     ecriture_symbole_AC(stream, symbole_decode, nbits);
     free(nbits);
   }
-  huffman_table_destroy(mon_arbre);
+  uint32_t* compteur = malloc(sizeof(uint32_t));
+  huffman_table_destroy(&mon_arbre, compteur);
 }
 
 

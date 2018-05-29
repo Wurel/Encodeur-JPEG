@@ -9,13 +9,13 @@
 #include "qtables.h"
 #include "bitstream.h"
 //#include "module_bitstream.h" //Le notre !
-#include "huffman.h"
+#include "huffman_eleve.h"
+//#include "huffman.h"
 #include <unistd.h>
 #include "recuperation.h"
 #include "down_sampler.h"
-#include "huffman_eleve.h"
-#include "jpeg_writer.h"
-// #include "module_jpeg.h"
+//#include "jpeg_writer.h"
+#include "module_jpeg.h"
 
 int main(int argc, char const *argv[])
 {
@@ -154,12 +154,10 @@ int main(int argc, char const *argv[])
     struct huff_table *mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][0],
                           htables_symbols[0][0],
                           htables_nb_symbols[0][0]);
-    // jpeg_desc_set_huffman_table(jpeg, DC, Y, huffman_table_build(htables_nb_symb_per_lengths[0][0], htables_symbols[0][0], htables_nb_symbols[0][0]));
+    printf("ma bite\n");
     jpeg_desc_set_huffman_table(jpeg, DC, Y, mon_arbre);
-    // jpeg_desc_set_huffman_table(jpeg, DC, Cb, huffman_table_build(htables_nb_symb_per_lengths[0][1], htables_symbols[0][1], htables_nb_symbols[0][1]));
     mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[1][0], htables_symbols[1][0], htables_nb_symbols[1][0]);
     jpeg_desc_set_huffman_table(jpeg, AC, Y, mon_arbre);
-    // jpeg_desc_set_huffman_table(jpeg, AC, Cb, huffman_table_build(htables_nb_symb_per_lengths[1][1], htables_symbols[1][1], htables_nb_symbols[1][1]));
     jpeg_desc_set_quantization_table(jpeg, Y, compressed_Y_table);
 
     if (type_couleur == 3) {
@@ -216,7 +214,9 @@ int main(int argc, char const *argv[])
     }
     free(tableau_de_mcu);
    free(tab_taille);
-   huffman_table_destroy(mon_arbre);
+   printf("coucouuuuuuuuuuu\n");
+   uint32_t* compteur = malloc(sizeof(uint32_t));
+   huffman_table_destroy(&mon_arbre, compteur);
 
 
     return EXIT_SUCCESS;
