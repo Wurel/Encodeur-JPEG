@@ -57,9 +57,9 @@ int main(int argc, char const *argv[])
         printf("Valeurs de h1xv1 impossible ... Sortie du programme\n");
     }
     struct mcu **tableau_de_mcu;
-    uint32_t *tab_taille = malloc(3*sizeof(uint32_t));
+    uint32_t *tab_taille = NULL;
     tab_taille = taille_tableau(entree,1,1);
-    uint32_t *tab_taille_x8 = malloc(3*sizeof(uint32_t));
+    uint32_t *tab_taille_x8 = NULL;
     tab_taille_x8 = taille_tableau_x8(entree);
     uint32_t largeur = tab_taille_x8[0];
     uint32_t hauteur = tab_taille_x8[1];
@@ -73,7 +73,7 @@ int main(int argc, char const *argv[])
     for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/(8*v1); i++) {
       for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/(8*h1); j++) {
         //PARCOURS DES BLOCS
-        tableau_de_mcu[i][j].tableau_de_bloc_apres_dct = malloc(h1*v1*sizeof(struct bloc_apres_dct));
+        // tableau_de_mcu[i][j].tableau_de_bloc_apres_dct = malloc(h1*v1*sizeof(struct bloc_apres_dct));
         for (size_t k = 0; k < h1*v1; k++) {
           //rgb 2 ycbcr
           transformation_bloc_rgb_ycbcr(&tableau_de_mcu[i][j].tableau_de_bloc[k]);
@@ -185,7 +185,7 @@ int main(int argc, char const *argv[])
     bits = jpeg_desc_get_bitstream(jpeg);
     ecriture_AC_DC_complete(bits, tableau_de_mcu, ajustement_taille(largeur, h1)/8/h1, ajustement_taille(hauteur, v1)/8/v1, h1, v1, h2, v2, h3, v3, type_couleur);
     jpeg_write_footer(jpeg);
-    // jpeg_desc_destroy(jpeg);
+    jpeg_desc_destroy(jpeg);
 
     for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/(8*v1); i++) {
       for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/(8*h1); j++) {
@@ -193,6 +193,7 @@ int main(int argc, char const *argv[])
           free(tableau_de_mcu[i][j].tableau_de_bloc[k].rgb);
           free(tableau_de_mcu[i][j].tableau_de_bloc[k].y);
           free(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y);
+
         }
         for (size_t k = 0; k < h1*v1; k=k+(h1/h2)) {
           free(tableau_de_mcu[i][j].tableau_de_bloc[k].cb);
@@ -214,7 +215,7 @@ int main(int argc, char const *argv[])
     for (uint32_t i = 0; i <ajustement_taille(hauteur, v1)/(8*v1); i++) {
       free(tableau_de_mcu[i]);
     }
-    free(tableau_de_mcu);
+   free(tableau_de_mcu);
    free(tab_taille);
    huffman_table_destroy(mon_arbre);
 
