@@ -5,7 +5,6 @@
 #include "rgb2ycbcr.h"
 #include "q_zz.h"
 #include "AC_DC.h"
-#include "jpeg_writer.h"
 #include "htables.h"
 #include "qtables.h"
 #include "bitstream.h"
@@ -15,12 +14,15 @@
 #include "module_jpeg.h"
 #include "down_sampler.h"
 #include "huffman_eleve.h"
+// #include "jpeg_writer.h"
+#include "module_jpeg.h"
+
 
 int main(int argc, char const *argv[])
 {
-    printf("Au boulot!\n\n");
     // struct huff_table_eleve *mon_arbre_test = huffman_table_build_eleve(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]);
     uint8_t sample[6] = {1,1,1,1,1,1};
+    printf("Au boulot!\n\n");
     char sortie[200] = "";
     char entree[200];
     recuperation_argument(argc, argv, entree, sortie, sample);
@@ -182,7 +184,7 @@ int main(int argc, char const *argv[])
     bits = jpeg_desc_get_bitstream(jpeg);
     ecriture_AC_DC_complete(bits, tableau_de_mcu, ajustement_taille(largeur, h1)/8/h1, ajustement_taille(hauteur, v1)/8/v1, h1, v1, h2, v2, h3, v3, type_couleur);
     jpeg_write_footer(jpeg);
-    jpeg_desc_destroy(jpeg);
+    // jpeg_desc_destroy(jpeg);
 
     for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/(8*v1); i++) {
       for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/(8*h1); j++) {

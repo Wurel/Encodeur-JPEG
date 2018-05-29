@@ -23,7 +23,7 @@ struct huff_table_eleve{
   uint8_t bool_feuille;
   uint32_t valeur_feuille;
   uint8_t sature;
-  uint8_t nb_symbols
+  uint8_t nb_symbols;
 };
 // void creation_et_ecrit(struct huff_table_eleve *arbre, uint32_t nombre_de_symbole_a_ecrire, uint8_t *symbols, uint8_t nb_symbols, uint8_t i, uint8_t *j);
 // void creation_arbre(struct huff_table_eleve *arbre, uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols, uint8_t i, uint8_t *j);
