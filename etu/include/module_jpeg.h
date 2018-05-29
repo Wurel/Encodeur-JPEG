@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 #ifndef module_jpeg
 #define module_jpeg
+=======
+#ifndef module_jpeg_eleve
+#define module_jpeg_eleve
+>>>>>>> 1006643947c8f6de9b6154d3858b271fca5fa790
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -57,12 +62,27 @@ extern struct jpeg_desc *jpeg_desc_create(void);
     bitstream est positionné juste après l'écriture de l'entête SOS, à
     l'emplacement du premier octet de données brutes à écrire.
 */
+<<<<<<< HEAD
 extern void jpeg_write_header(struct jpeg_desc *jdesc);
 
 extern void jpeg_write_footer(struct jpeg_desc *jdesc);
 
 extern void jpeg_desc_destroy(struct jpeg_desc *jdesc);
 
+=======
+extern void jpeg_desc_write_header(struct jpeg_desc *jdesc);
+
+/* Ecrit le footer JPEG (marqueur EOI) dans le fichier de sortie. */
+extern void jpeg_write_footer(struct jpeg_desc *jdesc);
+
+/*
+    Détruit un jpeg_desc. Toute la mémoire qui lui est
+    associée est libérée.
+*/
+extern void jpeg_desc_destroy(struct jpeg_desc *jdesc);
+
+
+>>>>>>> 1006643947c8f6de9b6154d3858b271fca5fa790
 /* Ecrit le nom du fichier de sortie jpeg_filename dans le jpeg_desc jdesc. */
 extern void jpeg_desc_set_ppm_filename(struct jpeg_desc *jdesc,
                                        const char *ppm_filename);
@@ -161,4 +181,8 @@ extern void jpeg_desc_set_quantization_table(struct jpeg_desc *jdesc, enum color
 extern uint8_t *jpeg_desc_get_quantization_table(struct jpeg_desc *jdesc,
                                                  enum color_component cc);
 
+<<<<<<< HEAD
   #endif /* module_jpeg */
+=======
+  #endif /* module_jpeg_eleve */
+>>>>>>> 1006643947c8f6de9b6154d3858b271fca5fa790
