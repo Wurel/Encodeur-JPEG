@@ -115,7 +115,7 @@ uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
   uint32_t hauteur_objectif = ajustement_taille(hauteur, v1);
   uint32_t largeur_objectif = ajustement_taille(largeur, h1);
   uint8_t * rgb_bonne_taille = malloc((3*hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
-  uint8_t *tableau_rgb = malloc(sizeof(uint8_t)*(3*hauteur * largeur + 3));
+  uint8_t *tableau_rgb = NULL;
   tableau_rgb = recuperation_rgb(ppm_filename);
   rgb_bonne_taille[0] = tableau_rgb[0];
   if (tableau_rgb[0] == 1) {
@@ -249,15 +249,19 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
 //prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
 struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
 {
-    uint32_t hauteur = taille_tableau_x8(ppm_filename)[1];
-    uint32_t largeur = taille_tableau_x8(ppm_filename)[0];
+    uint32_t * tab_taille_x8 = malloc(2*sizeof(uint32_t));
+    tab_taille_x8 = taille_tableau_x8(ppm_filename);
+    uint32_t hauteur = tab_taille_x8[1];
+    uint32_t largeur = tab_taille_x8[0];
+    free(tab_taille_x8);
     uint32_t hauteur_objectif = ajustement_taille(hauteur, v1);
     uint32_t largeur_objectif = ajustement_taille(largeur, h1);
-    uint8_t * tab_rgb = malloc((3*hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
-    if (tab_rgb == NULL){
-      printf("erreur d'allocation\n");
-      exit(0);
-    }
+    // uint8_t * tab_rgb = malloc((3*hauteur_objectif*largeur_objectif+3)*sizeof(uint8_t));
+    uint8_t *tab_rgb = NULL;
+    // if (tab_rgb == NULL){
+    //   printf("erreur d'allocation\n");
+    //   exit(0);
+    // }
     tab_rgb = rgb_rembourre(ppm_filename, h1, v1);
       //allocation memoire du tableau de mcu
       //tableau bidimensionnel (ligne colonne)
@@ -306,9 +310,9 @@ struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
               tableau_de_mcu[i][j].tableau_de_bloc[k].y = malloc(64*sizeof(uint8_t));
               tableau_de_mcu[i][j].tableau_de_bloc[k].cb = malloc(64*sizeof(uint8_t));
               tableau_de_mcu[i][j].tableau_de_bloc[k].cr = malloc(64*sizeof(uint8_t));
-              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y = malloc(64*sizeof(uint16_t));
-              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr = malloc(64*sizeof(uint16_t));
-              tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb = malloc(64*sizeof(uint16_t));
+              // tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y = malloc(64*sizeof(uint16_t));
+              // tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr = malloc(64*sizeof(uint16_t));
+              // tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb = malloc(64*sizeof(uint16_t));
             }
           }
         }
@@ -326,8 +330,8 @@ struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
             uint32_t j_bloc = (j - j_mcu * h1 * 8) / 8;
             uint32_t k_bloc = i_bloc * h1 + j_bloc; //On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
 
-            uint32_t i_coefficient = i - i_mcu * v1 * 8 - i_bloc * 8;//indice coefficient dans un bloc comme si c'était bidimensionnel
-            uint32_t j_coefficient = j - j_mcu * h1 * 8 - j_bloc * 8;
+            uint8_t i_coefficient = i - i_mcu * v1 * 8 - i_bloc * 8;//indice coefficient dans un bloc comme si c'était bidimensionnel
+            uint8_t j_coefficient = j - j_mcu * h1 * 8 - j_bloc * 8;
             uint32_t k_coefficient = 8 * i_coefficient + j_coefficient;//On calcule à partir des "indices bidimensionnels" le vrai indice dans le tableau 1D
             // int32_t i_prime = i-8*(k/largeur_objectif/8);
             // int32_t j_prime = j*8 + k%8;

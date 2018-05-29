@@ -9,7 +9,7 @@ struct jpeg_desc *jpeg_desc_create(void){
     struct jpeg_desc *jpeg = malloc(sizeof(struct jpeg_desc));
     jpeg->ppm_filename = malloc(200 * sizeof(char));
     jpeg->jpeg_filename = malloc(200 * sizeof(char));
-    jpeg->sampling_factor = malloc(3*sizeof(uint8_t));
+    jpeg->sampling_factor = malloc(3*sizeof(uint8_t *));
     for (uint8_t i = 0; i < 3; i++) {
       jpeg->sampling_factor[i] = malloc(2*sizeof(uint8_t));
     }
@@ -29,25 +29,25 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
     bitstream_write_nbits(jdesc->bits, 0xffd8, 16, 1);
     //Marqueur application
     bitstream_write_nbits(jdesc->bits, 0xffe0, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x0010, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x4a46, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x4946, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x0001, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x0100, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x0000, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x0000, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x0000, 16, 1);
+    bitstream_write_nbits(jdesc->bits, 0x0010, 16, 0);
+    bitstream_write_nbits(jdesc->bits, 0x4a46, 16, 0);
+    bitstream_write_nbits(jdesc->bits, 0x4946, 16, 0);
+    bitstream_write_nbits(jdesc->bits, 0x0001, 16, 0);
+    bitstream_write_nbits(jdesc->bits, 0x0100, 16, 0);
+    bitstream_write_nbits(jdesc->bits, 0x0000, 16, 0);
+    bitstream_write_nbits(jdesc->bits, 0x0000, 16, 0);
+    bitstream_write_nbits(jdesc->bits, 0x0000, 16, 0);
     //Marqueur Define Quantization table
     bitstream_write_nbits(jdesc->bits, 0xFFDB, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x0043, 16, 1);
-    bitstream_write_nbits(jdesc->bits, 0x00, 8, 1);
+    bitstream_write_nbits(jdesc->bits, 0x0043, 16, 0);
+    bitstream_write_nbits(jdesc->bits, 0x00, 8, 0);
     for (uint32_t i = 0; i < 64; i++) {
       bitstream_write_nbits(jdesc->bits, compressed_Y_table[i], 8, 1);
     }
     if (N == 3) {//Si on a une image en couleur
       bitstream_write_nbits(jdesc->bits, 0xFFDB, 16, 1);
-      bitstream_write_nbits(jdesc->bits, 0x0043, 16, 1);
-      bitstream_write_nbits(jdesc->bits, 0x01, 8, 1);
+      bitstream_write_nbits(jdesc->bits, 0x0043, 16, 0);
+      bitstream_write_nbits(jdesc->bits, 0x01, 8, 0);
       for (uint32_t i = 0; i < 64; i++) {
         bitstream_write_nbits(jdesc->bits, compressed_CbCr_table[i], 8, 1);
       }
@@ -57,32 +57,32 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
     bitstream_write_nbits(jdesc->bits, 0xFFC0, 16, 1);
       //Taille dépendante du nombre de composante (1 ou 3)
     if (N == 3) {//Si on a une image en couleur, longueur = 11
-      bitstream_write_nbits(jdesc->bits, 0x0011, 16, 1);
+      bitstream_write_nbits(jdesc->bits, 0x0011, 16, 0);
     }
     else{ //Sinon
-      bitstream_write_nbits(jdesc->bits, 0x000B, 16, 1);
+      bitstream_write_nbits(jdesc->bits, 0x000B, 16, 0);
     }
-    bitstream_write_nbits(jdesc->bits, 0x08, 8, 1); //Précision
-    bitstream_write_nbits(jdesc->bits, jpeg_desc_get_image_height(jdesc), 16, 1); //hauteur
-    bitstream_write_nbits(jdesc->bits, jpeg_desc_get_image_width(jdesc), 16, 1); //largeur
+    bitstream_write_nbits(jdesc->bits, 0x08, 8, 0); //Précision
+    bitstream_write_nbits(jdesc->bits, jpeg_desc_get_image_height(jdesc), 16, 0); //hauteur
+    bitstream_write_nbits(jdesc->bits, jpeg_desc_get_image_width(jdesc), 16, 0); //largeur
       //On écrit le nombre de composante N (1 ou 3)
     if (N == 3) {
-      bitstream_write_nbits(jdesc->bits, 0x0003, 8, 1);
+      bitstream_write_nbits(jdesc->bits, 0x0003, 8, 0);
     }
     else{
-      bitstream_write_nbits(jdesc->bits, 0x0001, 8, 1);
+      bitstream_write_nbits(jdesc->bits, 0x0001, 8, 0);
     }
       //On écrit N fois
-    bitstream_write_nbits(jdesc->bits, 0x01, 8, 1);
-    bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[0][0], 4, 1);
-    bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[0][1], 4, 1);
-    bitstream_write_nbits(jdesc->bits, 0, 8, 1);
+    bitstream_write_nbits(jdesc->bits, 0x01, 8, 0);
+    bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[0][0], 4, 0);
+    bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[0][1], 4, 0);
+    bitstream_write_nbits(jdesc->bits, 0, 8, 0);
     if (N == 3) {
       for (size_t i = 1; i < 3; i++) {
-        bitstream_write_nbits(jdesc->bits, i+1, 8, 1);
-        bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[i][0], 4, 1);
-        bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[i][1], 4, 1);
-        bitstream_write_nbits(jdesc->bits, 1, 8, 1);
+        bitstream_write_nbits(jdesc->bits, i+1, 8, 0);
+        bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[i][0], 4, 0);
+        bitstream_write_nbits(jdesc->bits, jdesc->sampling_factor[i][1], 4, 0);
+        bitstream_write_nbits(jdesc->bits, 1, 8, 0);
       }
     }
     //Marqueur Define Huffman Table
