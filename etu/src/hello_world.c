@@ -7,8 +7,8 @@
 #include "AC_DC.h"
 #include "htables.h"
 #include "qtables.h"
-#include "bitstream.h"
-//#include "module_bitstream.h" //Le notre !
+// #include "bitstream.h"
+#include "module_bitstream.h" //Le notre !
 #include "huffman.h"
 #include <unistd.h>
 #include "recuperation.h"
