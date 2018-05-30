@@ -13,7 +13,7 @@ struct jpeg_desc *jpeg_desc_create(void){
     for (uint8_t i = 0; i < 3; i++) {
       jpeg->sampling_factor[i] = malloc(2*sizeof(uint8_t));
     }
-    jpeg->qtables = malloc(2*sizeof(uint8_t));
+    jpeg->qtables = malloc(3*sizeof(uint8_t));
     jpeg->tableau_huffman = malloc(3*sizeof(struct huff_table**));
     for (size_t i = 0; i < 3; i++) {
       jpeg->tableau_huffman[i] = malloc(2*sizeof(struct huff_table*));

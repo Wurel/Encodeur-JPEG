@@ -4,6 +4,24 @@
 #include <stdio.h>
 #include "huffman_eleve.h"
 
+// struct huff_table{
+//   uint8_t profondeur;
+//   // struct huff_table *pere;
+//   struct huff_table *fils[2];
+//   uint8_t bool_feuille;
+//   uint32_t valeur_feuille;
+//   // uint8_t sature;
+//   // uint8_t nb_symbols;
+// };
+// struct huff_table *huffman_table_build(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols);
+// uint32_t huffman_table_get_path(struct huff_table *ht, uint8_t value, uint8_t *nbits);
+//
+// uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, uint32_t* chemin, uint8_t gauche_ou_droite);
+//
+// uint8_t place_element(struct huff_table *arbre, uint8_t symbole, uint8_t longueur_symbole);
+//
+// void huffman_table_destroy(struct huff_table *ht);
+
 // /* structure représentant un arbre de Huffman. */
 // struct huff_table{
 //   uint8_t profondeur;
@@ -24,7 +42,7 @@
 */
 struct huff_table *huffman_table_build(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols)
 {
-  struct huff_table* racine = malloc(sizeof(struct huff_table*));
+  struct huff_table* racine = malloc(sizeof(struct huff_table));
   // racine -> pere = NULL;
   racine -> bool_feuille = 0;
   racine -> profondeur = 0;  //rajout pour le path
@@ -49,7 +67,7 @@ uint8_t place_element(struct huff_table *arbre, uint8_t symbole, uint8_t longueu
   }
   else
   {
-    if (longueur_symbole - 1 == arbre->profondeur)
+    if (longueur_symbole == arbre->profondeur)
     {
       if (arbre->fils[0]!= NULL || arbre->fils[1] != NULL)
       {
@@ -66,7 +84,7 @@ uint8_t place_element(struct huff_table *arbre, uint8_t symbole, uint8_t longueu
     {
       if (arbre->fils[0] == NULL)
       {
-        struct huff_table* fils_gauche = malloc(sizeof(struct huff_table*));
+        struct huff_table* fils_gauche = malloc(sizeof(struct huff_table));
         fils_gauche->fils[0] = NULL;
         fils_gauche->fils[1] = NULL;
         fils_gauche->bool_feuille = 0;
@@ -82,7 +100,7 @@ uint8_t place_element(struct huff_table *arbre, uint8_t symbole, uint8_t longueu
       {
         if (arbre->fils[1] == NULL)
         {
-          struct huff_table* fils_droit = malloc(sizeof(struct huff_table*));
+          struct huff_table* fils_droit = malloc(sizeof(struct huff_table));
           fils_droit->fils[0] = NULL;
           fils_droit->fils[1] = NULL;
           fils_droit->bool_feuille = 0;
@@ -110,15 +128,16 @@ uint8_t place_element(struct huff_table *arbre, uint8_t symbole, uint8_t longueu
 //     longueur du chemin.
 // */
 uint32_t huffman_table_get_path(struct huff_table *ht, uint8_t value, uint8_t *nbits){
-  uint32_t *chemin = malloc(sizeof(uint32_t));
+  uint32_t *chemin = NULL;
+  chemin = malloc(sizeof(uint32_t));
   *chemin = 0;
-  recherche_chemin(ht, value, nbits, chemin);
+  recherche_chemin(ht, value, nbits, chemin,0);
   uint32_t reponse = *chemin;
   free(chemin);
   return reponse;
 }
 
-uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, uint32_t* chemin)
+uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, uint32_t* chemin, uint8_t gauche_ou_droite)
 {
   if (ht->bool_feuille == 1)
   {
@@ -129,16 +148,17 @@ uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, u
     }
     else
     {
+      *chemin = (*chemin - gauche_ou_droite) / 2;
       return 0;
     }
   }
   else
   {
-    *chemin = *chemin * 2;
     uint8_t test;
     if (ht->fils[0] != NULL)
     {
-      test = recherche_chemin(ht->fils[0], value, nbits, chemin);
+      *chemin = *chemin * 2;
+      test = recherche_chemin(ht->fils[0], value, nbits, chemin, 0);
     }
     else
     {
@@ -146,11 +166,11 @@ uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, u
     }
     if (test ==0)
     {
-      *chemin += 1;
       uint8_t test2;
       if (ht->fils[1] != NULL)
       {
-        test2 = recherche_chemin(ht->fils[1], value, nbits, chemin);
+        *chemin = *chemin * 2 + 1;
+        test2 = recherche_chemin(ht->fils[1], value, nbits, chemin, 1);
       }
       else
       {
@@ -158,8 +178,8 @@ uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, u
       }
       if (test2 ==0)
       {
+        *chemin = (*chemin - gauche_ou_droite) / 2;
         return 0;
-        *chemin = (*chemin - 1) / 2;
       }
       else
       {
@@ -173,62 +193,71 @@ uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, u
   }
 }
 
-void huffman_table_destroy(struct huff_table **ht, uint32_t* compteur)
+void huffman_table_destroy(struct huff_table *ht)
 {
-  //descente
-  if (ht==NULL)
+  if (ht->fils[0] != NULL)
   {
-    return;
+    huffman_table_destroy(ht->fils[0]);
   }
-  else
+  if (ht->fils[1] != NULL)
   {
-    if (*ht == NULL)
-    {
-      return;
-    }
-    printf("compteur : %d\n", *compteur);
-    *compteur = *compteur + 1;
-    if ((*ht)->fils[0]==NULL && (*ht)->fils[1]==NULL)
-    {
-      if (*ht!= NULL)
-      {
-        free(*ht);
-        *ht=NULL;
-      }
-    }
-    else
-    {
-      if ((*ht)->fils[0]!=NULL)
-      {
-        huffman_table_destroy(&((*ht)->fils[0]), compteur);
-      }
-      if ((*ht)->fils[1]!=NULL)
-      {
-        huffman_table_destroy(&((*ht)->fils[1]), compteur);
-      }
-      if (*ht!= NULL)
-      {
-        free(*ht);
-        *ht=NULL;
-      }
-
-    }
+    huffman_table_destroy(ht->fils[1]);
   }
+  free(ht);
 }
+  //descente
+  // if (ht==NULL)
+  // {
+  //   return;
+  // }
+  // else
+  // {
+  //   if (*ht == NULL)
+  //   {
+  //     return;
+  //   }
+  //   printf("compteur : %d\n", *compteur);
+  //   *compteur = *compteur + 1;
+  //   if ((*ht)->fils[0]==NULL && (*ht)->fils[1]==NULL)
+  //   {
+  //     if (*ht!= NULL)
+  //     {
+  //       free(*ht);
+  //       *ht=NULL;
+  //     }
+  //   }
+  //   else
+  //   {
+  //     if ((*ht)->fils[0]!=NULL)
+  //     {
+  //       huffman_table_destroy(&((*ht)->fils[0]), compteur);
+  //     }
+  //     if ((*ht)->fils[1]!=NULL)
+  //     {
+  //       huffman_table_destroy(&((*ht)->fils[1]), compteur);
+  //     }
+  //     if (*ht!= NULL)
+  //     {
+  //       free(*ht);
+  //       *ht=NULL;
+  //     }
+  //   }
+  // }
 
 
-//main de test
+
+// main de test
 // int main() {
+//   printf("coucou c'est huffman\n");
 //   uint8_t nb_symb_per_lengths[5] = {0,2,1,5};
 //   uint8_t symbols[8] = {5,4,8,16,32,54,11,12};
+//   struct huff_table *racine = NULL;
 //   racine = huffman_table_build(nb_symb_per_lengths, symbols, 8); //le 8 est nb_symbols
 //   uint8_t *nbits = malloc(sizeof(uint8_t));
-//   printf("dans le main: \n" );
+//   printf("racine : %d\n", racine->fils[1]->fils[1]->fils[1]->fils[0]->valeur_feuille );
 //   printf("on obtient %d\n", huffman_table_get_path(racine, 12, nbits));
 //   printf("codé sur %d bits \n", *nbits);
-//   if (racine -> pere == NULL) {
-//     printf("c'est nul\n");
-//   }
+//   huffman_table_destroy(racine);
 // }
 //
 // /*
