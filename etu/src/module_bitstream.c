@@ -42,59 +42,23 @@ extern struct bitstream *bitstream_create(const char *filename)
 */
 void bitstream_write_nbits(struct bitstream *stream, uint32_t value, uint8_t nbits, bool is_marker)
 {
-  // uint8_t a_ecrire = 0;
-  uint8_t *a_ecrire = malloc(sizeof(uint8_t));
-  *a_ecrire = 0;
-  uint8_t * zero = malloc(sizeof(uint8_t));
-  *zero = 0;
-  //printf("n bits = %d\n",nbits );
+  uint8_t a_ecrire = 0;
+  a_ecrire = 0;
   *stream -> valeur = (*stream -> valeur << nbits) +value;
   *stream -> nb_bits = *stream -> nb_bits  + nbits;
-  //printf("nb_bits = %d\n",*stream -> nb_bits );
   while (*stream -> nb_bits >= 8 )
   {
-    //printf("cas >8 \n");
-    *a_ecrire = *stream -> valeur >> (*stream -> nb_bits -8);
+    a_ecrire = *stream -> valeur >> (*stream -> nb_bits -8);
     *stream -> nb_bits = *stream -> nb_bits -8;
-    if (is_marker == 0 && *a_ecrire == 0xff )
+    if (is_marker == 0 && a_ecrire == 0xff )
     {
 
-      fwrite(a_ecrire, 1,1, stream->fichier);
-  // fputc(a_ecrire, stream -> fichier);
-    fwrite(zero, 1,1, stream->fichier);
-      // fputc(0, stream -> fichier);
+  fputc(a_ecrire, stream -> fichier);
+      fputc(0, stream -> fichier);
     }else{
-        // if (!a_ecrire == 0 || is_marker==1) {
-          // fputc(a_ecrire, stream -> fichier);
-          fwrite(a_ecrire, 1,1, stream->fichier);
-          // printf("zero\n");
-        // }
+          fputc(a_ecrire, stream -> fichier);
     }
-    // *a_ecrire = 0;
-
   }
-  // if (*stream->nb_bits < 8 ) {
-  //   //printf("cas < 8 \n");
-  //
-  //
-  // }
-  // else if (*stream -> nb_bits == 8)
-  // {
-  //   //printf("cas ==8 \n");
-  //   *stream -> nb_bits = 0;
-  //   //verif de 0xff dans le cas de l'encodage des données brutes.
-  //   if (is_marker == 0 && *(stream -> valeur) == 0xff )
-  //   {
-  //     fwrite(stream -> valeur, 1,1, stream->fichier);
-  //     // fputc(*stream -> valeur, stream -> fichier);
-  //     fwrite(zero, 1,1, stream->fichier);
-  //     // fputc(0, stream -> fichier);
-  //   }else{
-  //     fwrite(stream -> valeur, 1,1, stream->fichier);
-  //     // fputc(*stream -> valeur, stream -> fichier);
-  //   }
-  //   *stream -> valeur = 0;
-  // }
 }
 
 

@@ -8,16 +8,18 @@
 #include "htables.h"
 #include "qtables.h"
 #include "module_bitstream.h" //Le notre !
-#include "huffman.h"
+#include "huffman_eleve.h"
 #include <unistd.h>
 #include "recuperation.h"
 #include "down_sampler.h"
 #include "module_jpeg.h"
+#include <time.h>
 
 int main(int argc, char const *argv[])
 {
-    // struct huff_table_eleve *mon_arbre_test = huffman_table_build_eleve(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]);
     uint8_t sample[6] = {1,1,1,1,1,1};
+    clock_t t1, t2;
+    t1 = clock();
     printf("Au boulot!\n\n");
     char sortie[200] = "";
     char entree[200];
@@ -52,6 +54,7 @@ int main(int argc, char const *argv[])
     if ((h1 != 1 && h1 != 2 && h1 != 4) || (v1 != 1 && v1 != 2 && v1 != 4))
     {
         printf("Valeurs de h1xv1 impossible ... Sortie du programme\n");
+        exit(1);
     }
     struct mcu **tableau_de_mcu;
     uint32_t *tab_taille = NULL;
@@ -61,10 +64,9 @@ int main(int argc, char const *argv[])
     uint32_t largeur = tab_taille_x8[0];
     uint32_t hauteur = tab_taille_x8[1];
     free(tab_taille_x8);
-    // uint8_t *tab_rgb_rembourre = malloc(ajustement_taille(largeur,v1)*ajustement_taille(hauteur, h1)+3*sizeof(uint8_t)); //Bizarreeeeeeeeeeeeeee
-    // tab_rgb_rembourre = rgb_rembourre(entree, h1, v1);
     // Découpage
     tableau_de_mcu = decoupage_mc(entree,h1,v1);
+    printf("Recuperation RGB faite et decoupage mcu\n");
 // RGB -> YCbCr, DCT
     //PARCOURS DES MCUS
     for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/(8*v1); i++) {
@@ -115,6 +117,7 @@ int main(int argc, char const *argv[])
           quantification_Y(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y);
           quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
           quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
+          // si on a besoin de toutes les mcus
           // printf("mcu : [%d, %d]\n", i,j);
           // for (size_t p = 0; p < 8; p++) {
           //   for (size_t h = 0; h < 8; h++) {
@@ -126,19 +129,14 @@ int main(int argc, char const *argv[])
         }
       }
     }
-
+    printf("Transformation des blocs terminee\n");
+    //Si on a besoin d'afficher une mci
     // for (uint32_t i = 0; i < 8; i++) {
     //   for (uint32_t j = 0; j < 8; j++) {
     //     printf("%x\t", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[j+i*8]);
     //   }
     //   printf("\n");
     // }
-
-    //
-    //
-    // //
-    // printf("dct %d\n", tableau_de_mcu[0][0].tableau_de_bloc_apres_dct[0].y[0]);
-
     struct jpeg_desc *jpeg = jpeg_desc_create();
     jpeg_desc_set_ppm_filename(jpeg, entree);
     jpeg_desc_set_jpeg_filename(jpeg, sortie);
@@ -151,34 +149,35 @@ int main(int argc, char const *argv[])
     struct huff_table *mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][0],
                           htables_symbols[0][0],
                           htables_nb_symbols[0][0]);
-    printf("ma bite\n");
-    jpeg_desc_set_huffman_table(jpeg, DC, Y, mon_arbre);
-    mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[1][0], htables_symbols[1][0], htables_nb_symbols[1][0]);
-    jpeg_desc_set_huffman_table(jpeg, AC, Y, mon_arbre);
-    jpeg_desc_set_quantization_table(jpeg, Y, compressed_Y_table);
+    struct huff_table *mon_arbre_2 = huffman_table_build(htables_nb_symb_per_lengths[0][1], htables_symbols[0][1], htables_nb_symbols[0][1]);
+    struct huff_table *mon_arbre_3 = huffman_table_build(htables_nb_symb_per_lengths[1][1], htables_symbols[1][1], htables_nb_symbols[1][1]);
+    struct huff_table *mon_arbre_4 = huffman_table_build(htables_nb_symb_per_lengths[0][2], htables_symbols[0][2], htables_nb_symbols[0][2]);
+    struct huff_table *mon_arbre_5 = huffman_table_build(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]);
 
+    jpeg_desc_set_huffman_table(jpeg, DC, Y, mon_arbre);
+    struct huff_table *mon_arbre_1 = huffman_table_build(htables_nb_symb_per_lengths[1][0], htables_symbols[1][0], htables_nb_symbols[1][0]);
+    jpeg_desc_set_huffman_table(jpeg, AC, Y, mon_arbre_1);
+    jpeg_desc_set_quantization_table(jpeg, Y, compressed_Y_table);
     if (type_couleur == 3) {
       //couleur
       jpeg_desc_set_sampling_factor(jpeg, Cb, H, h2);
       jpeg_desc_set_sampling_factor(jpeg, Cb, V, v2);
-      mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][1], htables_symbols[0][1], htables_nb_symbols[0][1]);
-      jpeg_desc_set_huffman_table(jpeg, DC, Cb, mon_arbre);
-      mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[1][1], htables_symbols[1][1], htables_nb_symbols[1][1]);
-      jpeg_desc_set_huffman_table(jpeg, AC, Cb, mon_arbre);
+      jpeg_desc_set_huffman_table(jpeg, DC, Cb, mon_arbre_2);
+      jpeg_desc_set_huffman_table(jpeg, AC, Cb, mon_arbre_3);
       jpeg_desc_set_quantization_table(jpeg, Cb, compressed_CbCr_table);
 
       jpeg_desc_set_sampling_factor(jpeg, Cr, H, h3);
       jpeg_desc_set_sampling_factor(jpeg, Cr, V, v3);
-      mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][2], htables_symbols[0][2], htables_nb_symbols[0][2]);
-      jpeg_desc_set_huffman_table(jpeg, DC, Cr, mon_arbre);
-      mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]);
-      jpeg_desc_set_huffman_table(jpeg, AC, Cr, mon_arbre);
+      jpeg_desc_set_huffman_table(jpeg, DC, Cr, mon_arbre_4);
+      jpeg_desc_set_huffman_table(jpeg, AC, Cr, mon_arbre_5);
       jpeg_desc_set_quantization_table(jpeg, Cr, compressed_CbCr_table);
     }
     jpeg_write_header(jpeg);
+    printf("Ecriture de l'entete jpeg terminee\n");
     struct bitstream *bits; //= bitstream_create("/user/6/.base/poraa/home/Downloads/Encodeur-JPEG-master/Encodeur-JPEG/etu/test.jpeg");
     bits = jpeg_desc_get_bitstream(jpeg);
-    ecriture_AC_DC_complete(bits, tableau_de_mcu, ajustement_taille(largeur, h1)/8/h1, ajustement_taille(hauteur, v1)/8/v1, h1, v1, h2, v2, h3, v3, type_couleur);
+    ecriture_AC_DC_complete(bits, tableau_de_mcu, ajustement_taille(largeur, h1)/8/h1, ajustement_taille(hauteur, v1)/8/v1, h1, v1, h2, v2, h3, v3, type_couleur, jpeg);
+    printf("Ecriture des donnes brutes terminee\n");
     jpeg_write_footer(jpeg);
     jpeg_desc_destroy(jpeg);
 
@@ -212,10 +211,16 @@ int main(int argc, char const *argv[])
     }
    free(tableau_de_mcu);
    free(tab_taille);
-   printf("coucouuuuuuuuuuu\n");
-   uint32_t* compteur = malloc(sizeof(uint32_t));
-   huffman_table_destroy(&mon_arbre, compteur);
+   huffman_table_destroy(mon_arbre);
+   huffman_table_destroy(mon_arbre_1);
+   huffman_table_destroy(mon_arbre_2);
+   huffman_table_destroy(mon_arbre_3);
+   huffman_table_destroy(mon_arbre_4);
+   huffman_table_destroy(mon_arbre_5);
+   printf("Frees termines\n");
+   t2 = clock();
+   float temps = (float)(t2-t1)/CLOCKS_PER_SEC;
+   printf("temps = %f\n", temps);
 
-
-    return EXIT_SUCCESS;
+   return EXIT_SUCCESS;
 }

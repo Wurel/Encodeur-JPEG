@@ -15,7 +15,7 @@ struct jpeg_desc *jpeg_desc_create(void){
     for (uint8_t i = 0; i < 3; i++) {
       jpeg->sampling_factor[i] = malloc(2*sizeof(uint8_t));
     }
-    jpeg->qtables = malloc(2*sizeof(uint8_t));
+    jpeg->qtables = malloc(3*sizeof(uint8_t));
     jpeg->tableau_huffman = malloc(3*sizeof(struct huff_table**));
     for (size_t i = 0; i < 3; i++) {
       jpeg->tableau_huffman[i] = malloc(2*sizeof(struct huff_table*));
@@ -170,7 +170,6 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
 
 /* Ecrit le footer JPEG (marqueur EOI) dans le fichier de sortie. */
 void jpeg_write_footer(struct jpeg_desc *jdesc){
-  printf("coucou bande de nouilles\n");
   bitstream_flush(jdesc->bits);
   bitstream_write_nbits(jdesc->bits, 0xFFD9, 16, 1);
 }
@@ -185,6 +184,8 @@ void jpeg_desc_destroy(struct jpeg_desc *jdesc){
   free(jdesc->sampling_factor);
   free(jdesc->tableau_huffman);
   free(jdesc->qtables);
+  bitstream_destroy(jdesc->bits);
+  free(jdesc);
 }
 
 /* Ecrit le nom de fichier PPM ppm_filename dans le jpeg_desc jdesc. */
