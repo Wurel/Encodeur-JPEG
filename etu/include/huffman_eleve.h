@@ -32,8 +32,14 @@ struct huff_table *huffman_table_build(uint8_t *nb_symb_per_lengths, uint8_t *sy
 */
 uint32_t huffman_table_get_path(struct huff_table *ht, uint8_t value, uint8_t *nbits);
 
+/*
+  recherche chemin
+*/
 uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, uint32_t* chemin, uint8_t gauche_ou_droite);
 
+/*
+  Ecrit les elements dans la table
+*/
 uint8_t place_element(struct huff_table *arbre, uint8_t symbole, uint8_t longueur_symbole);
 
 /*

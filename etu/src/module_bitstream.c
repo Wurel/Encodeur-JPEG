@@ -22,8 +22,6 @@ Retourne un nouveau bitstream prêt à écrire dans le fichier filename.
 */
 extern struct bitstream *bitstream_create(const char *filename)
 {
-  // struct bitstream bits = {fopen(filename), 0, 0};
-  // return bite;
   struct bitstream *notre_bitstream = malloc(sizeof(struct bitstream));
   FILE* notre_fichier = NULL;
   notre_fichier = fopen(filename , "wb");
@@ -73,7 +71,6 @@ extern void bitstream_flush(struct bitstream *stream)
     *stream -> valeur = (*stream -> valeur << (8 - *stream -> nb_bits));
     *stream -> nb_bits = 0;
     fputc(*stream -> valeur, stream -> fichier);
-
   }
 }
 
@@ -83,7 +80,8 @@ extern void bitstream_flush(struct bitstream *stream)
 */
 extern void bitstream_destroy(struct bitstream *stream)
 {
-  if (*stream -> nb_bits != 0) {
+  if (*stream -> nb_bits != 0)
+  {
     bitstream_flush(stream);
   }
   fclose(stream->fichier);

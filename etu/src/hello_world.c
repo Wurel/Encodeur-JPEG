@@ -67,13 +67,16 @@ int main(int argc, char const *argv[])
     // Découpage
     tableau_de_mcu = decoupage_mc(entree,h1,v1);
     printf("Recuperation RGB faite et decoupage mcu\n");
-// RGB -> YCbCr, DCT
+    // RGB -> YCbCr, DCT
     //PARCOURS DES MCUS
-    for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/(8*v1); i++) {
-      for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/(8*h1); j++) {
+    for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/(8*v1); i++)
+    {
+      for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/(8*h1); j++)
+      {
         //PARCOURS DES BLOCS
         // tableau_de_mcu[i][j].tableau_de_bloc_apres_dct = malloc(h1*v1*sizeof(struct bloc_apres_dct));
-        for (size_t k = 0; k < h1*v1; k++) {
+        for (size_t k = 0; k < h1*v1; k++)
+        {
           //rgb 2 ycbcr
           transformation_bloc_rgb_ycbcr(&tableau_de_mcu[i][j].tableau_de_bloc[k]);
         }
@@ -91,7 +94,8 @@ int main(int argc, char const *argv[])
                 echantillonnage_vertical(tableau_de_mcu[i][j], v1/v2, facteur_horizontal);
             }
         }
-        for(size_t k=0; k<h1*v1; k++) {
+        for(size_t k=0; k<h1*v1; k++)
+        {
           // DCT
           tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y = malloc(sizeof(int16_t)*64);
           dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[k].y, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y);
@@ -180,15 +184,19 @@ int main(int argc, char const *argv[])
     jpeg_write_footer(jpeg);
     jpeg_desc_destroy(jpeg);
 
-    for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/(8*v1); i++) {
-      for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/(8*h1); j++) {
-        for (size_t k = 0; k < h1*v1; k++) {
+    for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/(8*v1); i++)
+    {
+      for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/(8*h1); j++)
+      {
+        for (size_t k = 0; k < h1*v1; k++)
+        {
           free(tableau_de_mcu[i][j].tableau_de_bloc[k].rgb);
           free(tableau_de_mcu[i][j].tableau_de_bloc[k].y);
           free(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y);
 
         }
-        for (size_t k = 0; k < h1*v1; k=k+(h1/h2)) {
+        for (size_t k = 0; k < h1*v1; k=k+(h1/h2))
+        {
           free(tableau_de_mcu[i][j].tableau_de_bloc[k].cb);
           free(tableau_de_mcu[i][j].tableau_de_bloc[k].cr);
           free(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
@@ -205,7 +213,8 @@ int main(int argc, char const *argv[])
         free(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct);
       }
     }
-    for (uint32_t i = 0; i <ajustement_taille(hauteur, v1)/(8*v1); i++) {
+    for (uint32_t i = 0; i <ajustement_taille(hauteur, v1)/(8*v1); i++)
+    {
       free(tableau_de_mcu[i]);
     }
    free(tableau_de_mcu);

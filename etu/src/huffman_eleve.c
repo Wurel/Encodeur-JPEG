@@ -21,15 +21,19 @@ struct huff_table *huffman_table_build(uint8_t *nb_symb_per_lengths, uint8_t *sy
   racine->fils[1] = NULL;
 
   uint32_t compteur = 0;
-  for (uint32_t i = 0; i < 16; i++) {
-    for (uint8_t k = 0; k < nb_symb_per_lengths[i]; k++) {
+  for (uint32_t i = 0; i < 16; i++)
+  {
+    for (uint8_t k = 0; k < nb_symb_per_lengths[i]; k++)
+    {
       place_element(racine, symbols[compteur], i+1);
       compteur +=1;
     }
   }
   return racine;
 }
-
+/*
+  Ecrit les elements dans la table
+*/
 uint8_t place_element(struct huff_table *arbre, uint8_t symbole, uint8_t longueur_symbole)
 {
   if (arbre->bool_feuille == 1)
@@ -92,14 +96,15 @@ uint8_t place_element(struct huff_table *arbre, uint8_t symbole, uint8_t longueu
   }
 }
 
-//
-//     Construit un arbre de Huffman à partir d'une table de symboles comme
-//     présenté en section 2.10.1 du sujet. nb_symb_per_lengths est un tableau
-//     contenant le nombre de symboles pour chaque longueur, symbols est le
-//     tableau des symboles ordonnés, et nb_symbols représente la taille du
-//     tableau symbols.
-// */
-uint32_t huffman_table_get_path(struct huff_table *ht, uint8_t value, uint8_t *nbits){
+/*
+    Construit un arbre de Huffman à partir d'une table de symboles comme
+    présenté en section 2.10.1 du sujet. nb_symb_per_lengths est un tableau
+    contenant le nombre de symboles pour chaque longueur, symbols est le
+    tableau des symboles ordonnés, et nb_symbols représente la taille du
+    tableau symbols.
+*/
+uint32_t huffman_table_get_path(struct huff_table *ht, uint8_t value, uint8_t *nbits)
+{
   uint32_t *chemin = NULL;
   chemin = malloc(sizeof(uint32_t));
   *chemin = 0;
@@ -109,6 +114,9 @@ uint32_t huffman_table_get_path(struct huff_table *ht, uint8_t value, uint8_t *n
   return reponse;
 }
 
+/*
+  recherche chemin
+*/
 uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, uint32_t* chemin, uint8_t gauche_ou_droite)
 {
   if (ht->bool_feuille == 1)
@@ -165,6 +173,10 @@ uint8_t recherche_chemin(struct huff_table *ht, uint8_t value, uint8_t *nbits, u
   }
 }
 
+/*
+    Détruit l'arbre de Huffman passé en paramètre et libère toute la mémoire
+    qui lui est associée.
+*/
 void huffman_table_destroy(struct huff_table *ht)
 {
   if (ht->fils[0] != NULL)
