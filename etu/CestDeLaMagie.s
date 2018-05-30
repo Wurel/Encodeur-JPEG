@@ -48,9 +48,9 @@ echo ""
 
 echo "Des grosses images, avec et sans couleurs"
 echo ""
-#./ppm2jpeg ./images/complexite.pgm --sample=1x1,1x1,1x1 --outfile=./Mes_images_jpeg/complexite-11-11-11.jpg
-#
-./ppm2jpeg ./images/biiiiiig.ppm --sample=1x1,1x1,1x1 --outfile=./Mes_images_jpeg/biiiiiig-11-11-11.jpg
+./ppm2jpeg ./images/complexite.pgm --sample=1x1,1x1,1x1 --outfile=./Mes_images_jpeg/complexite-11-11-11.jpg
+
+#./ppm2jpeg ./images/biiiiiig.ppm --sample=1x1,1x1,1x1 --outfile=./Mes_images_jpeg/biiiiiig-11-11-11.jpg
 
 rm -rf ./obj
 mkdir ./obj

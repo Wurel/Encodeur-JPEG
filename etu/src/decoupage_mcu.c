@@ -1,7 +1,12 @@
 #include "decoupage_mcu.h"
 #include "structures.h"
 
-uint8_t type(const char *ppm_filename){
+
+/*
+  renvoit 1 pour N&B et 3 pour couleur
+*/
+uint8_t type(const char *ppm_filename)
+{
   char type[100];
   FILE *ppm;
   ppm = fopen(ppm_filename, "r");
@@ -21,7 +26,9 @@ uint8_t type(const char *ppm_filename){
   }
 }
 
-
+/*
+  recupere les composantes rgb dans le fichier mis en parametre
+*/
 uint8_t *recuperation_rgb(const char *ppm_filename)
 {
   char type[100];
@@ -66,17 +73,23 @@ uint8_t *recuperation_rgb(const char *ppm_filename)
   exit(1);
 }
 
-//Taille en pixels avec rembourrage
+/*
+  donne la nouvelle taille de l'image avec les pixels remboures
+  (en prenant en compte les possible mcu pas de taille 1x1)
+*/
 uint32_t ajustement_taille(int32_t taille, uint8_t h1ouv1)
 {
   uint32_t nouvelle_taille = taille;
-  while (nouvelle_taille % (8 * h1ouv1) != 0) {
+  while (nouvelle_taille % (8 * h1ouv1) != 0)
+  {
     nouvelle_taille ++;
   }
   return nouvelle_taille;
 }
 
-
+/*
+   rembourre le tableau RGB pour qu'il est des tailles multiple de MCU
+*/
 uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
 {
   // uint32_t * tab_taille_x8 = malloc(2*sizeof(uint32_t));
@@ -92,8 +105,10 @@ uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
   tableau_rgb = recuperation_rgb(ppm_filename);
   rgb_bonne_taille[0] = tableau_rgb[0];
   if (tableau_rgb[0] == 1) {
-    for (uint32_t i = 0; i < hauteur_objectif; i++) {
-      for (uint32_t j = 0; j < largeur_objectif; j++) {
+    for (uint32_t i = 0; i < hauteur_objectif; i++)
+    {
+      for (uint32_t j = 0; j < largeur_objectif; j++)
+      {
         if(j < largeur && i < hauteur){
           rgb_bonne_taille[i*largeur_objectif + j+3] = tableau_rgb[i * largeur + j + 3];
         }
@@ -104,8 +119,10 @@ uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
     }
   }
   else{
-    for (uint32_t i = 0; i < hauteur_objectif; i++) {
-      for (uint32_t j = 0; j < largeur_objectif; j++) {
+    for (uint32_t i = 0; i < hauteur_objectif; i++)
+    {
+      for (uint32_t j = 0; j < largeur_objectif; j++)
+      {
         if (j< largeur && i < hauteur){
           rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3] = tableau_rgb[i * largeur*3 + 3*j + 3];
           rgb_bonne_taille[i*largeur_objectif*3 + 3*j+3+1] = tableau_rgb[i * largeur*3 + 3*j + 3+1];
@@ -123,7 +140,7 @@ uint8_t *rgb_rembourre(const char *ppm_filename, uint8_t h1, uint8_t v1)
   return rgb_bonne_taille;
 }
 
-//Retourne en pixels hauteur et largeur de l'image
+/* Retourne en pixels la hauteur et la largeur de l'image */
 uint32_t *taille_tableau_x8(const char * ppm_filename)
 {
   char type[100];
@@ -148,7 +165,9 @@ uint32_t *taille_tableau_x8(const char * ppm_filename)
 
 
 
-
+/*
+  renvoit le nombre de bloc en largeur et hauteur (nb de pixels /8)
+*/
 uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
 {
   if (h1 == 1 && v1 == 1)
@@ -175,7 +194,9 @@ uint32_t *taille_tableau(const char * ppm_filename, int8_t h1, int8_t v1)
   exit(1);
 }
 
-//prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
+/*
+  prend le fichier en entrée, le partitionne en une ou plusieurs MCU en RGB
+*/
 struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
 {
     uint32_t *tab_taille_x8;
@@ -237,7 +258,6 @@ struct mcu **decoupage_mc(const char *ppm_filename, uint8_t h1, uint8_t v1)
           }
         }
 
-        // int32_t indice_ligne = 0;
         for (uint32_t k = 0; k < hauteur_objectif*largeur_objectif; k++)
         {
             uint32_t i = k/largeur_objectif;

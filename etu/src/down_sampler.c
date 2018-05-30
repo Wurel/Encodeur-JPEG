@@ -68,14 +68,17 @@ void echantillonnage_horizontal(struct mcu ma_mcu, uint8_t facteur)
           ma_mcu.tableau_de_bloc[facteur*i+m].cb = ma_mcu.tableau_de_bloc[facteur*i].cb;
           ma_mcu.tableau_de_bloc[facteur*i+m].cr = ma_mcu.tableau_de_bloc[facteur*i].cr;
         }
-        for (size_t seum = 0; seum < facteur; seum++) {
-          for (size_t k = 0; k < 64; k++) {
+        for (size_t seum = 0; seum < facteur; seum++)
+        {
+          for (size_t k = 0; k < 64; k++)
+          {
             ma_mcu.tableau_de_bloc[facteur*i+seum].rgb[k] = tableau_rgb[k];
           }
         }
     }
     free(tableau_rgb);
 }
+
 /*
   Effectue l'echantillonnage_vertical si les facteur le permette (gerer dans le hello_word)
   Prend en parametre le tableau de mcu
