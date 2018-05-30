@@ -8,7 +8,7 @@
 #include "module_jpeg.h"
 
 /*
-  Retourne la magnitude d'un nombre entré en paramètre
+  Retourne la magnitude d'un nombre entre en paramètre
 */
 uint8_t retourne_magnitude(int16_t nombre)
 {
@@ -22,7 +22,7 @@ uint8_t retourne_magnitude(int16_t nombre)
 }
 
 /*
-  Retourne la place d'un nombre entré en paramètre dans sa classe de magnitude
+  Retourne la place d'un nombre entre en paramètre dans sa classe de magnitude
 */
 int16_t retourne_bits(int16_t nombre, uint8_t magnitude)
 {
@@ -40,7 +40,7 @@ int16_t retourne_bits(int16_t nombre, uint8_t magnitude)
 /*
 Pour les 3 fonctions suivantes:
 Calcule le DC a l'aide du predicateur dans les cas Y, Cb ou Cr
-et appele ecriture_symbole_DC pour le coder et l'ecrire dans le fichier
+et appelle ecriture_symbole_DC pour le coder et l'ecrire dans le fichier
 */
 void ecriture_DC_y(struct bitstream *stream, struct mcu **tab, uint32_t indice_i, uint32_t indice_j ,uint8_t indice_k, int16_t predicateur, struct jpeg_desc *jpeg)
 {

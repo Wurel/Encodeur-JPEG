@@ -80,6 +80,7 @@ int16_t* zigzag_composante(int16_t *composante)
         j++;
     }
     free(composante);
+    composante = NULL;
     return zigzag;
 }
 

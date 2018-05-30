@@ -57,14 +57,14 @@ void echantillonnage_horizontal(struct mcu ma_mcu, uint8_t facteur)
         //copie dans les autres blocs
         for (uint8_t m=1; m<facteur; m++)
         {
-          // if (ma_mcu.tableau_de_bloc[facteur*i+m].cb != NULL) {
-          //   free(ma_mcu.tableau_de_bloc[facteur*i+m].cb);
-          //   ma_mcu.tableau_de_bloc[facteur*i+m].cb = NULL;
-          // }
-          // if (ma_mcu.tableau_de_bloc[facteur*i+m].cr != NULL) {
-          //   free(ma_mcu.tableau_de_bloc[facteur*i+m].cr);
-          //   ma_mcu.tableau_de_bloc[facteur*i+m].cr = NULL;
-          // }
+          if (ma_mcu.tableau_de_bloc[facteur*i+m].cb != NULL) {
+            free(ma_mcu.tableau_de_bloc[facteur*i+m].cb);
+            ma_mcu.tableau_de_bloc[facteur*i+m].cb = NULL;
+          }
+          if (ma_mcu.tableau_de_bloc[facteur*i+m].cr != NULL) {
+            free(ma_mcu.tableau_de_bloc[facteur*i+m].cr);
+            ma_mcu.tableau_de_bloc[facteur*i+m].cr = NULL;
+          }
           ma_mcu.tableau_de_bloc[facteur*i+m].cb = ma_mcu.tableau_de_bloc[facteur*i].cb;
           ma_mcu.tableau_de_bloc[facteur*i+m].cr = ma_mcu.tableau_de_bloc[facteur*i].cr;
         }
@@ -131,16 +131,16 @@ void echantillonnage_vertical(struct mcu ma_mcu, uint8_t facteur, uint8_t facteu
             }
         }
         //copie dans les autres blocs
-        for (uint8_t m=1; m<facteur; m++)
+        for (uint8_t m=1; m<facteur; m = m + 1)
         {
-          // if (ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cb != NULL) {
-          //   free(ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cb);
-          //   ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cb = NULL;
-          // }
-          // if (ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cr != NULL) {
-          //   free(ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cr);
-          //   ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cr = NULL;
-          // }
+          if (ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cb != NULL) {
+            free(ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cb);
+            ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cb = NULL;
+          }
+          if (ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cr != NULL) {
+            free(ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cr);
+            ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cr = NULL;
+          }
           // free(ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cr);
           ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cb = ma_mcu.tableau_de_bloc[i].cb;
           ma_mcu.tableau_de_bloc[i+m*ma_mcu.h].cr = ma_mcu.tableau_de_bloc[i].cr;

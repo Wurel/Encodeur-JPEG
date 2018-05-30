@@ -96,27 +96,29 @@ int main(int argc, char const *argv[])
           tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y = malloc(sizeof(int16_t)*64);
           dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[k].y, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y);
 
-          tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb = malloc(sizeof(int16_t)*64);
-          dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[k].cb, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
+          if(k%(h1/h2)==0 && (k/(h1/h2))%(v1/v2)==0)
+          {
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb = malloc(sizeof(int16_t)*64);
+            dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[k].cb, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
 
-          tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr = malloc(sizeof(int16_t)*64);
-          dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[k].cr, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr = malloc(sizeof(int16_t)*64);
+            dct_bloc(tableau_de_mcu[i][j].tableau_de_bloc[k].cr, tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb =
+            zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
 
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr =
+            zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
+            quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
+            quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
+          }
           // // //Zigzag
           tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y =
                                   zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y);
 
-          tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb =
-                                  zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
-
-          tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr =
-                                  zigzag_composante(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
           //
           // //Quantification
           //
           quantification_Y(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].y);
-          quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
-          quantification_Cb_Cr(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
           // si on a besoin de toutes les mcus
           // printf("mcu : [%d, %d]\n", i,j);
           // for (size_t p = 0; p < 8; p++) {
@@ -180,6 +182,7 @@ int main(int argc, char const *argv[])
     jpeg_write_footer(jpeg);
     jpeg_desc_destroy(jpeg);
 
+    printf("frees commence\n");
     for (uint32_t i = 0; i < ajustement_taille(hauteur, v1)/(8*v1); i++) {
       for (uint32_t j = 0; j < ajustement_taille(largeur, h1)/(8*h1); j++) {
         for (size_t k = 0; k < h1*v1; k++) {
@@ -189,13 +192,29 @@ int main(int argc, char const *argv[])
 
         }
         for (size_t k = 0; k < h1*v1; k=k+(h1/h2)) {
-          free(tableau_de_mcu[i][j].tableau_de_bloc[k].cb);
-          free(tableau_de_mcu[i][j].tableau_de_bloc[k].cr);
-          free(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
-          free(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
+          if (tableau_de_mcu[i][j].tableau_de_bloc[k].cb != NULL)
+          {
+            free(tableau_de_mcu[i][j].tableau_de_bloc[k].cb);
+            tableau_de_mcu[i][j].tableau_de_bloc[k].cb = NULL;
+          }
+          if (tableau_de_mcu[i][j].tableau_de_bloc[k].cr != NULL)
+          {
+            free(tableau_de_mcu[i][j].tableau_de_bloc[k].cr);
+            tableau_de_mcu[i][j].tableau_de_bloc[k].cr = NULL;
+          }
+          if (tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb != NULL)
+          {
+            free(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb);
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cb = NULL;
+          }
+          if (tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr != NULL)
+          {
+            free(tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr);
+            tableau_de_mcu[i][j].tableau_de_bloc_apres_dct[k].cr = NULL;
+          }
           if(v2<v1)
           {
-            if((k+1)%h1 == 0)
+            if((k+(h1/h2))%h1 == 0)
             {
               k+=h1*v1/v2-1;
             }

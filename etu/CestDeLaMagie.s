@@ -1,4 +1,5 @@
 #!/bin/bash
+make clean
 make
 rm -rf ./Mes_images_jpeg
 mkdir ./Mes_images_jpeg
@@ -41,14 +42,15 @@ echo ""
 ./ppm2jpeg ./images/shaun_the_sheep.ppm --sample=2x2,2x1,1x1 --outfile=./Mes_images_jpeg/shaun-22-21-11.jpg
 
 ./ppm2jpeg ./images/horizontal.ppm --sample=2x2,1x1,1x1 --outfile=./Mes_images_jpeg/horizontal-22-11-11.jpg
+./ppm2jpeg ./images/horizontal.ppm --sample=4x2,1x1,1x1 --outfile=./Mes_images_jpeg/horizontal-42-11-11.jpg
 
 ./ppm2jpeg ./images/vertical.ppm --sample=1x4,1x1,1x1 --outfile=./Mes_images_jpeg/vertical-14-11-11.jpg
 
 echo "Des grosses images, avec et sans couleurs"
 echo ""
-./ppm2jpeg ./images/complexite.pgm --sample=1x1,1x1,1x1 --outfile=./Mes_images_jpeg/complexite-11-11-11.jpg
+#./ppm2jpeg ./images/complexite.pgm --sample=1x1,1x1,1x1 --outfile=./Mes_images_jpeg/complexite-11-11-11.jpg
 #
-# ./ppm2jpeg ./images/biiiiiig.ppm --sample=1x1,1x1,1x1 --outfile=./Mes_images_jpeg/biiiiiig-11-11-11.jpg
+./ppm2jpeg ./images/biiiiiig.ppm --sample=1x1,1x1,1x1 --outfile=./Mes_images_jpeg/biiiiiig-11-11-11.jpg
 
 rm -rf ./obj
 mkdir ./obj
