@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
-#include "huffman.h"
+#include "huffman_eleve.h"
 
 struct jpeg_desc{
   struct bitstream *bits;
@@ -18,36 +18,38 @@ struct jpeg_desc{
   uint8_t *qtables; //3
 };
 
-// /* Type énuméré représentant les composantes de couleur YCbCr. */
-// enum color_component
-// {
-//     Y,
-//     Cb,
-//     Cr,
-//     NB_COLOR_COMPONENTS
-// };
-//
-// /*
-//     Type énuméré représentant les types de composantes fréquentielles (DC ou
-//     AC).
-// */
-// enum sample_type
-// {
-//     DC,
-//     AC,
-//     NB_SAMPLE_TYPES
-// };
-//
-// /*
-//     Type énuméré représentant la direction des facteurs d'échantillonnage (H
-//     pour horizontal, V pour vertical).
-// */
-// enum direction
-// {
-//     H,
-//     V,
-//     NB_DIRECTIONS
-// };
+
+
+/* Type énuméré représentant les composantes de couleur YCbCr. */
+enum color_component
+{
+    Y,
+    Cb,
+    Cr,
+    NB_COLOR_COMPONENTS
+};
+
+/*
+    Type énuméré représentant les types de composantes fréquentielles (DC ou
+    AC).
+*/
+enum sample_type
+{
+    DC,
+    AC,
+    NB_SAMPLE_TYPES
+};
+
+/*
+    Type énuméré représentant la direction des facteurs d'échantillonnage (H
+    pour horizontal, V pour vertical).
+*/
+enum direction
+{
+    H,
+    V,
+    NB_DIRECTIONS
+};
 
 /* Ecrit le nom de fichier PPM ppm_filename dans le jpeg_desc jdesc. */
 extern struct jpeg_desc *jpeg_desc_create(void);
@@ -59,7 +61,7 @@ extern struct jpeg_desc *jpeg_desc_create(void);
     l'emplacement du premier octet de données brutes à écrire.
 */
 
-extern void jpeg_desc_write_header(struct jpeg_desc *jdesc);
+extern void jpeg_write_header(struct jpeg_desc *jdesc);
 
 /* Ecrit le footer JPEG (marqueur EOI) dans le fichier de sortie. */
 extern void jpeg_write_footer(struct jpeg_desc *jdesc);

@@ -11,7 +11,7 @@
     tableau des symboles ordonnés, et nb_symbols représente la taille du
     tableau symbols.
 */
-struct huff_table *huffman_table_build(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols)
+struct huff_table *huffman_table_build(uint8_t *nb_symb_per_lengths, uint8_t *symbols)
 {
   struct huff_table* racine = malloc(sizeof(struct huff_table));
   // racine -> pere = NULL;
@@ -23,7 +23,7 @@ struct huff_table *huffman_table_build(uint8_t *nb_symb_per_lengths, uint8_t *sy
   uint32_t compteur = 0;
   for (uint32_t i = 0; i < 16; i++) {
     for (uint8_t k = 0; k < nb_symb_per_lengths[i]; k++) {
-      uint8_t coucou = place_element(racine, symbols[compteur], i+1);
+      place_element(racine, symbols[compteur], i+1);
       compteur +=1;
     }
   }

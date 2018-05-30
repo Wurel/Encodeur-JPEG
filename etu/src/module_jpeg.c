@@ -1,5 +1,5 @@
 #include "module_jpeg.h"
-#include "bitstream.h"
+#include "module_bitstream.h"
 #include "qtables.h"
 #include "htables.h"
 #include <stdio.h>

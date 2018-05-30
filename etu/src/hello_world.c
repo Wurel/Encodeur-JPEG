@@ -151,15 +151,14 @@ int main(int argc, char const *argv[])
     jpeg_desc_set_sampling_factor(jpeg, Y, H, h1);
     jpeg_desc_set_sampling_factor(jpeg, Y, V, v1);
     struct huff_table *mon_arbre = huffman_table_build(htables_nb_symb_per_lengths[0][0],
-                          htables_symbols[0][0],
-                          htables_nb_symbols[0][0]);
-    struct huff_table *mon_arbre_2 = huffman_table_build(htables_nb_symb_per_lengths[0][1], htables_symbols[0][1], htables_nb_symbols[0][1]);
-    struct huff_table *mon_arbre_3 = huffman_table_build(htables_nb_symb_per_lengths[1][1], htables_symbols[1][1], htables_nb_symbols[1][1]);
-    struct huff_table *mon_arbre_4 = huffman_table_build(htables_nb_symb_per_lengths[0][2], htables_symbols[0][2], htables_nb_symbols[0][2]);
-    struct huff_table *mon_arbre_5 = huffman_table_build(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]);
+                          htables_symbols[0][0]);
+    struct huff_table *mon_arbre_2 = huffman_table_build(htables_nb_symb_per_lengths[0][1], htables_symbols[0][1]);
+    struct huff_table *mon_arbre_3 = huffman_table_build(htables_nb_symb_per_lengths[1][1], htables_symbols[1][1]);
+    struct huff_table *mon_arbre_4 = huffman_table_build(htables_nb_symb_per_lengths[0][2], htables_symbols[0][2]);
+    struct huff_table *mon_arbre_5 = huffman_table_build(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2]);
 
     jpeg_desc_set_huffman_table(jpeg, DC, Y, mon_arbre);
-    struct huff_table *mon_arbre_1 = huffman_table_build(htables_nb_symb_per_lengths[1][0], htables_symbols[1][0], htables_nb_symbols[1][0]);
+    struct huff_table *mon_arbre_1 = huffman_table_build(htables_nb_symb_per_lengths[1][0], htables_symbols[1][0]);
     jpeg_desc_set_huffman_table(jpeg, AC, Y, mon_arbre_1);
     jpeg_desc_set_quantization_table(jpeg, Y, compressed_Y_table);
     if (type_couleur == 3) {

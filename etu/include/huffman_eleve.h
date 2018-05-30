@@ -1,5 +1,5 @@
-#ifndef HUFFMAN_H
-#define HUFFMAN_H
+#ifndef HUFFMAN_H_ELEVE
+#define HUFFMAN_H_ELEVE
 
 
 
@@ -22,7 +22,7 @@ struct huff_table{
     tableau des symboles ordonnés, et nb_symbols représente la taille du
     tableau symbols.
 */
-struct huff_table *huffman_table_build(uint8_t *nb_symb_per_lengths, uint8_t *symbols, uint8_t nb_symbols);
+struct huff_table *huffman_table_build(uint8_t *nb_symb_per_lengths, uint8_t *symbols);
 
 
 /*

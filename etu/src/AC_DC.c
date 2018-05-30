@@ -3,8 +3,7 @@
 // #include "bitstream.h"
 #include "module_bitstream.h"
 #include <stdlib.h>
-#include "huffman.h"
-// #include "huffman_eleve.h"
+#include "huffman_eleve.h"
 #include "htables.h"
 #include <stdio.h>
 #include "module_jpeg.h"

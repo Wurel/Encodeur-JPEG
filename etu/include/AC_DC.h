@@ -2,7 +2,7 @@
 #define AC_DC
 #include "module_jpeg.h"
 #include "structures.h"
-#include "bitstream.h"
+#include "module_bitstream.h"
 #include <stdint.h>
 
 
