@@ -5,6 +5,9 @@
 #include <string.h>
 #include <math.h>
 
+/*
+  Renvoie un tableau passé en paramètre réordonné en zigzag dans un autre tableau
+*/
 int16_t* zigzag_composante(int16_t *composante)
 {
     int16_t* zigzag = malloc(64 * sizeof(int16_t));
@@ -80,6 +83,10 @@ int16_t* zigzag_composante(int16_t *composante)
     return zigzag;
 }
 
+/*
+  Fait le calcul de quantification pour Y :
+  Divise terme à terme le tableau de la composante, par la table de quantification
+*/
 void quantification_Y(int16_t *composante)
 {
   for (uint16_t i = 0; i < 64; i++)
@@ -88,6 +95,10 @@ void quantification_Y(int16_t *composante)
   }
 }
 
+/*
+  Fait le calcul de quantification pour Cb ou Cr :
+  Divise terme à terme le tableau de la composante, par la table de quantification
+*/
 void quantification_Cb_Cr(int16_t *composante)
 {
   for (uint16_t i = 0; i < 64; i++)
@@ -95,6 +106,9 @@ void quantification_Cb_Cr(int16_t *composante)
     composante[i] = composante[i]/compressed_CbCr_table[i];
   }
 }
+
+
+/*-----------------------------------TEST-----------------------------------*/
 
 // int main(int argc, char const *argv[])
 // {

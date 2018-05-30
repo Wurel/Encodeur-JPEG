@@ -7,20 +7,11 @@
 #include "AC_DC.h"
 #include "htables.h"
 #include "qtables.h"
-<<<<<<< HEAD
-#include "bitstream.h"
-//#include "module_bitstream.h" //Le notre !
-#include "huffman_eleve.h"
-//#include "huffman.h"
-=======
-// #include "bitstream.h"
 #include "module_bitstream.h" //Le notre !
 #include "huffman.h"
->>>>>>> e62394e1308fc4de93dd3853f96560593f500cf5
 #include <unistd.h>
 #include "recuperation.h"
 #include "down_sampler.h"
-//#include "jpeg_writer.h"
 #include "module_jpeg.h"
 
 int main(int argc, char const *argv[])

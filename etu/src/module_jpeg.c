@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+/* Ecrit le nom de fichier PPM ppm_filename dans le jpeg_desc jdesc. */
 struct jpeg_desc *jpeg_desc_create(void){
     struct jpeg_desc *jpeg = malloc(sizeof(struct jpeg_desc));
     jpeg->ppm_filename = malloc(200 * sizeof(char));
@@ -20,7 +22,12 @@ struct jpeg_desc *jpeg_desc_create(void){
     }
     return jpeg;
 }
-
+/*
+    Ecrit toute l'entête JPEG dans le fichier de sortie à partir des
+    informations contenues dans le jpeg_desc passé en paramètre. En sortie, le
+    bitstream est positionné juste après l'écriture de l'entête SOS, à
+    l'emplacement du premier octet de données brutes à écrire.
+*/
 void jpeg_write_header(struct jpeg_desc *jdesc){
     uint8_t N = jdesc->nb_components;
     //Création du bitstream
@@ -59,7 +66,7 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
     if (N == 3) {//Si on a une image en couleur, longueur = 11
       bitstream_write_nbits(jdesc->bits, 0x0011, 16, 0);
     }
-    else{ //Sinon
+    else{ 
       bitstream_write_nbits(jdesc->bits, 0x000B, 16, 0);
     }
     bitstream_write_nbits(jdesc->bits, 0x08, 8, 0); //Précision
@@ -161,6 +168,7 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
 
 }
 
+/* Ecrit le footer JPEG (marqueur EOI) dans le fichier de sortie. */
 void jpeg_write_footer(struct jpeg_desc *jdesc){
   printf("coucou bande de nouilles\n");
   bitstream_flush(jdesc->bits);
@@ -179,70 +187,128 @@ void jpeg_desc_destroy(struct jpeg_desc *jdesc){
   free(jdesc->qtables);
 }
 
+/* Ecrit le nom de fichier PPM ppm_filename dans le jpeg_desc jdesc. */
 void jpeg_desc_set_ppm_filename(struct jpeg_desc *jdesc, const char *ppm_filename){
   strcpy(jdesc->ppm_filename, ppm_filename);
 }
 
+/* Retourne le nom de fichier PPM lu dans le jpeg_desc jdesc. */
 char *jpeg_desc_get_ppm_filename(struct jpeg_desc *jdesc){
   return jdesc->ppm_filename;
 }
 
+/* Ecrit le nom du fichier de sortie jpeg_filename dans le jpeg_desc jdesc. */
 void jpeg_desc_set_jpeg_filename(struct jpeg_desc *jdesc, const char *jpeg_filename){
   strcpy(jdesc->jpeg_filename, jpeg_filename);
 }
 
+/* Retourne le nom du fichier de sortie lu depuis le jpeg_desc jdesc. */
 char *jpeg_desc_get_jpeg_filename(struct jpeg_desc *jdesc){
   return jdesc->ppm_filename;
 }
 
+/*
+    Ecrit la hauteur en nombre de pixels de l'image traitée image_height dans
+    le jpeg_desc jdesc.
+*/
 void jpeg_desc_set_image_height(struct jpeg_desc *jdesc, uint32_t image_height){
   jdesc->image_height = image_height;
 }
 
+/*
+    Retourne la hauteur en nombre de pixels de l'image traitée lue dans le
+    jpeg_desc jdesc.
+*/
 uint32_t jpeg_desc_get_image_height(struct jpeg_desc *jdesc){
   return jdesc->image_height;
 }
 
+/*
+    Ecrit la largeur en nombre de pixels de l'image traitée image_width dans le
+    jpeg_desc jdesc.
+*/
 void jpeg_desc_set_image_width(struct jpeg_desc *jdesc, uint32_t image_width){
   jdesc->image_width = image_width;
 }
 
+/*
+    Retourne la largeur en nombre de pixels de l'image traitée lue dans le
+    jpeg_desc jdesc.
+*/
 uint32_t jpeg_desc_get_image_width(struct jpeg_desc *jdesc){
   return jdesc->image_width;
 }
 
+/*
+    Ecrit le nombre de composantes de couleur de l'image traitée nb_components
+    dans le jpeg_desc jdesc.
+*/
 void jpeg_desc_set_nb_components(struct jpeg_desc *jdesc, uint8_t nb_components){
   jdesc->nb_components = nb_components;
 }
 
+/*
+    Retourne le nombre de composantes de couleur de l'image traitée lu à partir
+    du jpeg_desc jdesc.
+*/
 uint8_t jpeg_desc_get_nb_components(struct jpeg_desc *jdesc){
   return jdesc->nb_components;
 }
 
+/*
+    Retourne le bitstream associé au fichier de sortie enregistré dans le
+    jpeg_desc.
+*/
 struct bitstream *jpeg_desc_get_bitstream(struct jpeg_desc *jdesc){
   return jdesc->bits;
 }
 
+/*
+    Ecrit dans le jpeg_desc jdesc le facteur d'échantillonnage sampling_factor
+    à utiliser pour la composante de couleur cc et la direction dir.
+*/
 void jpeg_desc_set_sampling_factor(struct jpeg_desc *jdesc, enum color_component cc, enum direction dir, uint8_t sampling_factor){
   jdesc->sampling_factor[cc][dir] = sampling_factor;
 }
 
+/*
+    Retourne le facteur d'échantillonnage utilisé pour la composante de couleur
+    cc et la direction dir, lu à partir du jpeg_desc jdesc.
+*/
 uint8_t jpeg_desc_get_sampling_factor(struct jpeg_desc *jdesc, enum color_component cc, enum direction dir){
   return jdesc->sampling_factor[cc][dir];
 }
 
+/*
+    Ecrit dans le jpeg_desc jdesc la table de Huffman huff_table à utiliser
+    pour encoder les données de la composante fréquentielle acdc pour la
+    composante de couleur cc.
+*/
 void jpeg_desc_set_huffman_table(struct jpeg_desc *jdesc, enum sample_type acdc, enum color_component cc, struct huff_table *htable){
   jdesc->tableau_huffman[cc][acdc] = htable;
 }
 
+/*
+    Retourne un pointeur vers la table de Huffman utilisée pour encoder les
+    données de la composante fréquentielle acdc pour la composante de couleur
+    cc, lue à partir du jpeg_desc jdesc.
+*/
 struct huff_table *jpeg_desc_get_huffman_table(struct jpeg_desc *jdesc, enum sample_type acdc, enum color_component cc){
   return jdesc->tableau_huffman[cc][acdc];
 }
 
+/*
+    Ecrit dans le jpeg_desc jdesc la table de quantification qtable à utiliser
+    pour compresser les coefficients de la composante de couleur cc.
+*/
 void jpeg_desc_set_quantization_table(struct jpeg_desc *jdesc, enum color_component cc, uint8_t *qtable){
   jdesc->qtables[cc] = *qtable;
 }
 
+/*
+    Retourne la table de quantification associée à la composante de couleur
+    cc dans le jpeg_desc jdesc.
+*/
 uint8_t *jpeg_desc_get_quantization_table(struct jpeg_desc *jdesc, enum color_component cc){
   return &jdesc->qtables[cc];
 }

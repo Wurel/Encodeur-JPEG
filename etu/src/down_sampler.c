@@ -5,6 +5,11 @@
 #include <string.h>
 #include <math.h>
 
+
+/*
+  Effectue l'echantillonnage_horizontal si les facteur le permette (gerer dans le hello_word)
+  Prend en parametre le tableau de mcu
+*/
 void echantillonnage_horizontal(struct mcu ma_mcu, uint8_t facteur)
 {
     uint32_t* tableau_rgb = malloc(64*sizeof(uint32_t));
@@ -62,7 +67,10 @@ void echantillonnage_horizontal(struct mcu ma_mcu, uint8_t facteur)
         }
     }
 }
-
+/*
+  Effectue l'echantillonnage_vertical si les facteur le permette (gerer dans le hello_word)
+  Prend en parametre le tableau de mcu
+*/
 void echantillonnage_vertical(struct mcu ma_mcu, uint8_t facteur, uint8_t facteur_horizontal)
 {
     if(facteur_horizontal==ma_mcu.h && facteur_horizontal!=1)

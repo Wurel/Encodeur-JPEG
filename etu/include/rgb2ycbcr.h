@@ -9,7 +9,9 @@
 #include <math.h>
 #include "structures.h"
 
-
+/*
+  transforme UNE mcu (son pointeur est mis en parametre) en RGB en une mcu en YCbCr
+*/
 extern void transformation_bloc_rgb_ycbcr(struct bloc *blo);
 
 
