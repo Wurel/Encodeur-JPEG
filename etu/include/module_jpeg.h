@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include "huffman_eleve.h"
 
+/*
+    Type contenant l'intégralité des informations nécessaires à
+    l'écriture de l'entête JPEG.
+*/
 struct jpeg_desc{
   struct bitstream *bits;
   char *ppm_filename;
@@ -71,8 +75,6 @@ extern void jpeg_write_footer(struct jpeg_desc *jdesc);
     associée est libérée.
 */
 extern void jpeg_desc_destroy(struct jpeg_desc *jdesc);
-
-
 
 /* Ecrit le nom du fichier de sortie jpeg_filename dans le jpeg_desc jdesc. */
 extern void jpeg_desc_set_ppm_filename(struct jpeg_desc *jdesc,
@@ -146,9 +148,9 @@ extern uint8_t jpeg_desc_get_sampling_factor(struct jpeg_desc *jdesc,
                                              enum direction dir);
 
 /*
-Ecrit dans le jpeg_desc jdesc la table de Huffman huff_table à utiliser
-pour encoder les données de la composante fréquentielle acdc pour la
-composante de couleur cc.
+  Ecrit dans le jpeg_desc jdesc la table de Huffman huff_table à utiliser
+  pour encoder les données de la composante fréquentielle acdc pour la
+  composante de couleur cc.
 */
 extern void jpeg_desc_set_huffman_table(struct jpeg_desc *jdesc, enum sample_type acdc, enum color_component cc, struct huff_table *htable);
 
@@ -173,4 +175,4 @@ extern uint8_t *jpeg_desc_get_quantization_table(struct jpeg_desc *jdesc,
                                                  enum color_component cc);
 
 
-  #endif /* module_jpeg_eleve */
+#endif /* module_jpeg_eleve */

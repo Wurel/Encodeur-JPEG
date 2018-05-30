@@ -1,6 +1,8 @@
 #include "rgb2ycbcr.h"
 
-// transforme UNE mcu (son pointeur est mis en parametre) en RGB en une mcu en YCbCr
+/*
+  transforme UNE mcu (son pointeur est mis en parametre) en RGB en une mcu en YCbCr
+*/
 void transformation_bloc_rgb_ycbcr(struct bloc *blo)
 {
   //pour chaque tableau de composante de mcu ici juste un bloc pour la mcu

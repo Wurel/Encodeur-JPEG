@@ -7,20 +7,16 @@
 #include "AC_DC.h"
 #include "htables.h"
 #include "qtables.h"
-//#include "bitstream.h"
 #include "module_bitstream.h" //Le notre !
 #include "huffman_eleve.h"
-//#include "huffman.h"
 #include <unistd.h>
 #include "recuperation.h"
 #include "down_sampler.h"
-//#include "jpeg_writer.h"
 #include "module_jpeg.h"
 #include <time.h>
 
 int main(int argc, char const *argv[])
 {
-    // struct huff_table_eleve *mon_arbre_test = huffman_table_build_eleve(htables_nb_symb_per_lengths[1][2], htables_symbols[1][2], htables_nb_symbols[1][2]);
     uint8_t sample[6] = {1,1,1,1,1,1};
     clock_t t1, t2;
     t1 = clock();
@@ -224,9 +220,6 @@ int main(int argc, char const *argv[])
    t2 = clock();
    float temps = (float)(t2-t1)/CLOCKS_PER_SEC;
    printf("temps = %f\n", temps);
-  //  uint32_t* compteur = malloc(sizeof(uint32_t));
-  //  huffman_table_destroy(&mon_arbre, compteur);
 
-
-    return EXIT_SUCCESS;
+   return EXIT_SUCCESS;
 }
