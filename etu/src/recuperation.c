@@ -14,9 +14,7 @@ void recuperation_argument(int argc, char const *argv[], char *entree, char *sor
     }
     else {
       if (strncmp("--outfile=", argv[i], 10)==0) {
-        printf("--outfile\n");
         strcpy(sortie, &argv[i][10]);
-        // printf("%s\n", sortie);
       }
       else if (strncmp("--sample=", argv[i], 9)==0){
         sample[0] = argv[i][9]-48;
@@ -34,6 +32,5 @@ void recuperation_argument(int argc, char const *argv[], char *entree, char *sor
   if (strcmp(sortie, "")==0){
     strncpy(sortie, entree, strlen(entree)-4);
     strcat(sortie, ".jpeg");
-    // printf("%s\n", sortie);
   }
 }

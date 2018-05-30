@@ -162,7 +162,6 @@ void jpeg_write_header(struct jpeg_desc *jdesc){
 }
 
 void jpeg_write_footer(struct jpeg_desc *jdesc){
-  printf("coucou bande de nouilles\n");
   bitstream_flush(jdesc->bits);
   bitstream_write_nbits(jdesc->bits, 0xFFD9, 16, 1);
 }
@@ -177,6 +176,8 @@ void jpeg_desc_destroy(struct jpeg_desc *jdesc){
   free(jdesc->sampling_factor);
   free(jdesc->tableau_huffman);
   free(jdesc->qtables);
+  bitstream_destroy(jdesc->bits);
+  free(jdesc);
 }
 
 void jpeg_desc_set_ppm_filename(struct jpeg_desc *jdesc, const char *ppm_filename){
