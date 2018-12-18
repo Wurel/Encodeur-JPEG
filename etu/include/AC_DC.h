@@ -7,7 +7,7 @@
 
 
 /*
-  Retourne la magnitude d'un nombre entré en paramètre
+  Retourne la magnitude d'un nombre entre en paramètre
 */
 uint8_t retourne_magnitude(int16_t nombre);
 

@@ -7,7 +7,7 @@
 #include "huffman_eleve.h"
 
 /*
-    Type contenant l'intégralité des informations nécessaires à
+    Type contenant l'integralite des informations nécessaires à
     l'écriture de l'entête JPEG.
 */
 struct jpeg_desc{
