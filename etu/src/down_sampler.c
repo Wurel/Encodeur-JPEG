@@ -7,7 +7,7 @@
 
 
 /*
-  Effectue l'echantillonnage_horizontal si les facteur le permette (gerer dans le hello_word)
+  Effectue l'echantillonnage_horizontal si les facteur le permette (gerer dans le hello_word(main))
   Prend en parametre le tableau de mcu
 */
 void echantillonnage_horizontal(struct mcu ma_mcu, uint8_t facteur)

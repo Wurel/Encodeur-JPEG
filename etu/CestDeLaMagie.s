@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# script testant notre programme
 make clean
 make
 rm -rf ./Mes_images_jpeg

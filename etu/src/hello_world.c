@@ -24,7 +24,7 @@ int main(int argc, char const *argv[])
     char sortie[200] = "";
     char entree[200];
     recuperation_argument(argc, argv, entree, sortie, sample);
-    uint8_t type_couleur = type(entree); //type_couleur = 1 si N&B et type_couleur = 3 pour couleur
+    uint8_t type_couleur = type(entree); //type_couleur = 1 si Noir et Blanc et type_couleur = 3 pour couleur
     uint8_t h1 = sample[0];
     uint8_t v1 = sample[1];
     uint8_t h2 = sample[2];
